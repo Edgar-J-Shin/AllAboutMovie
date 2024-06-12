@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google {
@@ -21,4 +23,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "AllAboutMovie"
 include(":app")
- 
+include(":presentation")
+include(":data")
+include(":domain")
