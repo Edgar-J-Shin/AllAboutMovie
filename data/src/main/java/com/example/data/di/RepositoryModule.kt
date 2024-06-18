@@ -1,6 +1,6 @@
 package com.example.data.di
 
-import com.example.data.repository.MovieRepository
+import com.example.domain.repository.MovieRepository
 import com.example.data.repository.MovieRepositoryImpl
 import dagger.Binds
 import dagger.Module

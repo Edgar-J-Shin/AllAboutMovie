@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    implementation(libs.androidx.startup)
+
     implementation(libs.timber)
 
     //    testImplementation(libs.junit)

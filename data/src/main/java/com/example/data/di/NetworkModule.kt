@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
@@ -18,13 +19,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+    @Provides
+    @Singleton
+    fun provideJsonConverterFactory(): Converter.Factory {
+        val json = Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+            prettyPrint = true
+            isLenient = true
+        }
 
-    private val jsonConverterFactory = Json {
-        ignoreUnknownKeys = true
-        coerceInputValues = true
-        prettyPrint = true
-        isLenient = true
-    }.asConverterFactory("application/json".toMediaType())
+        return json.asConverterFactory("application/json".toMediaType())
+    }
 
     @Provides
     @Singleton
@@ -36,7 +42,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+    fun provideRetrofit(okHttpClient: OkHttpClient, jsonConverterFactory: Converter.Factory): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.TMDB_API_URL)
             .addConverterFactory(jsonConverterFactory)

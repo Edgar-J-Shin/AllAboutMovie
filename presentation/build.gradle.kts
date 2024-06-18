@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.data)
+    implementation(projects.domain)
 
     // hilt
     implementation(libs.hilt)

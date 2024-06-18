@@ -14,6 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AllAboutMovie"
-        tools:targetApi="31"/>
+        tools:targetApi="31">
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.example.allaboutmovie.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.example.allaboutmovie.initializer.TimberInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+    </application>
 </manifest>

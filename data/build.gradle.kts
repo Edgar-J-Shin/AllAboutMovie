@@ -48,6 +48,8 @@ fun getApiKey(propertyKey: String): String {
 
 dependencies {
 
+    implementation(projects.domain)
+
     // hilt
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
