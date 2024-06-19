@@ -1,8 +1,12 @@
 package com.example.data.repository
 
 import androidx.annotation.WorkerThread
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.data.di.IoDispatcher
-import com.example.data.model.mapper.toMovieEntity
+import com.example.data.model.mapper.toEntity
+import com.example.data.pagingsource.MoviePagingSource
 import com.example.data.remote.datasource.MovieRemoteDataSource
 import com.example.data.remote.model.MoviesResponse
 import com.example.domain.model.MovieEntity
@@ -22,11 +26,22 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun fetchMoviesByTopRated(): Flow<Result<List<MovieEntity>>> = flow {
         val result = movieRemoteDataSource.fetchMoviesByTopRated().handleResponse { response ->
             (response.data as MoviesResponse).results.map { movieResult ->
-                movieResult.toMovieEntity()
+                movieResult.toEntity()
             }
         }
 
         emit(result)
 
     }.flowOn(ioDispatcher)
+
+    override suspend fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = 20),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    pageSize = 20,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
 }

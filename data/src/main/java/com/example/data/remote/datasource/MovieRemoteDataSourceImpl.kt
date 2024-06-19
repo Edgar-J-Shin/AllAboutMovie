@@ -8,6 +8,15 @@ import javax.inject.Inject
 class MovieRemoteDataSourceImpl @Inject constructor(
     private val movieService: MovieService
 ) : MovieRemoteDataSource {
+
+    /**
+     * For test
+     */
     override suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse> =
-        movieService.fetchMoviesByTopRated()
+        movieService.fetchMoviesByTopRated(0)
+
+    override suspend fun getMoviesByTopRated(page: Int): NetworkResponse<MoviesResponse> =
+        movieService.fetchMoviesByTopRated(
+            page = page
+        )
 }

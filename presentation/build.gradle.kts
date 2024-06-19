@@ -59,6 +59,9 @@ dependencies {
     api(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation)
 
+    // paging
+    implementation(libs.androidx.paging)
+
     // debug
     implementation(libs.timber)
 

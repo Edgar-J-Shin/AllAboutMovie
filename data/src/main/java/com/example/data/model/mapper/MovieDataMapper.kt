@@ -1,9 +1,9 @@
 package com.example.data.model.mapper
 
-import com.example.data.model.MovieResult
+import com.example.data.model.MovieData
 import com.example.domain.model.MovieEntity
 
-fun MovieResult.toMovieEntity() = MovieEntity(
+fun MovieData.toEntity() = MovieEntity(
     adult = adult,
     backdropPath = backdropPath,
     genreIds = genreIds,

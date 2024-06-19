@@ -3,6 +3,7 @@ package com.example.data.remote.service
 import com.example.data.remote.model.MoviesResponse
 import com.example.data.remote.network.NetworkResponse
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface MovieService {
 
@@ -12,5 +13,8 @@ interface MovieService {
      * @return [MoviesResponse]
      */
     @GET("movie/top_rated")
-    suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse>
+    suspend fun fetchMoviesByTopRated(
+        @Query("page") page: Int,
+        @Query("language") language: String = "en-US"
+    ): NetworkResponse<MoviesResponse>
 }
