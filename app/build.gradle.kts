@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.allaboutmovie"
+    namespace = "com.dcs.allaboutmovie"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.allaboutmovie"
+        applicationId = "com.dcs.allaboutmovie"
         minSdk = 31
         targetSdk = 34
         versionCode = 1
@@ -51,17 +51,22 @@ dependencies {
     implementation(projects.domain)
     implementation(projects.data)
 
+    // hilt
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
 
+    // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // androidx Startup
     implementation(libs.androidx.startup)
 
+    // debug
     implementation(libs.timber)
 
-    //    testImplementation(libs.junit)
-    //    androidTestImplementation(libs.androidx.junit)
-    //    androidTestImplementation(libs.androidx.espresso.core)
+    // test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.domain"
+    namespace = "com.dcs.domain"
     compileSdk = 34
 
     defaultConfig {
@@ -38,12 +38,14 @@ dependencies {
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
 
+    // paging
     implementation(libs.androidx.paging)
 
     // serialization
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core.jvm)
 
+    // test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

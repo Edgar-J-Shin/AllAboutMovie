@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.dcs.data"
     compileSdk = 34
 
     defaultConfig {
@@ -75,8 +75,9 @@ dependencies {
     // debug
     implementation(libs.timber)
 
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
+    // test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
 }
