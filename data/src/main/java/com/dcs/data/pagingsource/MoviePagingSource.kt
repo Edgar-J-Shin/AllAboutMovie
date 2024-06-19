@@ -28,7 +28,6 @@ class MoviePagingSource(
         return try {
 
             val (movies, totalPages) = movieRemoteDataSource.getMoviesByTopRated(page)
-                .handleResponse { it.data as MoviesResponse }
                 .getOrThrow()
                 .run { results to totalPages }
 

@@ -24,7 +24,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     @WorkerThread
     override suspend fun fetchMoviesByTopRated(): Flow<Result<List<MovieEntity>>> = flow {
-        val result = movieRemoteDataSource.fetchMoviesByTopRated().handleResponse { response ->
+        val result = movieRemoteDataSource.fetchMoviesByTopRated().handleNetworkResponse { response ->
             (response.data as MoviesResponse).results.map { movieResult ->
                 movieResult.toEntity()
             }
