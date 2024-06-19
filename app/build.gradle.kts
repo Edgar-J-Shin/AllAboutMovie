@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
@@ -64,6 +66,7 @@ dependencies {
 
     // debug
     implementation(libs.timber)
+    implementation(libs.firebase.crashlytics)
 
     // test
     testImplementation(libs.junit)
