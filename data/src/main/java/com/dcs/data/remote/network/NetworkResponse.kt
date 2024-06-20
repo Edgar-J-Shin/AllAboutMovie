@@ -16,7 +16,7 @@ sealed class NetworkResponse<out T : Any> {
     inline fun <T> handleNetworkResponse(onSuccessAction: (Success<*>) -> T): Result<T> = when (this) {
         is Success -> Result.success(onSuccessAction(this))
         is Failure -> Result.failure(RetrofitFailureException(message, code))
-        is Error,
-        is Unexpected -> Result.failure(IllegalStateException("NetworkError or UnexpectedError"))
+        is Error -> Result.failure(IllegalStateException("Error : ${throwable.message}"))
+        is Unexpected -> Result.failure(IllegalStateException("UnexpectedError : ${throwable.message}"))
     }
 }

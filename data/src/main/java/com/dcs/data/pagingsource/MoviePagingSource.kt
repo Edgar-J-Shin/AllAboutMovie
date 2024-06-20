@@ -2,16 +2,18 @@ package com.dcs.data.pagingsource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.dcs.data.MovieRanking
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
-import com.dcs.data.remote.model.MoviesResponse
 import com.dcs.domain.model.MovieEntity
 import retrofit2.HttpException
 import java.io.IOException
 
 class MoviePagingSource(
+    private val movieRanking: MovieRanking,
     private val movieRemoteDataSource: MovieRemoteDataSource,
-    private val pageSize: Int
+    private val pageSize: Int,
+    private val language: String = "en-US"
 ) : PagingSource<Int, MovieEntity>() {
 
     private val startPageIndex = 0
@@ -27,9 +29,12 @@ class MoviePagingSource(
 
         return try {
 
-            val (movies, totalPages) = movieRemoteDataSource.getMoviesByTopRated(page)
-                .getOrThrow()
-                .run { results to totalPages }
+            val result = when (movieRanking) {
+                is MovieRanking.Trending -> movieRemoteDataSource.getMoviesByTrending(movieRanking.timeWindow, page + 1, language)
+                is MovieRanking.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page + 1, language)
+            }
+
+            val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
 
             val hasPrevPage = page != startPageIndex
             val hasNextPage = movies.isNotEmpty() && !(page == startPageIndex && totalPages < pageSize)
@@ -40,9 +45,9 @@ class MoviePagingSource(
                 nextKey = if (hasNextPage) page + 1 else null
             )
         } catch (exception: IOException) {
-            return LoadResult.Error(exception)
+            LoadResult.Error(exception)
         } catch (exception: HttpException) {
-            return LoadResult.Error(exception)
+            LoadResult.Error(exception)
         }
     }
 }

@@ -15,17 +15,19 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     override suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse> =
         movieService.fetchMoviesByTopRated(0)
 
-    override suspend fun getMoviesByTopRated(page: Int): Result<MoviesResponse> =
-        movieService.fetchMoviesByTopRated(
-            page = page
+    override suspend fun getMoviesByTrending(timeWindow: String, page: Int, language: String): Result<MoviesResponse> =
+        movieService.fetchMoviesByTrending(
+            timeWindow = timeWindow,
+            page = page,
+            language = language
         ).handleNetworkResponse {
             it.data as MoviesResponse
         }
 
-    override suspend fun getMoviesByTrending(timeWindow: String, page: Int): Result<MoviesResponse> =
-        movieService.fetchMoviesByTrending(
-            timeWindow = timeWindow,
-            page = page
+    override suspend fun getMoviesByTopRated(page: Int, language: String): Result<MoviesResponse> =
+        movieService.fetchMoviesByTopRated(
+            page = page,
+            language = language
         ).handleNetworkResponse {
             it.data as MoviesResponse
         }

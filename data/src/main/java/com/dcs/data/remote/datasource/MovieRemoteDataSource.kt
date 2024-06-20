@@ -6,7 +6,7 @@ import com.dcs.data.remote.network.NetworkResponse
 interface MovieRemoteDataSource {
     suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse>
 
-    suspend fun getMoviesByTopRated(page: Int): Result<MoviesResponse>
+    suspend fun getMoviesByTrending(timeWindow: String, page: Int, language: String): Result<MoviesResponse>
 
-    suspend fun getMoviesByTrending(timeWindow:String, page: Int): Result<MoviesResponse>
+    suspend fun getMoviesByTopRated(page: Int, language: String): Result<MoviesResponse>
 }

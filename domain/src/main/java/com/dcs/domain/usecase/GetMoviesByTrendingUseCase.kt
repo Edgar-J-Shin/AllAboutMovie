@@ -6,10 +6,10 @@ import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMoviesByTopRatedUseCase @Inject constructor(
+class GetMoviesByTrendingUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    operator fun invoke(): Flow<PagingData<MovieEntity>> {
-        return movieRepository.getMoviesByTopRated()
+    operator fun invoke(timeWindow: String): Flow<PagingData<MovieEntity>> {
+        return movieRepository.getMoviesByTrending(timeWindow = timeWindow)
     }
 }

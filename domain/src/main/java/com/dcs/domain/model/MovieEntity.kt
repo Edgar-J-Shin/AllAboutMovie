@@ -8,6 +8,7 @@ data class MovieEntity(
     val backdropPath: String,
     val genreIds: List<Int>,
     val id: Int,
+    val mediaType: String,
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,

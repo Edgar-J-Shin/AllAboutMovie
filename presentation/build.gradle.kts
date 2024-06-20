@@ -61,6 +61,7 @@ dependencies {
 
     // paging
     implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
 
     // debug
     implementation(libs.timber)

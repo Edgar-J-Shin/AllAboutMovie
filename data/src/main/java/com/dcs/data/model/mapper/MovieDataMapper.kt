@@ -8,6 +8,7 @@ fun MovieData.toEntity() = MovieEntity(
     backdropPath = backdropPath,
     genreIds = genreIds,
     id = id,
+    mediaType = mediaType,
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,
     overview = overview,

@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.dcs.data.MovieRanking
 import com.dcs.data.di.IoDispatcher
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.pagingsource.MoviePagingSource
@@ -34,14 +35,31 @@ class MovieRepositoryImpl @Inject constructor(
 
     }.flowOn(ioDispatcher)
 
-    override suspend fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
+    override fun getMoviesByTrending(timeWindow: String): Flow<PagingData<MovieEntity>> =
         Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = 20),
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    pageSize = 20,
+                    movieRanking = MovieRanking.Trending(timeWindow = timeWindow),
+                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
         ).flow
+
+    override fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    movieRanking = MovieRanking.TopRated,
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
+    companion object {
+        const val DEFAULT_PAGE_SIZE: Int = 20
+    }
 }

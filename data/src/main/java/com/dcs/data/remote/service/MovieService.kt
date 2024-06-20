@@ -31,7 +31,7 @@ interface MovieService {
      *
      * @return [MoviesResponse]
      */
-    @GET("movie/trending/movie/{time_window}")
+    @GET("trending/movie/{time_window}")
     suspend fun fetchMoviesByTrending(
         @Path("time_window") timeWindow: String = "day",
         @Query("page") page: Int = 1,

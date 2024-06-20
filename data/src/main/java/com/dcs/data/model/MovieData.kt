@@ -8,11 +8,13 @@ data class MovieData(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String = "",
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int> = emptyList(),
     @SerialName("id")
     val id: Int,
+    @SerialName("media_type")
+    val mediaType: String,
     @SerialName("original_language")
     val originalLanguage: String,
     @SerialName("original_title")

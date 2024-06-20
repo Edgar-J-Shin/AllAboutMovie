@@ -7,5 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface MovieRepository {
     suspend fun fetchMoviesByTopRated(): Flow<Result<List<MovieEntity>>>
 
-    suspend fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>>
+    fun getMoviesByTrending(timeWindow: String): Flow<PagingData<MovieEntity>>
+
+    fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>>
 }
