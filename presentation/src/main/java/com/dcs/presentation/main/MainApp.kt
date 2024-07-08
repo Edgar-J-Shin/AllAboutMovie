@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dcs.presentation.home.HomeScreen
 import com.dcs.presentation.main.Screen.Main
 import com.dcs.presentation.people.PeopleScreen
-import com.dcs.presentation.search.SearchScreen
+import com.dcs.presentation.trend.SearchScreen
 import com.dcs.presentation.setting.SettingScreen
 
 @Composable
