@@ -1,20 +1,46 @@
 package com.dcs.presentation.main
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.dcs.presentation.R
 
 sealed class Screen(
     val route: String,
-    val navArguments: List<NamedNavArgument> = emptyList()
+    val navArguments: List<NamedNavArgument> = emptyList(),
 ) {
-    data object Home : Screen(route = ROUTE_HOME)
 
-    data object Search : Screen(route = ROUTE_SEARCH)
+    sealed class Main(
+        route: String,
+        @StringRes val titleResId: Int,
+        @DrawableRes val iconResId: Int,
+    ) : Screen(route, emptyList()) {
+        data object Home : Main(
+            route = ROUTE_HOME,
+            titleResId = R.string.home,
+            iconResId = R.drawable.ic_home
+        )
 
-    data object People : Screen(route = ROUTE_PEOPLE)
+        data object Search : Main(
+            route = ROUTE_SEARCH,
+            titleResId = R.string.trend,
+            iconResId = R.drawable.ic_trend
+        )
 
-    data object Setting : Screen(route = ROUTE_SETTING)
+        data object People : Main(
+            route = ROUTE_PEOPLE,
+            titleResId = R.string.people,
+            iconResId = R.drawable.ic_people
+        )
+
+        data object Setting : Main(
+            route = ROUTE_SETTING,
+            titleResId = R.string.setting,
+            iconResId = R.drawable.ic_setting
+        )
+    }
 
     data object DetailItem : Screen(
         route = "$ROUTE_DETAIL/{$ID_SAVED_STATE_KEY}",
