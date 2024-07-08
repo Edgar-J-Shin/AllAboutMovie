@@ -10,11 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.dcs.presentation.home.HomeScreen
+import com.dcs.presentation.home.HomeRoute
 import com.dcs.presentation.main.Screen.Main
-import com.dcs.presentation.people.PeopleScreen
-import com.dcs.presentation.trend.SearchScreen
-import com.dcs.presentation.setting.SettingScreen
+import com.dcs.presentation.people.PeopleRoute
+import com.dcs.presentation.setting.SettingRoute
+import com.dcs.presentation.trend.SearchRoute
 
 @Composable
 fun MainApp(
@@ -49,19 +49,19 @@ private fun MainNavHost(
         startDestination = startDestination
     ) {
         composable(route = Main.Home.route) {
-            HomeScreen()
+            HomeRoute()
         }
 
         composable(route = Main.Search.route) {
-            SearchScreen()
+            SearchRoute()
         }
 
         composable(route = Main.People.route) {
-            PeopleScreen()
+            PeopleRoute()
         }
 
         composable(route = Main.Setting.route) {
-            SettingScreen()
+            SettingRoute()
         }
     }
 }
