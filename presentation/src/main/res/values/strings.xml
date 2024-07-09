@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AllAboutMovie</string>
+    <string name="home">HOME</string>
+    <string name="trend">TREND</string>
+    <string name="people">PEOPLE</string>
+    <string name="setting">SETTING</string>
 </resources>
