@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -30,9 +31,9 @@ fun MainBottomNavigation(
     modifier: Modifier = Modifier,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentDestination = navBackStackEntry?.destination
 
-    AnimatedVisibility(visible = items.any { it.route == currentRoute }) {
+    AnimatedVisibility(visible = items.any { it.route == currentDestination?.route }) {
         NavigationBar(
             modifier = modifier,
         ) {
@@ -41,7 +42,7 @@ fun MainBottomNavigation(
                     label = {
                         Text(text = stringResource(id = screen.titleResId))
                     },
-                    selected = currentRoute == screen.route,
+                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     alwaysShowLabel = false,
                     icon = {
                         Icon(
