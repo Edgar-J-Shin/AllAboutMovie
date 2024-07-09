@@ -52,7 +52,7 @@ private fun MainNavHost(
             HomeRoute()
         }
 
-        composable(route = Main.Search.route) {
+        composable(route = Main.Trend.route) {
             SearchRoute()
         }
 

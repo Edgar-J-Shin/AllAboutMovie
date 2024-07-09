@@ -22,7 +22,7 @@ fun MainBottomNavigation(
     items: List<Main> =
         listOf(
             Main.Home,
-            Main.Search,
+            Main.Trend,
             Main.People,
             Main.Setting,
         ),

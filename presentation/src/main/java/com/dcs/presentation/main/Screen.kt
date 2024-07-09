@@ -23,8 +23,8 @@ sealed class Screen(
             iconResId = R.drawable.ic_home
         )
 
-        data object Search : Main(
-            route = ROUTE_SEARCH,
+        data object Trend : Main(
+            route = ROUTE_TREND,
             titleResId = R.string.trend,
             iconResId = R.drawable.ic_trend
         )
@@ -54,7 +54,7 @@ sealed class Screen(
 
     companion object {
         const val ROUTE_HOME = "home"
-        const val ROUTE_SEARCH = "search"
+        const val ROUTE_TREND = "trend"
         const val ROUTE_PEOPLE = "people"
         const val ROUTE_SETTING = "setting"
         const val ROUTE_DETAIL = "detail"
