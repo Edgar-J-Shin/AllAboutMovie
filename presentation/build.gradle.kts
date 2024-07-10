@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -15,6 +17,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "TMDB_IMAGE_URL", getApiKey("tmdb.image.url"))
     }
 
     buildTypes {
@@ -34,6 +38,10 @@ android {
         buildConfig = true
         compose = true
     }
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
 dependencies {
@@ -62,6 +70,9 @@ dependencies {
     // paging
     implementation(libs.androidx.paging)
     implementation(libs.androidx.paging.compose)
+
+    // glide
+    implementation(libs.glide)
 
     // debug
     implementation(libs.timber)
