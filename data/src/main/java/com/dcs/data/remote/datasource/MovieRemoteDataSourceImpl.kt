@@ -20,7 +20,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             timeWindow = timeWindow,
             page = page,
             language = language
-        ).handleNetworkResponse {
+        ).asResult {
             it.data as MoviesResponse
         }
 
@@ -28,7 +28,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         movieService.fetchMoviesByTopRated(
             page = page,
             language = language
-        ).handleNetworkResponse {
+        ).asResult {
             it.data as MoviesResponse
         }
 }

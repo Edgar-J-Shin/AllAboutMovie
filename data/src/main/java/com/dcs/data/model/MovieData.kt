@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieData(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean = false,
     @SerialName("backdrop_path")
     val backdropPath: String = "",
     @SerialName("genre_ids")
@@ -14,25 +14,25 @@ data class MovieData(
     @SerialName("id")
     val id: Int,
     @SerialName("media_type")
-    val mediaType: String,
+    val mediaType: String = "",
     @SerialName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String = "",
     @SerialName("original_title")
-    val originalTitle: String,
+    val originalTitle: String = "",
     @SerialName("overview")
-    val overview: String,
+    val overview: String = "",
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double = 0.0,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String = "",
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String = "",
     @SerialName("title")
-    val title: String,
+    val title: String = "",
     @SerialName("video")
-    val video: Boolean,
+    val video: Boolean = false,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double = 0.0,
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int = 0
 )

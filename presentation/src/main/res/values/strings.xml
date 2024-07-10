@@ -4,4 +4,7 @@
     <string name="trend">TREND</string>
     <string name="people">PEOPLE</string>
     <string name="setting">SETTING</string>
+
+    <string name="api_response_error_message">Could not load data!</string>
+    <string name="empty_item_list_message">Empty Items!</string>
 </resources>
