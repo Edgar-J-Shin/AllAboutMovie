@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.dcs.presentation.theme.AllAboutMovieTheme
+import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
