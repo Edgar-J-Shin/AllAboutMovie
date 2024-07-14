@@ -44,7 +44,6 @@ fun TrendRoute(
                     movieItems = (uiState as UiState.Success<StateFlow<PagingData<MovieItemUiState>>>).data as StateFlow<PagingData<MovieItemUiState>>
                 )
 
-                is UiState.Failure,
                 is UiState.Error -> ErrorScreen(
                     message = stringResource(id = R.string.api_response_error_message)
                 )
@@ -77,7 +76,7 @@ fun TrendMovieList(
             pagingItems[index]?.let { movie ->
                 MovieItem(
                     modifier = Modifier
-                        .width(160.dp),
+                        .width(dimensionResource(id = R.dimen.trend_item_width)),
                     movie = movie,
                     onClick = { }
                 )
