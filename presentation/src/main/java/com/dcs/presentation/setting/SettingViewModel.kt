@@ -6,4 +6,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor() : ViewModel() {
+
+    fun dispatch(event: SettingEvent) {
+        when (event) {
+            SettingEvent.SignIn -> {
+            }
+        }
+    }
 }

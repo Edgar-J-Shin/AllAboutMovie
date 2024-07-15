@@ -19,25 +19,29 @@ fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     SettingScreen(
+        onSettingEvent = viewModel::dispatch,
         modifier = modifier.fillMaxSize(),
     )
 }
 
 @Composable
 fun SettingScreen(
+    onSettingEvent: (SettingEvent) -> Unit,
     modifier: Modifier,
 ) {
     Column(
         modifier = modifier,
     ) {
         SignInButton(
-            Modifier.fillMaxWidth()
+            onClick = { onSettingEvent(SettingEvent.SignIn) },
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
 @Composable
 private fun SignInButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -46,7 +50,7 @@ private fun SignInButton(
     ) {
         Button(
             shape = RoundedCornerShape(8.dp),
-            onClick = { /*TODO*/ }
+            onClick = onClick
         ) {
             Text(text = "로그인 하기")
         }
@@ -57,6 +61,7 @@ private fun SignInButton(
 @Composable
 fun PreviewSettingScreen() {
     SettingScreen(
+        onSettingEvent = {},
         modifier = Modifier.fillMaxSize(),
     )
 }
