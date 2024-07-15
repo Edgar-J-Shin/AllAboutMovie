@@ -24,6 +24,15 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             it.data as MoviesResponse
         }
 
+    override suspend fun getMoviesByPopular(mediaType: String, page: Int, language: String): Result<MoviesResponse> =
+        movieService.fetchMoviesByPopular(
+            mediaType = mediaType,
+            page = page,
+            language = language
+        ).asResult {
+            it.data as MoviesResponse
+        }
+
     override suspend fun getMoviesByTopRated(page: Int, language: String): Result<MoviesResponse> =
         movieService.fetchMoviesByTopRated(
             page = page,

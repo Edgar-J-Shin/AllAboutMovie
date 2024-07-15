@@ -30,8 +30,9 @@ class MoviePagingSource(
         return try {
 
             val result = when (movieRanking) {
+                MovieRanking.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page + 1, language)
                 is MovieRanking.Trending -> movieRemoteDataSource.getMoviesByTrending(movieRanking.timeWindow, page + 1, language)
-                is MovieRanking.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page + 1, language)
+                is MovieRanking.Popular -> movieRemoteDataSource.getMoviesByPopular(movieRanking.mediaType, page + 1, language)
             }
 
             val (movies, totalPages) = result.getOrThrow().run { results to totalPages }

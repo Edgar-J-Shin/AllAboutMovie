@@ -7,4 +7,18 @@
 
     <string name="api_response_error_message">Could not load data!</string>
     <string name="empty_item_list_message">Empty Items!</string>
+
+    # Movie Trend > Title
+    <string name="movie_trend_title_trend">Trend</string>
+    <string name="movie_trend_title_popular">Popular Contents</string>
+    <string name="movie_trend_title_free">Free Watch</string>
+
+    # Movie Trend > Types
+    <string name="movie_trend_type_day">day</string>
+    <string name="movie_trend_type_week">week</string>
+    <string name="movie_popular_type_movie">theater</string>
+    <string name="movie_popular_type_tv">tv</string>
+    <string name="movie_free_type_movie">movie</string>
+    <string name="movie_free_type_tv">tv</string>
+
 </resources>

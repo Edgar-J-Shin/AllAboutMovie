@@ -9,5 +9,7 @@ interface MovieRepository {
 
     fun getMoviesByTrending(timeWindow: String): Flow<PagingData<MovieEntity>>
 
+    fun getMoviesByPopular(mediaType: String): Flow<PagingData<MovieEntity>>
+
     fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>>
 }

@@ -47,6 +47,18 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
+    override fun getMoviesByPopular(mediaType: String): Flow<PagingData<MovieEntity>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    movieRanking = MovieRanking.Popular(mediaType = mediaType),
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
     override fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
