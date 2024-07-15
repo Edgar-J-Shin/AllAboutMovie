@@ -8,5 +8,7 @@ interface MovieRemoteDataSource {
 
     suspend fun getMoviesByTrending(timeWindow: String, page: Int, language: String): Result<MoviesResponse>
 
+    suspend fun getMoviesByPopular(mediaType: String, page: Int, language: String): Result<MoviesResponse>
+
     suspend fun getMoviesByTopRated(page: Int, language: String): Result<MoviesResponse>
 }
