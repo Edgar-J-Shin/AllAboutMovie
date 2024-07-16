@@ -12,17 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.dcs.presentation.core.extensions.collectAsEffect
+import com.dcs.presentation.main.Screen
 
 @Composable
 fun SettingRoute(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             SettingEffect.SignIn -> {
-                // TODO: launch Chrome Custom Tab and Sign In
+                navController.navigate(Screen.SignIn.route)
             }
         }
     }

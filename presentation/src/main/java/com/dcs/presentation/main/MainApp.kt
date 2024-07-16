@@ -62,7 +62,9 @@ private fun MainNavHost(
         }
 
         composable(route = Main.Setting.route) {
-            SettingRoute()
+            SettingRoute(
+                navController = navController,
+            )
         }
 
         // TODO: MainNavHost 랑 분리 필요, MainApp 함수 리팩토링 필요함
