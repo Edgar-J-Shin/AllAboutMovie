@@ -1,4 +1,4 @@
-package com.dcs.presentation.theme
+package com.dcs.presentation.core.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -2,7 +2,7 @@ package com.dcs.data.pagingsource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.dcs.data.MovieRanking
+import com.dcs.data.Trend
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.MovieEntity
@@ -10,7 +10,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class MoviePagingSource(
-    private val movieRanking: MovieRanking,
+    private val trend: Trend,
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val pageSize: Int,
     private val language: String = "en-US"
@@ -29,9 +29,11 @@ class MoviePagingSource(
 
         return try {
 
-            val result = when (movieRanking) {
-                is MovieRanking.Trending -> movieRemoteDataSource.getMoviesByTrending(movieRanking.timeWindow, page + 1, language)
-                is MovieRanking.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page + 1, language)
+            val result = when (trend) {
+                is Trend.Trending -> movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page + 1, language)
+                is Trend.Popular -> movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page + 1, language)
+                Trend.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page + 1, language)
+                Trend.Upcoming -> movieRemoteDataSource.getMoviesByUpcoming(page + 1, language)
             }
 
             val (movies, totalPages) = result.getOrThrow().run { results to totalPages }

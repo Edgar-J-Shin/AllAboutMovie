@@ -1,9 +1,9 @@
-package com.dcs.data.model.mapper
+package com.dcs.presentation.core.model.mapper
 
-import com.dcs.data.model.MovieData
 import com.dcs.domain.model.MovieEntity
+import com.dcs.presentation.core.model.MovieItemUiState
 
-fun MovieData.toEntity() = MovieEntity(
+fun MovieEntity.toUiState() = MovieItemUiState(
     adult = adult,
     backdropPath = backdropPath,
     genreIds = genreIds,

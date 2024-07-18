@@ -1,9 +1,6 @@
-package com.dcs.domain.model
+package com.dcs.presentation.core.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class MovieEntity(
+data class MovieItemUiState(
     val adult: Boolean,
     val backdropPath: String,
     val genreIds: List<Int>,
@@ -21,6 +18,6 @@ data class MovieEntity(
     val voteCount: Int,
     val name: String,
     val originalName: String,
-    val firstAirDate: String,
-    val originalCountry: List<String>
+    val originalCountry: List<String>,
+    val firstAirDate: String
 )
