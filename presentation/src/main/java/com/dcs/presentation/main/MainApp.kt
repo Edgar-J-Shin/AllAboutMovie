@@ -54,7 +54,7 @@ private fun MainNavHost(
         }
 
         composable(route = Main.Trend.route) {
-            SearchRoute()
+            TrendRoute()
         }
 
         composable(route = Main.People.route) {
