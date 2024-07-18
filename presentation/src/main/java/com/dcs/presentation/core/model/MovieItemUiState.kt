@@ -15,5 +15,9 @@ data class MovieItemUiState(
     val title: String,
     val video: Boolean,
     val voteAverage: Double,
-    val voteCount: Int
+    val voteCount: Int,
+    val name: String,
+    val originalName: String,
+    val originalCountry: List<String>,
+    val firstAirDate: String
 )

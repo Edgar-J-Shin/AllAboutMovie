@@ -34,5 +34,13 @@ data class MovieData(
     @SerialName("vote_average")
     val voteAverage: Double = 0.0,
     @SerialName("vote_count")
-    val voteCount: Int = 0
+    val voteCount: Int = 0,
+    @SerialName("name")
+    val name: String = "",
+    @SerialName("original_name")
+    val originalName: String = "",
+    @SerialName("first_air_date")
+    val firstAirDate: String = "",
+    @SerialName("original_country")
+    val originalCountry: List<String> = emptyList()
 )

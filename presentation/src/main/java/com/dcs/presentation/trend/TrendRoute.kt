@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
@@ -21,7 +20,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,6 +48,7 @@ fun TrendRoute(
     modifier: Modifier = Modifier,
     viewModel: TrendViewModel = hiltViewModel()
 ) {
+
     Scaffold { innerPadding ->
         val scrollState = rememberScrollState()
 
@@ -73,6 +73,11 @@ fun TrendRoute(
             ) { tabIndex ->
                 viewModel.updateMoviePopularType(MoviePopularType.entries[tabIndex])
             }
+
+            TrendMoviePanel(
+                title = stringResource(id = R.string.movie_trend_title_upcoming),
+                movies = viewModel.moviesByUpcoming
+            )
         }
     }
 }
@@ -81,11 +86,11 @@ fun TrendRoute(
 fun TrendMoviePanel(
     modifier: Modifier = Modifier,
     title: String,
-    tabs: List<String>,
+    tabs: List<String> = listOf(),
     movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
-    onTabClick: (Int) -> Unit
+    onTabClick: (Int) -> Unit = {}
 ) {
-    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = modifier
@@ -99,33 +104,17 @@ fun TrendMoviePanel(
             color = Color.Black
         )
 
-        CustomScrollableTabRow(
-            tabs = tabs,
-            selectedTabIndex = selectedTabIndex,
-        ) { tabIndex ->
-            selectedTabIndex = tabIndex
-            onTabClick.invoke(tabIndex)
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(280.dp)
-        ) {
-            val uiState by movies.collectAsStateWithLifecycle()
-
-            when (uiState) {
-                is UiState.Loading -> LoadingScreen()
-
-                is UiState.Success -> TrendMovieList(
-                    movieItems = (uiState as UiState.Success<StateFlow<PagingData<MovieItemUiState>>>).data as StateFlow<PagingData<MovieItemUiState>>
-                )
-
-                is UiState.Error -> ErrorScreen(
-                    message = stringResource(id = R.string.api_response_error_message)
-                )
+        if (tabs.isNotEmpty()) {
+            CustomScrollableTabRow(
+                tabs = tabs,
+                selectedTabIndex = selectedTabIndex,
+            ) { tabIndex ->
+                selectedTabIndex = tabIndex
+                onTabClick.invoke(tabIndex)
             }
         }
+
+        TrendMovieUiStateScreen(movies)
 
         HorizontalDivider(
             Modifier.padding(all = 4.dp),
@@ -160,6 +149,31 @@ fun CustomScrollableTabRow(
                         color = textColor
                     )
                 }
+            )
+        }
+    }
+}
+
+@Composable
+fun TrendMovieUiStateScreen(
+    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(280.dp)
+    ) {
+        val uiState by movies.collectAsStateWithLifecycle()
+
+        when (uiState) {
+            is UiState.Loading -> LoadingScreen()
+
+            is UiState.Success -> TrendMovieList(
+                movieItems = (uiState as UiState.Success<StateFlow<PagingData<MovieItemUiState>>>).data as StateFlow<PagingData<MovieItemUiState>>
+            )
+
+            is UiState.Error -> ErrorScreen(
+                message = stringResource(id = R.string.api_response_error_message)
             )
         }
     }
