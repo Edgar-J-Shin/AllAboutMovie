@@ -29,9 +29,9 @@ import com.dcs.presentation.core.model.MovieItemUiState
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MovieItem(
+    modifier: Modifier = Modifier,
     movie: MovieItemUiState,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onClick: () -> Unit = {}
 ) {
     Column(modifier = modifier
         .fillMaxWidth()
@@ -44,7 +44,7 @@ fun MovieItem(
                 .aspectRatio(0.75f)
         ) {
             GlideImage(
-                model = movie.backdropPath.toImageUrl(),
+                model = movie.posterPath.toImageUrl(),
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxSize()
@@ -67,7 +67,7 @@ fun MovieItem(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            text = movie.title,
+            text = movie.title.ifEmpty { movie.name },
             textAlign = TextAlign.Left,
             maxLines = 1,
             fontSize = 12.sp,
@@ -80,7 +80,7 @@ fun MovieItem(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            text = movie.releaseDate,
+            text = movie.releaseDate.ifEmpty { movie.firstAirDate },
             textAlign = TextAlign.Left,
             maxLines = 1,
             fontSize = 12.sp,

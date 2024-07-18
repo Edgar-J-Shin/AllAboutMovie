@@ -11,7 +11,7 @@
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>
     <string name="movie_trend_title_popular">Popular Contents</string>
-    <string name="movie_trend_title_free">Free Watch</string>
+    <string name="movie_trend_title_upcoming">Upcoming</string>
 
     # Movie Trend > Types
     <string name="movie_trend_type_day">day</string>

@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.dcs.domain.usecase.GetMoviesByPopularUseCase
+import com.dcs.domain.usecase.GetContentsByPopularUseCase
 import com.dcs.domain.usecase.GetMoviesByTrendingUseCase
+import com.dcs.domain.usecase.GetMoviesByUpcomingUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.state.MovieFreeType
 import com.dcs.presentation.core.state.MoviePopularType
 import com.dcs.presentation.core.state.MovieTrendType
 import com.dcs.presentation.core.state.UiState
@@ -28,17 +28,15 @@ import javax.inject.Inject
 @HiltViewModel
 class TrendViewModel @Inject constructor(
     getMoviesByTrendingUseCase: GetMoviesByTrendingUseCase,
-    getMoviesByPopularUseCase: GetMoviesByPopularUseCase
+    getContentsByPopularUseCase: GetContentsByPopularUseCase,
+    getMoviesByUpcomingUseCase: GetMoviesByUpcomingUseCase
 ) : ViewModel() {
 
     private var _movieTrendType = MutableStateFlow(MovieTrendType.DAY)
     val movieTrendType = _movieTrendType.asStateFlow()
 
-    private var _moviePopularType = MutableStateFlow(MoviePopularType.MOVIE)
+    private var _moviePopularType = MutableStateFlow(MoviePopularType.TV)
     val moviePopularType = _moviePopularType.asStateFlow()
-
-    private var _movieFreeType = MutableStateFlow(MovieFreeType.MOVIE)
-    val movieFreeType = _movieFreeType.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     internal val moviesByTrending = movieTrendType
@@ -59,10 +57,20 @@ class TrendViewModel @Inject constructor(
     internal val moviesByPopular = moviePopularType
         .map { it.toString().lowercase(Locale.getDefault()) }
         .flatMapLatest { type ->
-            getMoviesByPopularUseCase(type)
+            getContentsByPopularUseCase(type)
                 .cachedIn(viewModelScope)
                 .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
         }
+        .asUiState()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = UiState.Success(MutableStateFlow(PagingData.empty())),
+        )
+
+    internal val moviesByUpcoming = getMoviesByUpcomingUseCase()
+        .cachedIn(viewModelScope)
+        .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
         .asUiState()
         .stateIn(
             scope = viewModelScope,
@@ -79,12 +87,6 @@ class TrendViewModel @Inject constructor(
     fun updateMoviePopularType(moviePopularType: MoviePopularType) {
         viewModelScope.launch {
             _moviePopularType.emit(moviePopularType)
-        }
-    }
-
-    fun updateMovieFreeType(movieFreeType: MovieFreeType) {
-        viewModelScope.launch {
-            _movieFreeType.emit(movieFreeType)
         }
     }
 }

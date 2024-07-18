@@ -18,5 +18,9 @@ data class MovieEntity(
     val title: String,
     val video: Boolean,
     val voteAverage: Double,
-    val voteCount: Int
+    val voteCount: Int,
+    val name: String,
+    val originalName: String,
+    val firstAirDate: String,
+    val originalCountry: List<String>
 )
