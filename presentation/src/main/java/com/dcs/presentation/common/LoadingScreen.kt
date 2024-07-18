@@ -12,23 +12,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@Preview(name = "LoadingScreen", showBackground = true)
 @Composable
 fun LoadingScreen(
-    size: Dp = 64.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Dp = 64.dp
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
-            modifier = modifier
-                .size(size)
-                .align(Alignment.Center),
+            modifier = Modifier
+                .size(size),
             color = MaterialTheme.colorScheme.secondary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant,
         )
 
     }
+}
+
+@Preview(name = "LoadingScreen", showBackground = true)
+@Composable
+fun LoadingScreenPreview() {
+    LoadingScreen()
 }

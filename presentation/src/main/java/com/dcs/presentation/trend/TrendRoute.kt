@@ -58,24 +58,21 @@ fun TrendRoute(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
-            TrendMoviePanel(
-                title = stringResource(id = R.string.movie_trend_title_trend),
-                tabs = MovieTrendType.entries.map { it.toUiString() },
-                movies = viewModel.moviesByTrending
-            ) { tabIndex ->
-                viewModel.updateMovieTrendType(MovieTrendType.entries[tabIndex])
-            }
+            TrendMovies(
+                movies = viewModel.moviesByTrending,
+                onTabClick = { tabIndex ->
+                    viewModel.updateMovieTrendType(MovieTrendType.entries[tabIndex])
+                }
+            )
 
-            TrendMoviePanel(
-                title = stringResource(id = R.string.movie_trend_title_popular),
-                tabs = MoviePopularType.entries.map { it.toUiString() },
-                movies = viewModel.moviesByPopular
-            ) { tabIndex ->
-                viewModel.updateMoviePopularType(MoviePopularType.entries[tabIndex])
-            }
+            PopularContents(
+                movies = viewModel.moviesByPopular,
+                onTabClick = { tabIndex ->
+                    viewModel.updateMoviePopularType(MoviePopularType.entries[tabIndex])
+                }
+            )
 
-            TrendMoviePanel(
-                title = stringResource(id = R.string.movie_trend_title_upcoming),
+            UpcomingMovies(
                 movies = viewModel.moviesByUpcoming
             )
         }
@@ -83,11 +80,47 @@ fun TrendRoute(
 }
 
 @Composable
-fun TrendMoviePanel(
-    modifier: Modifier = Modifier,
-    title: String,
-    tabs: List<String> = listOf(),
+fun TrendMovies(
     movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
+    onTabClick: (Int) -> Unit = {}
+) {
+    TrendMoviePanel(
+        title = stringResource(id = R.string.movie_trend_title_trend),
+        movies = movies,
+        tabs = MovieTrendType.entries.map { it.toUiString() },
+        onTabClick = onTabClick
+    )
+}
+
+@Composable
+fun PopularContents(
+    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
+    onTabClick: (Int) -> Unit = {}
+) {
+    TrendMoviePanel(
+        title = stringResource(id = R.string.movie_trend_title_popular),
+        movies = movies,
+        tabs = MoviePopularType.entries.map { it.toUiString() },
+        onTabClick = onTabClick
+    )
+}
+
+@Composable
+fun UpcomingMovies(
+    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>
+) {
+    TrendMoviePanel(
+        title = stringResource(id = R.string.movie_trend_title_upcoming),
+        movies = movies
+    )
+}
+
+@Composable
+fun TrendMoviePanel(
+    title: String,
+    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
+    modifier: Modifier = Modifier,
+    tabs: List<String> = listOf(),
     onTabClick: (Int) -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -114,7 +147,12 @@ fun TrendMoviePanel(
             }
         }
 
-        TrendMovieUiStateScreen(movies)
+        TrendMovieUiStateScreen(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(280.dp),
+            movies = movies
+        )
 
         HorizontalDivider(
             Modifier.padding(all = 4.dp),
@@ -156,12 +194,11 @@ fun CustomScrollableTabRow(
 
 @Composable
 fun TrendMovieUiStateScreen(
+    modifier: Modifier = Modifier,
     movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(280.dp)
+        modifier = modifier
     ) {
         val uiState by movies.collectAsStateWithLifecycle()
 
