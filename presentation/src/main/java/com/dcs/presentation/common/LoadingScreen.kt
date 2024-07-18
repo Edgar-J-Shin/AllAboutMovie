@@ -12,12 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@Preview(name = "LoadingScreen", showBackground = true)
-@Composable
-fun LoadingScreenPreview() {
-    LoadingScreen()
-}
-
 @Composable
 fun LoadingScreen(
     modifier: Modifier = Modifier,
@@ -36,4 +30,10 @@ fun LoadingScreen(
         )
 
     }
+}
+
+@Preview(name = "LoadingScreen", showBackground = true)
+@Composable
+fun LoadingScreenPreview() {
+    LoadingScreen()
 }

@@ -11,14 +11,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.dcs.presentation.R
 
-@Preview(name = "ErrorScreen", showBackground = true)
-@Composable
-fun ErrorScreenPreview() {
-    ErrorScreen(
-        message = stringResource(id = R.string.api_response_error_message)
-    )
-}
-
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier,
@@ -35,4 +27,12 @@ fun ErrorScreen(
             modifier = modifier
         )
     }
+}
+
+@Preview(name = "ErrorScreen", showBackground = true)
+@Composable
+fun ErrorScreenPreview() {
+    ErrorScreen(
+        message = stringResource(id = R.string.api_response_error_message)
+    )
 }

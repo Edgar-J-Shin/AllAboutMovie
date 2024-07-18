@@ -24,14 +24,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Preview(name = "PercentageCircleView", showBackground = true)
-@Composable
-fun CircularProgressBarWithPercentagePreview() {
-    CircularProgressBarWithPercentage(
-        percentage = 70
-    )
-}
-
 @Composable
 fun CircularProgressBarWithPercentage(
     modifier: Modifier = Modifier,
@@ -108,4 +100,12 @@ fun CircularProgressBarWithPercentage(
             )
         }
     }
+}
+
+@Preview(name = "PercentageCircleView", showBackground = true)
+@Composable
+fun CircularProgressBarWithPercentagePreview() {
+    CircularProgressBarWithPercentage(
+        percentage = 70
+    )
 }
