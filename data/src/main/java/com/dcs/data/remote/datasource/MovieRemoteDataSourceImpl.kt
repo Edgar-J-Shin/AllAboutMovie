@@ -10,7 +10,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
 ) : MovieRemoteDataSource {
 
     /**
-     * Todo : 테스트용 제거 예정
+     * For test
      */
     override suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse> =
         movieService.fetchMoviesByTopRated(0)
@@ -20,16 +20,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             timeWindow = timeWindow,
             page = page,
             language = language
-        ).asResult {
-            it.data as MoviesResponse
-        }
-
-    override suspend fun getMoviesByPopular(mediaType: String, page: Int, language: String): Result<MoviesResponse> =
-        movieService.fetchMoviesByPopular(
-            mediaType = mediaType,
-            page = page,
-            language = language
-        ).asResult {
+        ).handleNetworkResponse {
             it.data as MoviesResponse
         }
 
@@ -37,23 +28,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         movieService.fetchMoviesByTopRated(
             page = page,
             language = language
-        ).asResult {
-            it.data as MoviesResponse
-        }
-
-    override suspend fun getMoviesByNowPlaying(page: Int, language: String): Result<MoviesResponse> =
-        movieService.fetchMoviesByNowPlaying(
-            page = page,
-            language = language
-        ).asResult {
-            it.data as MoviesResponse
-        }
-
-    override suspend fun getMoviesByUpcoming(page: Int, language: String): Result<MoviesResponse> =
-        movieService.fetchMoviesByUpcoming(
-            page = page,
-            language = language
-        ).asResult {
+        ).handleNetworkResponse {
             it.data as MoviesResponse
         }
 }

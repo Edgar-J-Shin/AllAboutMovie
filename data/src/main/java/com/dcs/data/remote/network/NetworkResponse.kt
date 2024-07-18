@@ -13,7 +13,7 @@ sealed class NetworkResponse<out T : Any> {
     // Others..
     data class Unexpected(val throwable: Throwable) : NetworkResponse<Nothing>()
 
-    inline fun <T> asResult(onSuccessAction: (Success<*>) -> T): Result<T> = when (this) {
+    inline fun <T> handleNetworkResponse(onSuccessAction: (Success<*>) -> T): Result<T> = when (this) {
         is Success -> Result.success(onSuccessAction(this))
         is Failure -> Result.failure(RetrofitFailureException(message, code))
         is Error -> Result.failure(IllegalStateException("Error : ${throwable.message}"))

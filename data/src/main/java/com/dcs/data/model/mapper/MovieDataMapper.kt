@@ -18,9 +18,5 @@ fun MovieData.toEntity() = MovieEntity(
     title = title,
     video = video,
     voteAverage = voteAverage,
-    voteCount = voteCount,
-    name = name,
-    originalName = originalName,
-    firstAirDate = firstAirDate,
-    originalCountry = originalCountry
+    voteCount = voteCount
 )

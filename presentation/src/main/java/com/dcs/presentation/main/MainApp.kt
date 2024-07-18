@@ -14,7 +14,7 @@ import com.dcs.presentation.home.HomeRoute
 import com.dcs.presentation.main.Screen.Main
 import com.dcs.presentation.people.PeopleRoute
 import com.dcs.presentation.setting.SettingRoute
-import com.dcs.presentation.trend.TrendRoute
+import com.dcs.presentation.trend.SearchRoute
 
 @Composable
 fun MainApp(
@@ -53,7 +53,7 @@ private fun MainNavHost(
         }
 
         composable(route = Main.Trend.route) {
-            TrendRoute()
+            SearchRoute()
         }
 
         composable(route = Main.People.route) {

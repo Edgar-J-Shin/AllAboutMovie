@@ -14,7 +14,7 @@ hilt = "2.51.1"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
 kotlinxSerialization = "1.6.3"
-glide = "1.0.0-beta01"
+glide = "4.16.0"
 datastore = "1.1.1"
 room = "2.6.1"
 paging = "3.3.0"
@@ -84,8 +84,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-serialization-core-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core-jvm", version.ref = "kotlinxSerialization" }
 
 # Glide
-glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
-#glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 
 # Debug
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber"}
