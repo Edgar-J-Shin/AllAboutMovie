@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,12 +26,21 @@ import androidx.compose.ui.unit.sp
 
 @Preview(name = "PercentageCircleView", showBackground = true)
 @Composable
-fun PercentageCircleView(
+fun CircularProgressBarWithPercentagePreview() {
+    CircularProgressBarWithPercentage(
+        percentage = 70
+    )
+}
+
+@Composable
+fun CircularProgressBarWithPercentage(
+    modifier: Modifier = Modifier,
     percentage: Int = 0,
-    viewSize: Dp = 40.dp,
-    modifier: Modifier = Modifier
+    viewSize: Dp = 40.dp
 ) {
-    val progress by remember { mutableStateOf(percentage) }
+    val progress by remember { mutableIntStateOf(percentage) }
+
+    val startAngle = 270f
 
     val convertedValue = progress * 360 / 100
     val insideArcSize = (viewSize - 8.dp)
@@ -65,7 +74,7 @@ fun PercentageCircleView(
                 topLeft = topLeft,
                 size = size,
                 brush = SolidColor(Color.Gray),
-                startAngle = 270f,
+                startAngle = startAngle,
                 sweepAngle = 360f,
                 useCenter = false,
                 style = Stroke(progressSize.toPx(), cap = StrokeCap.Square)
@@ -75,7 +84,7 @@ fun PercentageCircleView(
                 topLeft = topLeft,
                 size = size,
                 brush = SolidColor(progressColor),
-                startAngle = 270f,
+                startAngle = startAngle,
                 sweepAngle = convertedValue.toFloat(),
                 useCenter = false,
                 style = Stroke(progressSize.toPx(), cap = StrokeCap.Round)

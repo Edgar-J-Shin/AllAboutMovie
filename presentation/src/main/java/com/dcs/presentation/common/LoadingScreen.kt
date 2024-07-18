@@ -14,9 +14,14 @@ import androidx.compose.ui.unit.dp
 
 @Preview(name = "LoadingScreen", showBackground = true)
 @Composable
+fun LoadingScreenPreview() {
+    LoadingScreen()
+}
+
+@Composable
 fun LoadingScreen(
-    size: Dp = 64.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Dp = 64.dp
 ) {
     Box(
         modifier = modifier

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.dcs.presentation.common.PercentageCircleView
+import com.dcs.presentation.common.CircularProgressBarWithPercentage
 import com.dcs.presentation.core.extentions.toImageUrl
 import com.dcs.presentation.core.model.MovieItemUiState
 
@@ -54,12 +54,12 @@ fun MovieItem(
                 contentScale = ContentScale.Crop
             )
 
-            PercentageCircleView(
+            CircularProgressBarWithPercentage(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 10.dp),
-                viewSize = 40.dp,
-                percentage = (movie.voteAverage * 10).toInt()
+                percentage = (movie.voteAverage * 10).toInt(),
+                viewSize = 40.dp
             )
         }
 
