@@ -52,12 +52,17 @@ sealed class Screen(
 
     }
 
+    data object SignIn : Screen(
+        route = ROUTE_SIGN_IN
+    )
+
     companion object {
         const val ROUTE_HOME = "home"
         const val ROUTE_TREND = "trend"
         const val ROUTE_PEOPLE = "people"
         const val ROUTE_SETTING = "setting"
         const val ROUTE_DETAIL = "detail"
+        const val ROUTE_SIGN_IN = "signIn"
 
         const val ID_SAVED_STATE_KEY = "IdStateKey"
     }
