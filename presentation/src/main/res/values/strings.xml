@@ -10,6 +10,12 @@
     <string name="error_message">일시적인 오류가 발생하여\n작업이 실패했습니다.\n불편을 드려 죄송합니다.\n잠시 후 다시 시작해주세요.</string>
     <string name="retry">재시도</string>
 
+    <string name="desc_search">search</string>
+    <string name="desc_clear">clear</string>
+
+    # Search > Searchbar
+    <string name="searchbar_hint">Enter query text.</string>
+
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>
     <string name="movie_trend_title_popular">Popular Contents</string>
@@ -36,3 +42,4 @@
     <string name="title_poplular_people">인기 인물</string>
 
 </resources>
+
