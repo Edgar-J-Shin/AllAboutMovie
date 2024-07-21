@@ -16,7 +16,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.dcs.presentation.ui.main.Screen.Main
+import com.dcs.presentation.ui.Screen.Main
 
 @Composable
 fun MainBottomNavigation(
