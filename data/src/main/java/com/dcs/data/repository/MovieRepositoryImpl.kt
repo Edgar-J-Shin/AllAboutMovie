@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.dcs.data.Trend
 import com.dcs.data.di.IoDispatcher
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.pagingsource.MoviePagingSource
@@ -24,7 +25,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     @WorkerThread
     override suspend fun fetchMoviesByTopRated(): Flow<Result<List<MovieEntity>>> = flow {
-        val result = movieRemoteDataSource.fetchMoviesByTopRated().handleResponse { response ->
+        val result = movieRemoteDataSource.fetchMoviesByTopRated().asResult { response ->
             (response.data as MoviesResponse).results.map { movieResult ->
                 movieResult.toEntity()
             }
@@ -34,14 +35,58 @@ class MovieRepositoryImpl @Inject constructor(
 
     }.flowOn(ioDispatcher)
 
-    override suspend fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
+    @WorkerThread
+    override fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
         Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = 20),
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    pageSize = 20,
+                    trend = Trend.TopRated,
+                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
         ).flow
+
+    @WorkerThread
+    override fun getMoviesByTrending(timeWindow: String): Flow<PagingData<MovieEntity>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    trend = Trend.Trending(timeWindow = timeWindow),
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
+    @WorkerThread
+    override fun getMoviesByPopular(mediaType: String): Flow<PagingData<MovieEntity>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    trend = Trend.Popular(mediaType = mediaType),
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
+    override fun getMoviesByUpcoming(): Flow<PagingData<MovieEntity>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    trend = Trend.Upcoming,
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
+    companion object {
+        const val DEFAULT_PAGE_SIZE: Int = 20
+    }
 }

@@ -14,7 +14,7 @@ hilt = "2.51.1"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
 kotlinxSerialization = "1.6.3"
-glide = "4.16.0"
+glide = "1.0.0-beta01"
 datastore = "1.1.1"
 room = "2.6.1"
 paging = "3.3.0"
@@ -56,6 +56,7 @@ hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", v
 
 # AndroidX Paging
 androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+androidx-paging-compose = {group = "androidx.paging", name = "paging-compose", version.ref = "paging"}
 
 # DataStore
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
@@ -83,8 +84,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-serialization-core-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core-jvm", version.ref = "kotlinxSerialization" }
 
 # Glide
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
+#glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 
 # Debug
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber"}

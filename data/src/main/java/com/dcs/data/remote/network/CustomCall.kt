@@ -12,14 +12,15 @@ class CustomCall<T : Any>(
 
     override fun enqueue(callback: Callback<NetworkResponse<T>>) = callDelegate.enqueue(object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
-            response.body()?.let {
-                if (response.isSuccessful) {
-                    callback.onResponse(this@CustomCall, Response.success(NetworkResponse.Success(it, response.code())))
-                } else {
-                    callback.onResponse(this@CustomCall, Response.success(NetworkResponse.Failure(response.message(), response.code())))
-                }
+            val networkResponse = if (response.isSuccessful) {
+                response.body()?.let {
+                    NetworkResponse.Success(it, response.code())
+                } ?: NetworkResponse.Unexpected(Throwable())
+            } else {
+                NetworkResponse.Failure(response.message(), response.code())
+            }
 
-            } ?: callback.onResponse(this@CustomCall, Response.success(NetworkResponse.Unexpected(Throwable())))
+            callback.onResponse(this@CustomCall, Response.success(networkResponse))
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {

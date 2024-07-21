@@ -4,7 +4,16 @@ import com.dcs.data.remote.model.MoviesResponse
 import com.dcs.data.remote.network.NetworkResponse
 
 interface MovieRemoteDataSource {
+
     suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse>
 
-    suspend fun getMoviesByTopRated(page: Int): NetworkResponse<MoviesResponse>
+    suspend fun getMoviesByTrending(timeWindow: String, page: Int, language: String): Result<MoviesResponse>
+
+    suspend fun getMoviesByNowPlaying(page: Int, language: String): Result<MoviesResponse>
+
+    suspend fun getMoviesByPopular(mediaType: String, page: Int, language: String): Result<MoviesResponse>
+
+    suspend fun getMoviesByTopRated(page: Int, language: String): Result<MoviesResponse>
+
+    suspend fun getMoviesByUpcoming(page: Int, language: String): Result<MoviesResponse>
 }
