@@ -12,34 +12,38 @@ sealed class Screen(
     val navArguments: List<NamedNavArgument> = emptyList(),
 ) {
 
-    sealed class Main(
-        route: String,
-        @StringRes val titleResId: Int,
-        @DrawableRes val iconResId: Int,
-    ) : Screen(route, emptyList()) {
-        data object Home : Main(
-            route = ROUTE_HOME,
-            titleResId = R.string.home,
-            iconResId = R.drawable.ic_home
-        )
+    data object Main : Screen(route = ROUTE_MAIN) {
 
-        data object Trend : Main(
-            route = ROUTE_TREND,
-            titleResId = R.string.trend,
-            iconResId = R.drawable.ic_trend
-        )
+        sealed class MainTab(
+            route: String,
+            @StringRes val titleResId: Int,
+            @DrawableRes val iconResId: Int,
+        ) : Screen(route, emptyList()) {
 
-        data object People : Main(
-            route = ROUTE_PEOPLE,
-            titleResId = R.string.people,
-            iconResId = R.drawable.ic_people
-        )
+            data object Home : MainTab(
+                route = ROUTE_HOME,
+                titleResId = R.string.home,
+                iconResId = R.drawable.ic_home
+            )
 
-        data object Setting : Main(
-            route = ROUTE_SETTING,
-            titleResId = R.string.setting,
-            iconResId = R.drawable.ic_setting
-        )
+            data object Trend : MainTab(
+                route = ROUTE_TREND,
+                titleResId = R.string.trend,
+                iconResId = R.drawable.ic_trend
+            )
+
+            data object People : MainTab(
+                route = ROUTE_PEOPLE,
+                titleResId = R.string.people,
+                iconResId = R.drawable.ic_people
+            )
+
+            data object Setting : MainTab(
+                route = ROUTE_SETTING,
+                titleResId = R.string.setting,
+                iconResId = R.drawable.ic_setting
+            )
+        }
     }
 
     data object DetailItem : Screen(
@@ -57,6 +61,7 @@ sealed class Screen(
     )
 
     companion object {
+        const val ROUTE_MAIN = "main"
         const val ROUTE_HOME = "home"
         const val ROUTE_TREND = "trend"
         const val ROUTE_PEOPLE = "people"
