@@ -1,4 +1,4 @@
-package com.dcs.presentation.home
+package com.dcs.presentation.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

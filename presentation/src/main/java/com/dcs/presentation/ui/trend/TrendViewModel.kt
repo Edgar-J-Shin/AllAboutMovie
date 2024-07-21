@@ -1,4 +1,4 @@
-package com.dcs.presentation.trend
+package com.dcs.presentation.ui.trend
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

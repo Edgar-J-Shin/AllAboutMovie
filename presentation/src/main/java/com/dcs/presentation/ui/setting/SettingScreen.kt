@@ -1,4 +1,4 @@
-package com.dcs.presentation.setting
+package com.dcs.presentation.ui.setting
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.main.Screen
+import com.dcs.presentation.ui.Screen
 
 @Composable
 fun SettingRoute(
