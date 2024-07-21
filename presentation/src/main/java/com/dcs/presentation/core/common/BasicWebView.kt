@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.util
+package com.dcs.presentation.core.common
 
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
@@ -9,7 +9,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 
 @Composable
-fun AllAboutMovieWebView(
+fun BasicWebView(
     onUpdate: (WebView) -> Unit,
     modifier: Modifier = Modifier,
 ) {

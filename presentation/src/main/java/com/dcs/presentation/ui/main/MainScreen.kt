@@ -1,4 +1,4 @@
-package com.dcs.presentation.main
+package com.dcs.presentation.ui.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,28 +10,29 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.dcs.presentation.home.HomeRoute
-import com.dcs.presentation.main.Screen.Main
-import com.dcs.presentation.people.PeopleRoute
-import com.dcs.presentation.setting.SettingRoute
-import com.dcs.presentation.trend.TrendRoute
-import com.dcs.presentation.ui.signin.SignInRoute
+import com.dcs.presentation.ui.Screen.Main.MainTab
+import com.dcs.presentation.ui.home.HomeRoute
+import com.dcs.presentation.ui.people.PeopleRoute
+import com.dcs.presentation.ui.setting.SettingRoute
+import com.dcs.presentation.ui.trend.TrendRoute
 
 @Composable
-fun MainApp(
-    navController: NavHostController = rememberNavController(),
+fun MainRoute(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
+    mainNavController: NavHostController = rememberNavController(),
 ) {
-
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            MainBottomNavigation(navController = navController)
+            MainBottomNavigation(navController = mainNavController)
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             MainNavHost(
-                navController = navController, startDestination = Main.Home.route
+                mainNavController = mainNavController,
+                appNavHostController = navController,
+                startDestination = MainTab.Home.route
             )
         }
     }
@@ -39,37 +40,33 @@ fun MainApp(
 
 @Composable
 private fun MainNavHost(
-    navController: NavHostController,
+    mainNavController: NavHostController,
+    appNavHostController: NavHostController,
     startDestination: String,
     modifier: Modifier = Modifier,
 ) {
 
     NavHost(
         modifier = modifier,
-        navController = navController,
+        navController = mainNavController,
         startDestination = startDestination
     ) {
-        composable(route = Main.Home.route) {
+        composable(route = MainTab.Home.route) {
             HomeRoute()
         }
 
-        composable(route = Main.Trend.route) {
+        composable(route = MainTab.Trend.route) {
             TrendRoute()
         }
 
-        composable(route = Main.People.route) {
+        composable(route = MainTab.People.route) {
             PeopleRoute()
         }
 
-        composable(route = Main.Setting.route) {
+        composable(route = MainTab.Setting.route) {
             SettingRoute(
-                navController = navController,
+                navController = appNavHostController,
             )
-        }
-
-        // TODO: MainNavHost 랑 분리 필요, MainApp 함수 리팩토링 필요함
-        composable(route = Screen.SignIn.route) {
-            SignInRoute(navController = navController)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.dcs.presentation.main
+package com.dcs.presentation.ui.main
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.Icon
@@ -16,16 +16,16 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.dcs.presentation.main.Screen.Main
+import com.dcs.presentation.ui.Screen.Main.MainTab
 
 @Composable
 fun MainBottomNavigation(
-    items: List<Main> =
+    items: List<MainTab> =
         listOf(
-            Main.Home,
-            Main.Trend,
-            Main.People,
-            Main.Setting,
+            MainTab.Home,
+            MainTab.Trend,
+            MainTab.People,
+            MainTab.Setting,
         ),
     navController: NavHostController,
     modifier: Modifier = Modifier,

@@ -1,4 +1,4 @@
-package com.dcs.presentation.trend
+package com.dcs.presentation.ui.trend
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.dcs.presentation.common.CircularProgressBarWithPercentage
-import com.dcs.presentation.core.extentions.toImageUrl
+import com.dcs.presentation.core.common.CircularProgressBarWithPercentage
+import com.dcs.presentation.core.extensions.toImageUrl
 import com.dcs.presentation.core.model.MovieItemUiState
 
 @OptIn(ExperimentalGlideComposeApi::class)
