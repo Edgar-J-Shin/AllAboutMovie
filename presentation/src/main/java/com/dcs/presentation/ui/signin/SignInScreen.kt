@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.dcs.presentation.common.BaseWebView
+import com.dcs.presentation.core.common.BaseWebView
 
 @Composable
 fun SignInRoute(

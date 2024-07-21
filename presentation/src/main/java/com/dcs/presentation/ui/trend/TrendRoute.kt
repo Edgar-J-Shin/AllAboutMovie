@@ -35,8 +35,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
-import com.dcs.presentation.common.ErrorScreen
-import com.dcs.presentation.common.LoadingScreen
+import com.dcs.presentation.core.common.ErrorScreen
+import com.dcs.presentation.core.common.LoadingScreen
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.state.MoviePopularType
 import com.dcs.presentation.core.state.MovieTrendType
