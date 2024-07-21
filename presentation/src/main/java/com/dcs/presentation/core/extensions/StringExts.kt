@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.extentions
+package com.dcs.presentation.core.extensions
 
 import com.dcs.presentation.BuildConfig
 import java.util.Locale
