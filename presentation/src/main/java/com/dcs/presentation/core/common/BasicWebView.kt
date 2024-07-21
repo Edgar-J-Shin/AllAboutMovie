@@ -9,7 +9,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 
 @Composable
-fun BaseWebView(
+fun BasicWebView(
     onUpdate: (WebView) -> Unit,
     modifier: Modifier = Modifier,
 ) {
