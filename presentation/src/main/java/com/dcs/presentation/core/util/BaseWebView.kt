@@ -9,7 +9,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 
 @Composable
-fun AllAboutMovieWebView(
+fun BaseWebView(
     onUpdate: (WebView) -> Unit,
     modifier: Modifier = Modifier,
 ) {

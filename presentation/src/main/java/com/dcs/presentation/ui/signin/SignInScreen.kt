@@ -4,14 +4,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.dcs.presentation.core.util.AllAboutMovieWebView
+import com.dcs.presentation.core.util.BaseWebView
 
 @Composable
 fun SignInRoute(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    AllAboutMovieWebView(
+    BaseWebView(
         onUpdate = { webView ->
             webView.loadUrl("https://www.themoviedb.org/")
         },
