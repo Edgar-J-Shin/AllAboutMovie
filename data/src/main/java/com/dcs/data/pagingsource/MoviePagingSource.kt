@@ -36,16 +36,20 @@ class MoviePagingSource(
                 Trend.Upcoming -> movieRemoteDataSource.getMoviesByUpcoming(page + 1, language)
             }
 
-            val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
+            try {
+                val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
 
-            val hasPrevPage = page != startPageIndex
-            val hasNextPage = movies.isNotEmpty() && !(page == startPageIndex && totalPages < pageSize)
+                val hasPrevPage = page != startPageIndex
+                val hasNextPage = movies.isNotEmpty() && !(page == startPageIndex && totalPages < pageSize)
 
-            LoadResult.Page(
-                data = movies.map { it.toEntity() }.distinct(),
-                prevKey = if (hasPrevPage) page - 1 else null,
-                nextKey = if (hasNextPage) page + 1 else null
-            )
+                LoadResult.Page(
+                    data = movies.map { it.toEntity() }.distinct(),
+                    prevKey = if (hasPrevPage) page - 1 else null,
+                    nextKey = if (hasNextPage) page + 1 else null
+                )
+            } catch (e: Exception) {
+                LoadResult.Error(e)
+            }
         } catch (exception: IOException) {
             LoadResult.Error(exception)
         } catch (exception: HttpException) {
