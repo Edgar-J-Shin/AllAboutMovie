@@ -6,8 +6,6 @@ import com.dcs.data.Trend
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.MovieEntity
-import retrofit2.HttpException
-import java.io.IOException
 
 class MoviePagingSource(
     private val trend: Trend,
@@ -28,7 +26,6 @@ class MoviePagingSource(
         val page = params.key ?: startPageIndex
 
         return try {
-
             val result = when (trend) {
                 is Trend.Trending -> movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page + 1, language)
                 is Trend.Popular -> movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page + 1, language)
@@ -36,24 +33,18 @@ class MoviePagingSource(
                 Trend.Upcoming -> movieRemoteDataSource.getMoviesByUpcoming(page + 1, language)
             }
 
-            try {
-                val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
+            val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
 
-                val hasPrevPage = page != startPageIndex
-                val hasNextPage = movies.isNotEmpty() && !(page == startPageIndex && totalPages < pageSize)
+            val hasPrevPage = page != startPageIndex
+            val hasNextPage = movies.isNotEmpty() && !(page == startPageIndex && totalPages < pageSize)
 
-                LoadResult.Page(
-                    data = movies.map { it.toEntity() }.distinct(),
-                    prevKey = if (hasPrevPage) page - 1 else null,
-                    nextKey = if (hasNextPage) page + 1 else null
-                )
-            } catch (e: Exception) {
-                LoadResult.Error(e)
-            }
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
+            LoadResult.Page(
+                data = movies.map { it.toEntity() }.distinct(),
+                prevKey = if (hasPrevPage) page - 1 else null,
+                nextKey = if (hasNextPage) page + 1 else null
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
         }
     }
 }
