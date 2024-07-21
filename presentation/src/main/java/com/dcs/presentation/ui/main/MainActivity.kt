@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
-import com.dcs.presentation.ui.MainApp
+import com.dcs.presentation.ui.AllAboutMovieApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AllAboutMovieTheme {
-                MainApp()
+                AllAboutMovieApp()
             }
         }
     }

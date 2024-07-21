@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.dcs.presentation.ui.Screen.Main.MainTab
 import com.dcs.presentation.ui.home.HomeRoute
 import com.dcs.presentation.ui.people.PeopleRoute
@@ -19,16 +20,19 @@ import com.dcs.presentation.ui.trend.TrendRoute
 fun MainRoute(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    mainNavController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            MainBottomNavigation(navController = navController)
+            MainBottomNavigation(navController = mainNavController)
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             MainNavHost(
-                navController = navController, startDestination = MainTab.Home.route
+                mainNavController = mainNavController,
+                appNavHostController = navController,
+                startDestination = MainTab.Home.route
             )
         }
     }
@@ -36,14 +40,15 @@ fun MainRoute(
 
 @Composable
 private fun MainNavHost(
-    navController: NavHostController,
+    mainNavController: NavHostController,
+    appNavHostController: NavHostController,
     startDestination: String,
     modifier: Modifier = Modifier,
 ) {
 
     NavHost(
         modifier = modifier,
-        navController = navController,
+        navController = mainNavController,
         startDestination = startDestination
     ) {
         composable(route = MainTab.Home.route) {
@@ -60,7 +65,7 @@ private fun MainNavHost(
 
         composable(route = MainTab.Setting.route) {
             SettingRoute(
-                navController = navController,
+                navController = appNavHostController,
             )
         }
     }
