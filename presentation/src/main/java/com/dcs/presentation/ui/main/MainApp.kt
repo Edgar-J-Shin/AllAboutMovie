@@ -1,4 +1,4 @@
-package com.dcs.presentation.main
+package com.dcs.presentation.ui.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.dcs.presentation.home.HomeRoute
-import com.dcs.presentation.main.Screen.Main
-import com.dcs.presentation.people.PeopleRoute
-import com.dcs.presentation.setting.SettingRoute
-import com.dcs.presentation.trend.TrendRoute
+import com.dcs.presentation.ui.home.HomeRoute
+import com.dcs.presentation.ui.main.Screen.Main
+import com.dcs.presentation.ui.people.PeopleRoute
+import com.dcs.presentation.ui.setting.SettingRoute
+import com.dcs.presentation.ui.trend.TrendRoute
 import com.dcs.presentation.ui.signin.SignInRoute
 
 @Composable

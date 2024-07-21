@@ -1,4 +1,4 @@
-package com.dcs.presentation.trend
+package com.dcs.presentation.ui.trend
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

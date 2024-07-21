@@ -1,4 +1,4 @@
-package com.dcs.presentation.home
+package com.dcs.presentation.ui.home
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

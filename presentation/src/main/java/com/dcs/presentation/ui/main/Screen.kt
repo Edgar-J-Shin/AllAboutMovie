@@ -1,4 +1,4 @@
-package com.dcs.presentation.main
+package com.dcs.presentation.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
