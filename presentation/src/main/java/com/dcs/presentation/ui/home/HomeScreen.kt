@@ -3,8 +3,13 @@ package com.dcs.presentation.ui.home
 import android.view.ViewTreeObserver
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -17,22 +22,31 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
+import com.dcs.presentation.core.common.ErrorScreen
+import com.dcs.presentation.core.common.LoadingScreen
+import com.dcs.presentation.core.model.MovieItemUiState
+import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.ui.trend.MovieItem
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
 
     Scaffold(
@@ -47,7 +61,11 @@ fun HomeRoute(
         Box(
             modifier = modifier.padding(innerPadding)
         ) {
-
+            SearchUiStateScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
+                movies = viewModel.searchResult
+            )
         }
     }
 }
@@ -55,11 +73,10 @@ fun HomeRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTopBar(
-    queryText: StateFlow<String>,
+    queryText: String,
     onQueryChange: (String) -> Unit,
-    onQueryClear: () -> Unit
+    onQueryClear: () -> Unit,
 ) {
-    val searchText by queryText.collectAsStateWithLifecycle()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
@@ -82,7 +99,7 @@ private fun SearchTopBar(
     }
 
     SearchBar(
-        query = searchText,
+        query = queryText,
         onQueryChange = onQueryChange,
         onSearch = {
             onQueryChange(it)
@@ -102,6 +119,63 @@ private fun SearchTopBar(
             .fillMaxWidth()
             .focusable()
     ) {
+    }
+}
+
+@Composable
+fun SearchUiStateScreen(
+    modifier: Modifier = Modifier,
+    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
+) {
+    Box(
+        modifier = modifier
+    ) {
+        val uiState by movies.collectAsStateWithLifecycle()
+
+        when (uiState) {
+            is UiState.Loading -> LoadingScreen()
+
+            is UiState.Success -> GridMovieList(
+                movieItems = (uiState as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
+            )
+
+            is UiState.Error -> ErrorScreen(
+                message = stringResource(id = R.string.api_response_error_message)
+            )
+        }
+    }
+}
+
+@Composable
+fun GridMovieList(
+    movieItems: PagingData<MovieItemUiState>,
+    modifier: Modifier = Modifier,
+) {
+    val pagingItems = snapshotFlow { movieItems }.collectAsLazyPagingItems()
+    val gridState = rememberLazyGridState()
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier,
+        state = gridState,
+        contentPadding = PaddingValues(
+            horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
+            vertical = dimensionResource(id = R.dimen.list_margin_vertical)
+        )
+    ) {
+        items(
+            count = pagingItems.itemCount,
+            key = { index -> index }
+        ) { index ->
+            pagingItems[index]?.let { movie ->
+                MovieItem(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    movie = movie,
+                    onClick = { }
+                )
+            }
+        }
     }
 }
 

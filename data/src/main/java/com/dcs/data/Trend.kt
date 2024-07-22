@@ -8,4 +8,6 @@ sealed class Trend {
     data object TopRated : Trend()
 
     data object Upcoming : Trend()
+
+    data class Search(val query: String) : Trend()
 }
