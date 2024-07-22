@@ -40,6 +40,9 @@ class MoviePagingSource(
                 Trend.Upcoming -> {
                     movieRemoteDataSource.getMoviesByUpcoming(page, language)
                 }
+                is Trend.Search -> {
+                    movieRemoteDataSource.getSearchMulti(trend.query, page, language)
+                }
             }
 
             val (movies, totalPages) = result.getOrThrow().let { it.results to it.totalPages }
@@ -58,3 +61,4 @@ class MoviePagingSource(
         private const val START_PAGE_INDEX = 1
     }
 }
+

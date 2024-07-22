@@ -82,6 +82,18 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
+    override fun getSearchMulti(query: String): Flow<PagingData<MovieEntity>>  =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    trend = Trend.Search(query),
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
     companion object {
         const val DEFAULT_PAGE_SIZE: Int = 20
     }

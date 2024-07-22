@@ -14,4 +14,6 @@ interface MovieRepository {
     fun getMoviesByPopular(mediaType: String): Flow<PagingData<MovieEntity>>
 
     fun getMoviesByUpcoming(): Flow<PagingData<MovieEntity>>
+
+    fun getSearchMulti(query: String): Flow<PagingData<MovieEntity>>
 }
