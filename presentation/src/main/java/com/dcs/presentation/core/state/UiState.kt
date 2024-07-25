@@ -18,9 +18,9 @@ sealed class UiState<out R> {
 
 private const val RETRY_ATTEMPT_COUNT = 3
 private const val RETRY_TIME_IN_MILLIS = 1000L
-fun <T> Flow<T>.asUiState(): Flow<UiState<StateFlow<T>>> {
+fun <T> Flow<T>.asUiState(): Flow<UiState<T>> {
     return this
-        .map<T, UiState<StateFlow<T>>> { UiState.Success(MutableStateFlow(it)) }
+        .map<T, UiState<T>> { UiState.Success(it) }
         .onStart { emit(UiState.Loading) }
         .retryWhen { cause, attempt ->
             if (cause is IOException && attempt < RETRY_ATTEMPT_COUNT) {

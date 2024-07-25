@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -46,7 +47,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun TrendRoute(
     modifier: Modifier = Modifier,
-    viewModel: TrendViewModel = hiltViewModel()
+    viewModel: TrendViewModel = hiltViewModel(),
 ) {
 
     Scaffold { innerPadding ->
@@ -81,8 +82,8 @@ fun TrendRoute(
 
 @Composable
 fun TrendMovies(
-    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
-    onTabClick: (Int) -> Unit = {}
+    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
+    onTabClick: (Int) -> Unit = {},
 ) {
     TrendMoviePanel(
         title = stringResource(id = R.string.movie_trend_title_trend),
@@ -94,8 +95,8 @@ fun TrendMovies(
 
 @Composable
 fun PopularContents(
-    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
-    onTabClick: (Int) -> Unit = {}
+    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
+    onTabClick: (Int) -> Unit = {},
 ) {
     TrendMoviePanel(
         title = stringResource(id = R.string.movie_trend_title_popular),
@@ -107,7 +108,7 @@ fun PopularContents(
 
 @Composable
 fun UpcomingMovies(
-    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>
+    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
     TrendMoviePanel(
         title = stringResource(id = R.string.movie_trend_title_upcoming),
@@ -118,10 +119,10 @@ fun UpcomingMovies(
 @Composable
 fun TrendMoviePanel(
     title: String,
-    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
+    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     modifier: Modifier = Modifier,
     tabs: List<String> = listOf(),
-    onTabClick: (Int) -> Unit = {}
+    onTabClick: (Int) -> Unit = {},
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -165,7 +166,7 @@ fun TrendMoviePanel(
 fun CustomScrollableTabRow(
     tabs: List<String>,
     selectedTabIndex: Int,
-    onTabClick: (Int) -> Unit
+    onTabClick: (Int) -> Unit,
 ) {
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
@@ -195,7 +196,7 @@ fun CustomScrollableTabRow(
 @Composable
 fun TrendMovieUiStateScreen(
     modifier: Modifier = Modifier,
-    movies: StateFlow<UiState<StateFlow<PagingData<MovieItemUiState>>>>,
+    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
     Box(
         modifier = modifier
@@ -206,7 +207,7 @@ fun TrendMovieUiStateScreen(
             is UiState.Loading -> LoadingScreen()
 
             is UiState.Success -> TrendMovieList(
-                movieItems = (uiState as UiState.Success<StateFlow<PagingData<MovieItemUiState>>>).data as StateFlow<PagingData<MovieItemUiState>>
+                movieItems = (uiState as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
             )
 
             is UiState.Error -> ErrorScreen(
@@ -218,10 +219,10 @@ fun TrendMovieUiStateScreen(
 
 @Composable
 fun TrendMovieList(
-    movieItems: StateFlow<PagingData<MovieItemUiState>>,
-    modifier: Modifier = Modifier
+    movieItems: PagingData<MovieItemUiState>,
+    modifier: Modifier = Modifier,
 ) {
-    val pagingItems = movieItems.collectAsLazyPagingItems()
+    val pagingItems = snapshotFlow { movieItems }.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
 
     LazyRow(

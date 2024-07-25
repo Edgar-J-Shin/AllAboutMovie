@@ -50,7 +50,7 @@ class TrendViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Success(MutableStateFlow(PagingData.empty())),
+            initialValue = UiState.Success(PagingData.empty()),
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -65,7 +65,7 @@ class TrendViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Success(MutableStateFlow(PagingData.empty())),
+            initialValue = UiState.Success(PagingData.empty()),
         )
 
     internal val moviesByUpcoming = getMoviesByUpcomingUseCase()
@@ -75,7 +75,7 @@ class TrendViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Success(MutableStateFlow(PagingData.empty())),
+            initialValue = UiState.Success(PagingData.empty()),
         )
 
     fun updateMovieTrendType(movieTrendType: MovieTrendType) {
