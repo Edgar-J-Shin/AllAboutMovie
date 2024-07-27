@@ -19,6 +19,8 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         buildConfigField("String", "TMDB_IMAGE_URL", getApiKey("tmdb.image.url"))
+        buildConfigField("String", "TMDB_AUTH_URL", getApiKey("tmdb.auth.url"))
+        buildConfigField("String", "TMDB_GRAVATR_URL", getApiKey("tmdb.gravatar.url"))
     }
 
     buildTypes {
