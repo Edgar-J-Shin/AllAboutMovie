@@ -1,5 +1,7 @@
 package com.dcs.data.remote.di
 
+import com.dcs.data.remote.datasource.AuthRemoteDataSource
+import com.dcs.data.remote.datasource.AuthRemoteDataSourceImpl
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSourceImpl
 import dagger.Binds
@@ -14,4 +16,8 @@ internal abstract class RemoteDataSourceModule() {
     @Binds
     @Singleton
     abstract fun bindMovieRemoteDataSource(movieRemoteDataSourceImpl: MovieRemoteDataSourceImpl): MovieRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRemoteDataSource(authRemoteDataSourceImpl: AuthRemoteDataSourceImpl): AuthRemoteDataSource
 }
