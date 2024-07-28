@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +32,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.SettingUiState
+import com.dcs.presentation.core.model.SettingUiStateProvider
 import com.dcs.presentation.core.model.UserProfile
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.theme.Gray1
@@ -152,10 +154,14 @@ private fun UserProfile(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewSettingScreen() {
+fun PreviewSettingScreen(
+    @PreviewParameter(SettingUiStateProvider::class) uiState: SettingUiState,
+) {
     SettingScreen(
-        uiState = SettingUiState(UserProfile.NotLoggedIn),
+        uiState = uiState,
         onSettingEvent = {},
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
     )
 }
