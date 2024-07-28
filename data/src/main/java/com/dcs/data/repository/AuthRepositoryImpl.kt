@@ -2,6 +2,7 @@ package com.dcs.data.repository
 
 import androidx.annotation.WorkerThread
 import com.dcs.data.di.IoDispatcher
+import com.dcs.data.local.datastore.AuthLocalDataSource
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.AuthRemoteDataSource
 import com.dcs.domain.model.RequestToken
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource,
+    private val authLocalDataSource: AuthLocalDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AuthRepository {
 
@@ -54,7 +56,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun getUser(): Flow<User?> {
-        TODO("Not yet implemented")
+        return authLocalDataSource.getUser()
+            .flowOn(ioDispatcher)
     }
-
 }
