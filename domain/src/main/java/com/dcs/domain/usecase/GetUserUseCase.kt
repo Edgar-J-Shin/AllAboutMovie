@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @Reusable
-class GetUser @Inject constructor(
+class GetUserUseCase @Inject constructor(
     private val repo: AuthRepository,
 ) {
     operator fun invoke(): Flow<User?> {
