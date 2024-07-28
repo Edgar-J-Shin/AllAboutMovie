@@ -19,6 +19,10 @@ class SettingViewModel @Inject constructor() : ViewModel() {
             SettingEvent.SignIn -> {
                 emitEffect(SettingEffect.SignIn)
             }
+
+            is SettingEvent.SignOut -> {
+                // TODO: Sign out
+            }
         }
     }
 
