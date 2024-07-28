@@ -21,4 +21,10 @@
     <string name="movie_free_type_movie">movie</string>
     <string name="movie_free_type_tv">tv</string>
 
+    # Setting > User Profile
+    <string name="profile_image_content_description">User Profile Avatar Image</string>
+    <string name="sign_in">로그인</string>
+    <string name="ask_to_login">로그인이 필요합니다</string>
+    <string name="sign_out">로그아웃</string>
+
 </resources>
