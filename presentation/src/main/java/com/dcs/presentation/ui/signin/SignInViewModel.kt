@@ -1,5 +1,6 @@
 package com.dcs.presentation.ui.signin
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.RequestToken
@@ -9,7 +10,6 @@ import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -72,6 +72,11 @@ class SignInViewModel @Inject constructor(
                     _signInState.update {
                         UiState.Success(uiState.copy(loading = false))
                     }
+                }
+                .catch { error ->
+                    // Handle failure
+                    Log.e(TAG, "signIn: ", error)
+                    _signInState.value = UiState.Error(error)
                 }
                 .collect {
                     _effect.emit(SignInEffect.Finish)
