@@ -133,7 +133,7 @@ private fun UserProfile(
             shape = RoundedCornerShape(8.dp),
             onClick = {
                 if (userProfile is UserProfile.User) {
-                    onSettingEvent(SettingEvent.SignOut(userProfile.sessionId.value))
+                    onSettingEvent(SettingEvent.SignOut(userProfile.sessionId))
                 } else {
                     onSettingEvent(SettingEvent.SignIn)
                 }
