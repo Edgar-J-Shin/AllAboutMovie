@@ -14,7 +14,7 @@ sealed interface UserProfile {
     data object NotLoggedIn : UserProfile
 
     data class User(
-        val id: Int,
+        val id: Long,
         val includeAdult: Boolean,
         val name: String,
         val username: String,
