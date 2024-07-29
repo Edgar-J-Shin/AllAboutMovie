@@ -39,11 +39,11 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             getUserUseCase()
                 .map { user ->
-                    UserProfile(user)
+                    SettingUiState(UserProfile(user))
                 }
                 .asUiState()
-                .onEach {
-                    _state.update { it }
+                .onEach { state ->
+                    _state.update { state }
                 }
                 .launchIn(this)
         }
