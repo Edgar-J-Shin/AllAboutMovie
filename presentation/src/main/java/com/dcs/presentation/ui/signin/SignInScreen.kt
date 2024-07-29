@@ -52,36 +52,55 @@ fun SignInRoute(
         }
     }
 
-    when (uiState) {
-        is UiState.Loading -> {
-            // Loading screen
-            Skeleton(
-                modifier = Modifier.systemBarsPadding()
-            )
-        }
+    SignInScreen(
+        state = uiState,
+        onSignInEvent = viewModel::dispatch,
+        modifier = modifier
+            .systemBarsPadding()
+            .background(color = White3)
+    )
+}
 
-        is UiState.Success -> {
-            val signInUiState = (uiState as UiState.Success<SignInUiState>).data
-            if (signInUiState != null) {
-                SignInScreen(
-                    signInUiState = signInUiState,
-                    onSignInEvent = viewModel::dispatch,
-                    modifier = Modifier
-                        .systemBarsPadding()
-                        .background(color = White3)
-                )
+@Composable
+private fun SignInScreen(
+    state: UiState<SignInUiState>,
+    onSignInEvent: (SignInEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        when (state) {
+            is UiState.Loading -> {
+                // Loading screen
+                Skeleton()
             }
-        }
 
-        is UiState.Error -> {
-            // Error screen
+            is UiState.Success -> {
+                val signInUiState = state.data
+                if (signInUiState != null) {
+                    SignInContents(
+                        signInUiState = signInUiState,
+                        onSignInEvent = onSignInEvent,
+                        modifier = Modifier
+                            .systemBarsPadding()
+                            .background(color = White3)
+                    )
+
+                    if (signInUiState.loading) {
+                        LoadingScreen()
+                    }
+                }
+            }
+
+            is UiState.Error -> {
+                // Error screen
+            }
         }
     }
 }
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-private fun SignInScreen(
+fun SignInContents(
     signInUiState: SignInUiState,
     onSignInEvent: (SignInEvent) -> Unit,
     modifier: Modifier = Modifier,
@@ -112,10 +131,6 @@ private fun SignInScreen(
         },
         modifier = modifier.fillMaxSize()
     )
-
-    if (signInUiState.loading) {
-        LoadingScreen()
-    }
 }
 
 @Composable
