@@ -59,4 +59,12 @@ class AuthRepositoryImpl @Inject constructor(
         return authLocalDataSource.getUser()
             .flowOn(ioDispatcher)
     }
+
+    override suspend fun insertUser(user: User): Result<Unit> {
+        return authLocalDataSource.insertUser(user)
+    }
+
+    override suspend fun deleteUser(user: User): Result<Unit> {
+        return authLocalDataSource.deleteUser(user)
+    }
 }
