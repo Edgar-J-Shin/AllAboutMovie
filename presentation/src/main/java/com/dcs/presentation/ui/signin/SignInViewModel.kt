@@ -42,8 +42,14 @@ class SignInViewModel @Inject constructor(
                     _signInState.update { UiState.Error(throwable) }
                 }
                 .collect { requestToken ->
-                    _signInState.value =
-                        UiState.Success(SignInUiState(BuildConfig.TMDB_AUTH_URL, requestToken))
+                    _signInState.update {
+                        UiState.Success(
+                            SignInUiState(
+                                baseUrl = BuildConfig.TMDB_AUTH_URL,
+                                requestToken = requestToken
+                            )
+                        )
+                    }
                 }
         }
     }
@@ -69,9 +75,7 @@ class SignInViewModel @Inject constructor(
                 .onCompletion {
                     val uiState: SignInUiState =
                         (_signInState.value as? UiState.Success)?.data ?: return@onCompletion
-                    _signInState.update {
-                        UiState.Success(uiState.copy(loading = false))
-                    }
+                    _signInState.update { UiState.Success(uiState.copy(loading = false)) }
                 }
                 .catch { throwable ->
                     // Handle failure
