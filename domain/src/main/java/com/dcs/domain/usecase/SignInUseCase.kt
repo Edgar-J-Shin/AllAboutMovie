@@ -23,7 +23,6 @@ class SignInUseCase @Inject constructor(
             .flatMapLatest { sessionId ->
                 repo.signIn(
                     sessionId = sessionId,
-                    accountId = null
                 )
             }
             .onEach {
