@@ -2,12 +2,10 @@ package com.dcs.data.repository
 
 import androidx.annotation.WorkerThread
 import com.dcs.data.di.IoDispatcher
+import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.AuthRemoteDataSource
-import com.dcs.domain.model.Avatar
-import com.dcs.domain.model.GravatarHash
 import com.dcs.domain.model.RequestToken
 import com.dcs.domain.model.SessionId
-import com.dcs.domain.model.TmdbAvatarPath
 import com.dcs.domain.model.User
 import com.dcs.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,7 +25,7 @@ class AuthRepositoryImpl @Inject constructor(
             val response = authRemoteDataSource.createRequestToken()
                 .getOrThrow()
 
-            emit(RequestToken(response.requestToken))
+            emit(response.toEntity())
         }
             .flowOn(ioDispatcher)
     }
@@ -39,7 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
                 requestToken = requestToken.value
             ).getOrThrow()
 
-            emit(SessionId(response.sessionId))
+            emit(response.toEntity())
         }
             .flowOn(ioDispatcher)
     }
@@ -50,22 +48,7 @@ class AuthRepositoryImpl @Inject constructor(
                 sessionId = sessionId,
             ).getOrThrow()
 
-            // TODO: Mapper 생성
-            val user = User(
-                id = response.id,
-                name = response.name,
-                username = response.username,
-                avatar = Avatar(
-                    gravatar = GravatarHash(response.avatar.gravatar.hash),
-                    tmdb = TmdbAvatarPath(response.avatar.tmdb.avatarPath)
-
-                ),
-                includeAdult = response.includeAdult,
-                iso31661 = response.iso31661,
-                iso6391 = response.iso6391,
-                sessionId = sessionId
-            )
-            emit(user)
+            emit(response.toEntity(sessionId))
         }
             .flowOn(ioDispatcher)
     }

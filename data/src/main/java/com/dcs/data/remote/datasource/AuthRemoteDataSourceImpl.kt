@@ -29,9 +29,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             }
     }
 
-    override suspend fun getUser(
-        sessionId: SessionId,
-    ): Result<GetUserResponse> {
+    override suspend fun getUser(sessionId: SessionId): Result<GetUserResponse> {
         return api.getAccountDetails(
             sessionId = sessionId.value
         )
