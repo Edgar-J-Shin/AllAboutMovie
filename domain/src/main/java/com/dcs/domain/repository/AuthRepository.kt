@@ -11,7 +11,7 @@ interface AuthRepository {
 
     fun createSessionId(requestToken: RequestToken): Flow<SessionId>
 
-    fun signIn(sessionId: SessionId, accountId: String?): Flow<User>
+    fun signIn(sessionId: SessionId): Flow<User>
 
     fun getUser(): Flow<User?>
 }

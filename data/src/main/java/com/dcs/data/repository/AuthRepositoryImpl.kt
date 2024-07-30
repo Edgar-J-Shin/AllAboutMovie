@@ -42,7 +42,7 @@ class AuthRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
     }
 
-    override fun signIn(sessionId: SessionId, accountId: String?): Flow<User> {
+    override fun signIn(sessionId: SessionId): Flow<User> {
         return flow {
             val response = authRemoteDataSource.getUser(
                 sessionId = sessionId,
