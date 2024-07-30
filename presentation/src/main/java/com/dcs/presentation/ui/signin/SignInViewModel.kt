@@ -37,9 +37,9 @@ class SignInViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             createRequestTokenUseCase()
-                .catch {
+                .catch { throwable ->
                     // Handle failure
-                    _signInState.value = UiState.Error(it)
+                    _signInState.update { UiState.Error(throwable) }
                 }
                 .collect { requestToken ->
                     _signInState.value =
@@ -73,10 +73,10 @@ class SignInViewModel @Inject constructor(
                         UiState.Success(uiState.copy(loading = false))
                     }
                 }
-                .catch { error ->
+                .catch { throwable ->
                     // Handle failure
-                    Log.e(TAG, "signIn: ", error)
-                    _signInState.value = UiState.Error(error)
+                    Log.e(TAG, "signIn: ", throwable)
+                    _signInState.update { UiState.Error(throwable) }
                 }
                 .collect {
                     _effect.emit(SignInEffect.Finish)
