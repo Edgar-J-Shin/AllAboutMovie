@@ -103,7 +103,7 @@ private fun SignInScreen(
                     }
                 }
             }
-            with(webView.settings) {
+            webView.settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true
                 cacheMode = WebSettings.LOAD_NO_CACHE
