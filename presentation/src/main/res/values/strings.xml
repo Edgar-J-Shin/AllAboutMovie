@@ -12,9 +12,11 @@
 
     <string name="desc_search">search</string>
     <string name="desc_clear">clear</string>
+    <string name="desc_history">history</string>
 
     # Search > Searchbar
     <string name="searchbar_hint">Enter query text.</string>
+    <string name="clear_all_history">Clear all history</string>
 
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>
@@ -42,4 +44,3 @@
     <string name="title_poplular_people">인기 인물</string>
 
 </resources>
-

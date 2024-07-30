@@ -11,4 +11,4 @@ enum class ImageType {
     }
 }
 
-fun String.toImageUrl(imageType: ImageType = ImageType.W500) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$this"
+fun String.toImageUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$this"

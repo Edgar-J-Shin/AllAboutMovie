@@ -1,34 +1,45 @@
 package com.dcs.presentation.ui.home
 
 import android.view.ViewTreeObserver
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,7 +70,8 @@ fun HomeRoute(
         }
     ) { innerPadding ->
         Box(
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier
+                .padding(innerPadding)
         ) {
             SearchUiStateScreen(
                 modifier = Modifier
@@ -77,9 +89,7 @@ private fun SearchTopBar(
     onQueryChange: (String) -> Unit,
     onQueryClear: () -> Unit,
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-
     val view = LocalView.current
     val viewTreeObserver = view.viewTreeObserver
     DisposableEffect(viewTreeObserver) {
@@ -98,27 +108,75 @@ private fun SearchTopBar(
         }
     }
 
+    var active by remember { mutableStateOf(false) }
+    val searchHistory = remember { mutableStateListOf("") }
+
     SearchBar(
         query = queryText,
         onQueryChange = onQueryChange,
         onSearch = {
-            onQueryChange(it)
-            keyboardController?.hide()
-            focusManager.clearFocus()
+            active = false
+            searchHistory.add(it)
         },
-        active = false,
-        onActiveChange = { },
+        active = active,
+        onActiveChange = { active = it },
         placeholder = { Text(text = stringResource(id = R.string.searchbar_hint)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(id = R.string.desc_search)) },
         trailingIcon = {
-            IconButton(onClick = onQueryClear) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.desc_clear))
+            if (active) {
+                Icon(
+                    modifier = Modifier.clickable {
+                        if (queryText.isNotEmpty()) {
+                            onQueryClear()
+                        } else {
+                            active = false
+                        }
+                    },
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = R.string.desc_clear)
+                )
             }
         },
         modifier = Modifier
             .fillMaxWidth()
             .focusable()
     ) {
+        searchHistory.forEach {
+            if (it.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.padding(all = 12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.History,
+                        contentDescription = stringResource(id = R.string.desc_history)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = it)
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
+                    Icon(
+                        modifier = Modifier.clickable { searchHistory.remove(it) },
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(id = R.string.desc_clear)
+                    )
+                }
+            }
+        }
+        HorizontalDivider()
+        Text(
+            modifier = Modifier
+                .padding(all = 12.dp)
+                .fillMaxWidth()
+                .clickable {
+                    searchHistory.clear()
+                },
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            text = stringResource(id = R.string.clear_all_history)
+        )
     }
 }
 
