@@ -4,10 +4,12 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.domain.model.SessionId
 import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.core.state.UiState
 
 @Stable
 data class SettingUiState(
     val userProfile: UserProfile,
+    val loading: Boolean = false,
 )
 
 sealed interface UserProfile {
@@ -55,18 +57,33 @@ sealed interface UserProfile {
 }
 
 class SettingUiStateProvider :
-    PreviewParameterProvider<SettingUiState> {
-    override val values: Sequence<SettingUiState>
+    PreviewParameterProvider<UiState<SettingUiState>> {
+    override val values: Sequence<UiState<SettingUiState>>
         get() = sequenceOf(
-            SettingUiState(UserProfile.NotLoggedIn),
-            SettingUiState(
-                UserProfile.User(
-                    id = 1,
-                    includeAdult = true,
-                    name = "name",
-                    username = "username",
-                    sessionId = SessionId("sessionId"),
-                    avatarImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA4MDdfMTk5/MDAxNjkxNDA5NTk2MTcz.Zr7MEQr-w3PH_l5R2uzj_rTJlPOcMZka28xz7zLJWIQg.ts6pjnQVYkBLV_fXtlV2N0_A3mRlMW-woSdq9gUoGOkg.PNG.saontsdkss119/image.png?type=w800",
+            UiState.Success(SettingUiState(UserProfile.NotLoggedIn)),
+            UiState.Success(
+                SettingUiState(
+                    UserProfile.User(
+                        id = 1,
+                        includeAdult = true,
+                        name = "name",
+                        username = "username",
+                        sessionId = SessionId("sessionId"),
+                        avatarImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA4MDdfMTk5/MDAxNjkxNDA5NTk2MTcz.Zr7MEQr-w3PH_l5R2uzj_rTJlPOcMZka28xz7zLJWIQg.ts6pjnQVYkBLV_fXtlV2N0_A3mRlMW-woSdq9gUoGOkg.PNG.saontsdkss119/image.png?type=w800",
+                    )
+                )
+            ),
+            UiState.Success(
+                SettingUiState(
+                    userProfile = UserProfile.User(
+                        id = 1,
+                        includeAdult = true,
+                        name = "name",
+                        username = "username",
+                        sessionId = SessionId("sessionId"),
+                        avatarImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA4MDdfMTk5/MDAxNjkxNDA5NTk2MTcz.Zr7MEQr-w3PH_l5R2uzj_rTJlPOcMZka28xz7zLJWIQg.ts6pjnQVYkBLV_fXtlV2N0_A3mRlMW-woSdq9gUoGOkg.PNG.saontsdkss119/image.png?type=w800",
+                    ),
+                    loading = true,
                 )
             ),
         )

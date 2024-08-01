@@ -1,6 +1,7 @@
 package com.dcs.presentation.ui.signin
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.RequestToken
@@ -9,6 +10,7 @@ import com.dcs.domain.usecase.SignInUseCase
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,33 +26,28 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     createRequestTokenUseCase: CreateRequestTokenUseCase,
+    savedStateHandle: SavedStateHandle,
     private val signInUseCase: SignInUseCase,
 ) : ViewModel() {
 
-    private val _signInState: MutableStateFlow<UiState<SignInUiState>> =
+    private val _state: MutableStateFlow<UiState<SignInUiState>> =
         MutableStateFlow(UiState.Loading)
-    val signInState = _signInState.asStateFlow()
+    val state = _state.asStateFlow()
 
     private val _effect = MutableSharedFlow<SignInEffect>()
     val effect = _effect.asSharedFlow()
 
+    private val requestToken: String = savedStateHandle[Screen.REQUEST_TOKEN_KEY]!!
+
     init {
-        viewModelScope.launch {
-            createRequestTokenUseCase()
-                .catch { throwable ->
-                    // Handle failure
-                    _signInState.update { UiState.Error(throwable) }
-                }
-                .collect { requestToken ->
-                    _signInState.update {
-                        UiState.Success(
-                            SignInUiState(
-                                baseUrl = BuildConfig.TMDB_AUTH_URL,
-                                requestToken = requestToken
-                            )
-                        )
-                    }
-                }
+        _state.update {
+            val token = RequestToken(requestToken)
+            UiState.Success(
+                SignInUiState(
+                    baseUrl = BuildConfig.TMDB_AUTH_URL,
+                    requestToken = token
+                )
+            )
         }
     }
 

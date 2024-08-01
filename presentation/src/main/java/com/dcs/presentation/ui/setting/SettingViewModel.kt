@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
+    private val createRequestTokenUseCase: CreateRequestTokenUseCase,
     private val getUserUseCase: GetUserUseCase,
 ) : ViewModel() {
 
@@ -52,12 +53,34 @@ class SettingViewModel @Inject constructor(
     fun dispatch(event: SettingEvent) {
         when (event) {
             SettingEvent.SignIn -> {
-                emitEffect(SettingEffect.SignIn)
+                createRequestTokenAndNavigateToSignIn()
             }
 
             is SettingEvent.SignOut -> {
                 // TODO: Sign out
             }
+    private fun createRequestTokenAndNavigateToSignIn() {
+        viewModelScope.launch {
+            createRequestTokenUseCase()
+                .onStart {
+                    val uiState: SettingUiState =
+                        (_state.value as? UiState.Success)?.data ?: return@onStart
+                    _state.update { UiState.Success(uiState.copy(loading = true)) }
+                }
+                .onCompletion {
+                    val uiState: SettingUiState =
+                        (_state.value as? UiState.Success)?.data ?: return@onCompletion
+                    _state.update { UiState.Success(uiState.copy(loading = false)) }
+                }
+                .catch { throwable ->
+                    if (throwable.message != null) {
+                        _error.value = throwable.message
+                    }
+                }
+                .collect { requestToken ->
+                    // TODO: Navigate to sign in
+                    emitEffect(SettingEffect.SignIn(requestToken))
+                }
         }
     }
 

@@ -57,8 +57,15 @@ sealed class Screen(
     }
 
     data object SignIn : Screen(
-        route = ROUTE_SIGN_IN
-    )
+        route = "$ROUTE_SIGN_IN/{$REQUEST_TOKEN_KEY}",
+        navArguments = listOf(
+            navArgument(REQUEST_TOKEN_KEY) {
+                type = NavType.StringType
+            }
+        )
+    ) {
+        fun createRoute(requestToken: String) = "$ROUTE_SIGN_IN/${requestToken}"
+    }
 
     companion object {
         const val ROUTE_MAIN = "main"
@@ -70,5 +77,6 @@ sealed class Screen(
         const val ROUTE_SIGN_IN = "signIn"
 
         const val ID_SAVED_STATE_KEY = "IdStateKey"
+        const val REQUEST_TOKEN_KEY = "RequestTokenKey"
     }
 }

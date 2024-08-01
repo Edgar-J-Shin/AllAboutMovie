@@ -49,7 +49,10 @@ fun AllAboutMovieApp(
             MainRoute(navController = navController)
         }
 
-        composable(route = SignIn.route) {
+        composable(
+            route = SignIn.route,
+            arguments = SignIn.navArguments
+        ) {
             SignInRoute(navController = navController)
         }
 

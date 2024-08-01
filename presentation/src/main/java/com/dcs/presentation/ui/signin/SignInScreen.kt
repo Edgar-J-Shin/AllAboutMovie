@@ -40,7 +40,7 @@ fun SignInRoute(
     viewModel: SignInViewModel = hiltViewModel(),
 ) {
 
-    val uiState by viewModel.signInState.collectAsStateWithLifecycle()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         viewModel.effect.collect {
