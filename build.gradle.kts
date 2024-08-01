@@ -10,3 +10,18 @@ plugins {
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.google.firebase.crashlytics) apply false
 }
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        compilerOptions {
+            if (project.findProperty("composeCompilerReports") == "true") {
+                freeCompilerArgs.add("-P")
+                freeCompilerArgs.add("plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_compiler")
+            }
+            if (project.findProperty("composeCompilerMetrics") == "true") {
+                freeCompilerArgs.add("-P")
+                freeCompilerArgs.add("plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_compiler")
+            }
+        }
+    }
+}
