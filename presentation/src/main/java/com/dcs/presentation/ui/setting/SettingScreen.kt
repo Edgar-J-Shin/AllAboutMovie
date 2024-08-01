@@ -2,6 +2,7 @@ package com.dcs.presentation.ui.setting
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,14 +12,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -30,6 +35,7 @@ import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.SettingUiStateProvider
@@ -45,48 +51,85 @@ fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
-            SettingEffect.SignIn -> {
-                navController.navigate(Screen.SignIn.route)
+            is SettingEffect.SignIn -> {
+                navController.navigate(Screen.SignIn.createRoute(effect.requestToken.value))
             }
-        }
-    }
 
-    when (state) {
-        is UiState.Loading -> {
-            // Loading screen
-        }
-
-        is UiState.Success -> {
-            val settingUiState = (state as UiState.Success<SettingUiState>).data
-            if (settingUiState != null) {
-                SettingScreen(
-                    uiState = settingUiState,
-                    onSettingEvent = viewModel::dispatch,
-                    modifier = modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxSize(),
+            is SettingEffect.ShowSnackbar -> {
+                snackBarHostState.showSnackbar(
+                    message = context.getString(effect.state.messageResId),
+                    duration = effect.state.duration,
                 )
             }
         }
-
-        is UiState.Error -> {
-            // Error screen
-        }
     }
+
+    SettingScreen(
+        state = state,
+        onSettingEvent = viewModel::dispatch,
+        snackbarHostState = snackBarHostState,
+        modifier = modifier
+            .fillMaxSize(),
+    )
 }
 
 @Composable
 fun SettingScreen(
-    uiState: SettingUiState,
+    state: UiState<SettingUiState>,
     onSettingEvent: (SettingEvent) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
-    Column(
+    Box(
         modifier = modifier,
     ) {
+        when (state) {
+            is UiState.Loading -> {
+                // Loading screen
+            }
+
+            is UiState.Success -> {
+                val settingUiState = state.data
+                if (settingUiState != null) {
+                    SettingContents(
+                        uiState = settingUiState,
+                        onSettingEvent = onSettingEvent,
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp, vertical = 20.dp)
+                            .fillMaxSize(),
+                    )
+
+                    if (settingUiState.loading) {
+                        LoadingScreen(
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
+            }
+
+            is UiState.Error -> {
+                // Error screen
+            }
+        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
+    }
+}
+
+@Composable
+private fun SettingContents(
+    uiState: SettingUiState,
+    onSettingEvent: (SettingEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         UserProfile(
             userProfile = uiState.userProfile,
             onSettingEvent = onSettingEvent,
@@ -154,14 +197,11 @@ private fun UserProfile(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewSettingScreen(
-    @PreviewParameter(SettingUiStateProvider::class) uiState: SettingUiState,
+fun SettingScreenPreview(
+    @PreviewParameter(SettingUiStateProvider::class) uiState: UiState<SettingUiState>,
 ) {
     SettingScreen(
-        uiState = uiState,
+        state = uiState,
         onSettingEvent = {},
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
     )
 }
