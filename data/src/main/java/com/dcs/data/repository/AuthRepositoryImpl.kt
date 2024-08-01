@@ -11,6 +11,7 @@ import com.dcs.domain.model.User
 import com.dcs.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
@@ -56,6 +57,27 @@ class AuthRepositoryImpl @Inject constructor(
             .onEach { user ->
                 insertUser(user)
             }
+            .flowOn(ioDispatcher)
+    }
+
+    override fun signOut(userTmdbId: Long, sessionId: SessionId): Flow<Unit> {
+        return combine(
+            flow {
+                emit(
+                    authRemoteDataSource
+                        .deleteSession(
+                            sessionId = sessionId,
+                        )
+                        .getOrDefault(Unit)
+                )
+            },
+            flow {
+                emit(
+                    deleteUserByTmdbId(userTmdbId)
+                        .getOrThrow()
+                )
+            },
+        ) { _, _ -> }
             .flowOn(ioDispatcher)
     }
 
