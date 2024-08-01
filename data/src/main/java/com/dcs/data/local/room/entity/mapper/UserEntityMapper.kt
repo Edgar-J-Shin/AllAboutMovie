@@ -1,9 +1,9 @@
 package com.dcs.data.local.room.entity.mapper
 
-import com.dcs.data.local.room.entity.UserEntity
+import com.dcs.data.local.room.entity.User
 
-fun UserEntity.toModel() = com.dcs.domain.model.User(
-    id = id,
+fun User.toEntity() = com.dcs.domain.model.User(
+    id = tmdbId,
     name = name,
     username = username,
     includeAdult = includeAdult,
@@ -16,8 +16,8 @@ fun UserEntity.toModel() = com.dcs.domain.model.User(
     sessionId = com.dcs.domain.model.SessionId(sessionId),
 )
 
-fun com.dcs.domain.model.User.toEntity() = UserEntity(
-    id = id,
+fun com.dcs.domain.model.User.toLocalData() = User(
+    tmdbId = id,
     name = name,
     username = username,
     includeAdult = includeAdult,
