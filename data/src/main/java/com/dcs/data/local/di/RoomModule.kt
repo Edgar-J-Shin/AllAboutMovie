@@ -17,9 +17,7 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideRoomDatabase(
-        @ApplicationContext context: Context,
-    ): AllAboutMovieDatabase {
+    fun provideRoomDatabase(@ApplicationContext context: Context): AllAboutMovieDatabase {
         return Room.databaseBuilder(
             context,
             AllAboutMovieDatabase::class.java,
@@ -31,7 +29,6 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideUserEntityDao(
-        allAboutMovieDatabase: AllAboutMovieDatabase,
-    ) = allAboutMovieDatabase.userEntityDao()
+    fun provideUserEntityDao(allAboutMovieDatabase: AllAboutMovieDatabase) =
+        allAboutMovieDatabase.userEntityDao()
 }
