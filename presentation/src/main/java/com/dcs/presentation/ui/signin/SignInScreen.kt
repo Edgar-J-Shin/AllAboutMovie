@@ -134,45 +134,18 @@ fun SignInContents(
 }
 
 @Composable
-private fun Skeleton(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-    ) {
-        // 1 small box and 2 big boxes
-        Box(
-            modifier = Modifier
-                .width(200.dp)
-                .height(50.dp)
-                .background(color = Gray1)
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(color = Gray1)
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(color = Gray1)
-        )
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun SignInSkeletonPreview() {
+@Preview
+fun SignInScreenPreview() {
     AllAboutMovieTheme {
-        Skeleton()
+        SignInScreen(
+            state = UiState.Success(
+                SignInUiState(
+                    baseUrl = "https://www.themoviedb.org/auth/access",
+                    requestToken = RequestToken("requestToken"),
+                    loading = true,
+                ),
+            ),
+            onSignInEvent = {},
+        )
     }
 }
