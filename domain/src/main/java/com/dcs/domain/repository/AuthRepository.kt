@@ -17,5 +17,5 @@ interface AuthRepository {
 
     suspend fun insertUser(user: User): Result<Unit>
 
-    suspend fun deleteUser(user: User): Result<Unit>
+    suspend fun deleteUserByTmdbId(userTmdbId: Long): Result<Unit>
 }

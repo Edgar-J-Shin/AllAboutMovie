@@ -68,7 +68,7 @@ class AuthRepositoryImpl @Inject constructor(
         return authLocalDataSource.insertUser(user)
     }
 
-    override suspend fun deleteUser(user: User): Result<Unit> {
-        return authLocalDataSource.deleteUser(user)
+    override suspend fun deleteUserByTmdbId(userTmdbId: Long): Result<Unit> {
+        return authLocalDataSource.deleteUserByTmdbId(userTmdbId)
     }
 }
