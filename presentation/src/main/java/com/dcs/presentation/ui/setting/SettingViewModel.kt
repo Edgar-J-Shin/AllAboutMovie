@@ -3,6 +3,7 @@ package com.dcs.presentation.ui.setting
 import androidx.lifecycle.ViewModel
 import com.dcs.domain.usecase.CreateRequestTokenUseCase
 import com.dcs.domain.usecase.GetUserUseCase
+import com.dcs.domain.usecase.SignOutUseCase
 import com.dcs.presentation.core.designsystem.state.SnackbarState
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.UserProfile
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val createRequestTokenUseCase: CreateRequestTokenUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val signOutUseCase: SignOutUseCase,
 ) : ViewModel() {
 
     private val _effect = MutableSharedFlow<SettingEffect>()
@@ -62,6 +64,7 @@ class SettingViewModel @Inject constructor(
                  * TODO: Implement sign out
                  * https://github.com/Edgar-J-Shin/AllAboutMovie/issues/21
                  */
+                signOut()
             }
         }
     }
@@ -89,6 +92,39 @@ class SettingViewModel @Inject constructor(
                 .collect { requestToken ->
                     _effect.emit(SettingEffect.SignIn(requestToken = requestToken))
                 }
+        }
+    }
+
+    private fun signOut() {
+        launch {
+            val user: UserProfile.User =
+                ((_state.value as? UiState.Success)
+                    ?.data
+                    ?.userProfile as? UserProfile.User)
+                    ?: return@launch
+
+            signOutUseCase(
+                userTmdbId = user.id,
+                sessionId = user.sessionId
+            )
+                .onStart {
+                    val uiState: SettingUiState =
+                        (_state.value as? UiState.Success)?.data ?: return@onStart
+                    _state.update { UiState.Success(uiState.copy(loading = true)) }
+                }
+                .onCompletion {
+                    val uiState: SettingUiState =
+                        (_state.value as? UiState.Success)?.data ?: return@onCompletion
+                    _state.update { UiState.Success(uiState.copy(loading = false)) }
+                }
+                .catch { _ ->
+                    _effect.emit(
+                        SettingEffect.ShowSnackbar(
+                            state = SnackbarState.SettingToSignOutError
+                        )
+                    )
+                }
+                .collect { }
         }
     }
 }
