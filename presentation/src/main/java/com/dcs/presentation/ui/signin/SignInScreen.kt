@@ -64,7 +64,7 @@ fun SignInRoute(
 @Composable
 private fun SignInScreen(
     state: UiState<SignInUiState>,
-    onSignInEvent: (SignInEvent) -> Unit,
+    onSignInEvent: (SignInUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -97,7 +97,7 @@ private fun SignInScreen(
                     primaryButton = {
                         Button(
                             onClick = {
-                                onSignInEvent(SignInEvent.NavigateBack)
+                                onSignInEvent(SignInUiEvent.NavigateBack)
                             },
                         ) {
                             Text(text = stringResource(R.string.close))
@@ -114,7 +114,7 @@ private fun SignInScreen(
 @Composable
 fun SignInContents(
     signInUiState: SignInUiState,
-    onSignInEvent: (SignInEvent) -> Unit,
+    onSignInEvent: (SignInUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BasicWebView(
@@ -127,7 +127,7 @@ fun SignInContents(
                     if (uri.host == signInUiState.url.host && uri.lastPathSegment == PATH_ALLOW) {
                         // Handle request token
                         onSignInEvent(
-                            SignInEvent.SignIn(
+                            SignInUiEvent.SignIn(
                                 requestToken = signInUiState.requestToken,
                             )
                         )

@@ -49,14 +49,14 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun dispatch(event: SignInEvent) {
+    fun dispatch(event: SignInUiEvent) {
         when (event) {
-            is SignInEvent.SignIn -> {
+            is SignInUiEvent.SignIn -> {
                 // Handle sign in
                 signIn(event.requestToken)
             }
 
-            is SignInEvent.NavigateBack -> {
+            is SignInUiEvent.NavigateBack -> {
                 // Handle navigate back
                 viewModelScope.launch {
                     _effect.emit(SignInEffect.NavigateBack)
