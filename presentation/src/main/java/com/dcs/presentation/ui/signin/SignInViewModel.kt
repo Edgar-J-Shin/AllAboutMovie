@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.RequestToken
-import com.dcs.domain.usecase.CreateRequestTokenUseCase
 import com.dcs.domain.usecase.SignInUseCase
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
@@ -25,7 +24,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    createRequestTokenUseCase: CreateRequestTokenUseCase,
     savedStateHandle: SavedStateHandle,
     private val signInUseCase: SignInUseCase,
 ) : ViewModel() {
@@ -57,6 +55,13 @@ class SignInViewModel @Inject constructor(
                 // Handle sign in
                 signIn(event.requestToken)
             }
+
+            is SignInEvent.NavigateBack -> {
+                // Handle navigate back
+                viewModelScope.launch {
+                    _effect.emit(SignInEffect.NavigateBack)
+                }
+            }
         }
     }
 
@@ -65,22 +70,22 @@ class SignInViewModel @Inject constructor(
             signInUseCase(requestToken)
                 .onStart {
                     val uiState: SignInUiState =
-                        (_signInState.value as? UiState.Success)?.data ?: return@onStart
-                    _signInState.update { UiState.Success(uiState.copy(loading = true)) }
+                        (_state.value as? UiState.Success)?.data ?: return@onStart
+                    _state.update { UiState.Success(uiState.copy(loading = true)) }
 
                 }
                 .onCompletion {
                     val uiState: SignInUiState =
-                        (_signInState.value as? UiState.Success)?.data ?: return@onCompletion
-                    _signInState.update { UiState.Success(uiState.copy(loading = false)) }
+                        (_state.value as? UiState.Success)?.data ?: return@onCompletion
+                    _state.update { UiState.Success(uiState.copy(loading = false)) }
                 }
                 .catch { throwable ->
                     // Handle failure
                     Log.e(TAG, "signIn: ", throwable)
-                    _signInState.update { UiState.Error(throwable) }
+                    _state.update { UiState.Error(throwable) }
                 }
                 .collect {
-                    _effect.emit(SignInEffect.Finish)
+                    _effect.emit(SignInEffect.NavigateBack)
                 }
         }
     }
