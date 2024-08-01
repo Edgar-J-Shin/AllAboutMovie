@@ -28,12 +28,5 @@ class SignInUseCase @Inject constructor(
                     sessionId = sessionId,
                 )
             }
-            .onEach {
-                coroutineScope {
-                    withContext(Dispatchers.IO) {
-                        repo.insertUser(it)
-                    }
-                }
-            }
     }
 }

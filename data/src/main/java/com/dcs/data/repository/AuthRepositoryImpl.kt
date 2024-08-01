@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -52,6 +53,9 @@ class AuthRepositoryImpl @Inject constructor(
 
             emit(response.toEntity(sessionId))
         }
+            .onEach { user ->
+                insertUser(user)
+            }
             .flowOn(ioDispatcher)
     }
 
