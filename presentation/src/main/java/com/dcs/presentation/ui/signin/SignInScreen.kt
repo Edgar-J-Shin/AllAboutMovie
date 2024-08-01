@@ -134,17 +134,13 @@ fun SignInContents(
 }
 
 @Composable
-@Preview
-fun SignInScreenPreview() {
+@Preview(showBackground = true)
+fun SignInScreenPreview(
+    @PreviewParameter(SignInUiStateProvider::class) state: UiState<SignInUiState>,
+) {
     AllAboutMovieTheme {
         SignInScreen(
-            state = UiState.Success(
-                SignInUiState(
-                    baseUrl = "https://www.themoviedb.org/auth/access",
-                    requestToken = RequestToken("requestToken"),
-                    loading = true,
-                ),
-            ),
+            state = state,
             onSignInEvent = {},
         )
     }

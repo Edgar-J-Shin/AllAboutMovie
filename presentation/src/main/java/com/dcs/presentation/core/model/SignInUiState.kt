@@ -22,3 +22,19 @@ fun RequestToken.buildUrl(baseUrl: String): Uri {
         .appendPath(this.value)
         .build()
 }
+
+class SignInUiStateProvider :
+    PreviewParameterProvider<UiState<SignInUiState>> {
+    override val values: Sequence<UiState<SignInUiState>>
+        get() = sequenceOf(
+            UiState.Success(
+                SignInUiState(
+                    requestToken = RequestToken("request_token"),
+                    url = Uri.parse("https://www.themoviedb.org/auth/access?request_token=request_token"),
+                    loading = true
+                )
+            ),
+            UiState.Error(Exception())
+        )
+
+}
