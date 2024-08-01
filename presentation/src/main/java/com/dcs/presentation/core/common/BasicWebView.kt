@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 
 
@@ -18,9 +19,13 @@ fun BasicWebView(
         WebView(context)
     }
 
+    val runningInPreview = LocalInspectionMode.current
+
     AndroidView(
         factory = { webView },
         update = {
+            // WebView is not supported in preview
+            if (runningInPreview) return@AndroidView
             onUpdate(it)
         },
         modifier = modifier
