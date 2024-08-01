@@ -88,14 +88,8 @@ class SettingViewModel @Inject constructor(
                     )
                 }
                 .collect { requestToken ->
-                    // TODO: Navigate to sign in
-                    emitEffect(SettingEffect.SignIn(requestToken))
+                    _effect.emit(SettingEffect.SignIn(requestToken = requestToken))
                 }
         }
     }
-
-    private fun emitEffect(effect: SettingEffect) =
-        viewModelScope.launch {
-            _effect.emit(effect)
-        }
 }
