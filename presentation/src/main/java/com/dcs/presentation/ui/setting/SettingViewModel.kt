@@ -1,7 +1,6 @@
 package com.dcs.presentation.ui.setting
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.dcs.domain.usecase.CreateRequestTokenUseCase
 import com.dcs.domain.usecase.GetUserUseCase
 import com.dcs.presentation.core.designsystem.state.SnackbarState
@@ -9,6 +8,7 @@ import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.UserProfile
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.state.asUiState
+import com.dcs.presentation.core.ui.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +39,7 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun checkIfUserLoggedIn() {
-        viewModelScope.launch {
+        launch {
             getUserUseCase()
                 .map { user ->
                     SettingUiState(UserProfile(user))
@@ -68,7 +67,7 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun createRequestTokenAndNavigateToSignIn() {
-        viewModelScope.launch {
+        launch {
             createRequestTokenUseCase()
                 .onStart {
                     val uiState: SettingUiState =
