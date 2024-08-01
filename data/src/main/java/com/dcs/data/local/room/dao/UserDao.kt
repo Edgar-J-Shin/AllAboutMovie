@@ -17,6 +17,6 @@ interface UserDao {
     @Query("SELECT * FROM users ORDER BY id ASC LIMIT 1")
     fun getFirstUser(): Flow<User?>
 
-    @Delete
-    fun delete(user: User)
+    @Query("DELETE FROM users WHERE tmdb_id = :userId")
+    fun delete(userId: Long)
 }

@@ -26,7 +26,11 @@ class AuthLocalDataSourceImpl @Inject constructor(
 
     override suspend fun deleteUser(user: User): Result<Unit> {
         return runCatching {
-            userEntityDao.delete(user.toLocalData())
+            userEntityDao.delete(
+                user
+                    .toLocalData()
+                    .tmdbId
+            )
         }
     }
 }
