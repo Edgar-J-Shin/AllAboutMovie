@@ -2,7 +2,9 @@ package com.dcs.presentation.core.model
 
 import android.net.Uri
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.domain.model.RequestToken
+import com.dcs.presentation.core.state.UiState
 
 @Stable
 data class SignInUiState(
@@ -13,6 +15,12 @@ data class SignInUiState(
     constructor(baseUrl: String, requestToken: RequestToken) : this(
         requestToken = requestToken,
         url = requestToken.buildUrl(baseUrl),
+    )
+
+    constructor(baseUrl: String, requestToken: RequestToken, loading: Boolean) : this(
+        requestToken = requestToken,
+        url = requestToken.buildUrl(baseUrl),
+        loading = loading,
     )
 }
 
