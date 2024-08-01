@@ -17,4 +17,8 @@ import com.dcs.data.local.room.entity.UserEntity
 abstract class AllAboutMovieDatabase : RoomDatabase() {
 
     abstract fun userEntityDao(): UserEntityDao
+
+    companion object {
+        const val DATABASE_NAME = "dcs-allaboutmoive.db"
+    }
 }

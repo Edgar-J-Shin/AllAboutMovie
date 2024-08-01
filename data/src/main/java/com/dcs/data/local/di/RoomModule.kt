@@ -21,7 +21,7 @@ object RoomModule {
         return Room.databaseBuilder(
             context,
             AllAboutMovieDatabase::class.java,
-            BuildConfig.APP_DATABASE_NAME
+            AllAboutMovieDatabase.DATABASE_NAME
         )
             .fallbackToDestructiveMigrationFrom()
             .build()

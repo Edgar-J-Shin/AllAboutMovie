@@ -21,7 +21,6 @@ android {
         buildConfigField("String", "TMDB_API_KEY", getApiKey("tmdb.api.key"))
         buildConfigField("String", "TMDB_API_URL", getApiKey("tmdb.api.url"))
         buildConfigField("String", "TMDB_IMAGE_URL", getApiKey("tmdb.image.url"))
-        buildConfigField("String", "APP_DATABASE_NAME", getApiKey("app.database.name"))
     }
 
     buildTypes {
