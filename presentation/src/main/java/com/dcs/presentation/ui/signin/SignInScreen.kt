@@ -2,6 +2,7 @@ package com.dcs.presentation.ui.signin
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -139,6 +140,15 @@ fun SignInContents(
                 domStorageEnabled = true
                 cacheMode = WebSettings.LOAD_NO_CACHE
             }
+            // 쿠키 삭제
+            val cookieManager = CookieManager.getInstance()
+            cookieManager.removeAllCookies(null)
+            cookieManager.flush()
+
+            // 캐시 삭제
+            webView.clearCache(true)
+            webView.clearHistory()
+
             webView.loadUrl(signInUiState.url.toString())
         },
         modifier = modifier.fillMaxSize()
