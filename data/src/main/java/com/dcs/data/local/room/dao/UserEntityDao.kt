@@ -17,7 +17,6 @@ interface UserEntityDao {
     @Query("SELECT * FROM users ORDER BY id ASC LIMIT 1")
     fun getFirstUser(): Flow<User?>
 
-//    @Delete
-    // delete row with User.tmdbId
+    @Delete
     fun delete(user: User)
 }
