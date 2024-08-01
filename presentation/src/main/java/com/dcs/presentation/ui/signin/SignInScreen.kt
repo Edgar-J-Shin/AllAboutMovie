@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.dcs.presentation.core.designsystem.BasicWebView
-import com.dcs.presentation.core.designsystem.LoadingScreen
+import com.dcs.presentation.core.designsystem.widget.BasicWebView
+import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme

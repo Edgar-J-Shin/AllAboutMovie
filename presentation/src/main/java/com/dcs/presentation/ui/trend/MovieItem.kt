@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.dcs.presentation.core.designsystem.CircularProgressBarWithPercentage
+import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
 import com.dcs.presentation.core.extensions.toImageUrl
 import com.dcs.presentation.core.model.MovieItemUiState
 

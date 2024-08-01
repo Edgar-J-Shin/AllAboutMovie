@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.designsystem
+package com.dcs.presentation.core.designsystem.widget
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
