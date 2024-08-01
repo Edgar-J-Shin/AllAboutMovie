@@ -55,13 +55,13 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun dispatch(event: SettingEvent) {
+    fun dispatch(event: SettingUiEvent) {
         when (event) {
-            SettingEvent.SignIn -> {
+            SettingUiEvent.SignIn -> {
                 createRequestTokenAndNavigateToSignIn()
             }
 
-            is SettingEvent.SignOut -> {
+            is SettingUiEvent.SignOut -> {
                 // TODO: Sign out
             }
         }

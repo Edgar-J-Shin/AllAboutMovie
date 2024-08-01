@@ -81,7 +81,7 @@ fun SettingRoute(
 @Composable
 fun SettingScreen(
     state: UiState<SettingUiState>,
-    onSettingEvent: (SettingEvent) -> Unit,
+    onSettingEvent: (SettingUiEvent) -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -126,7 +126,7 @@ fun SettingScreen(
 @Composable
 private fun SettingContents(
     uiState: SettingUiState,
-    onSettingEvent: (SettingEvent) -> Unit,
+    onSettingEvent: (SettingUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -143,7 +143,7 @@ private fun SettingContents(
 @Composable
 private fun UserProfile(
     userProfile: UserProfile,
-    onSettingEvent: (SettingEvent) -> Unit,
+    onSettingEvent: (SettingUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -176,9 +176,9 @@ private fun UserProfile(
             shape = RoundedCornerShape(8.dp),
             onClick = {
                 if (userProfile is UserProfile.User) {
-                    onSettingEvent(SettingEvent.SignOut(userProfile.sessionId))
+                    onSettingEvent(SettingUiEvent.SignOut(userProfile.sessionId))
                 } else {
-                    onSettingEvent(SettingEvent.SignIn)
+                    onSettingEvent(SettingUiEvent.SignIn)
                 }
             },
             modifier = Modifier
