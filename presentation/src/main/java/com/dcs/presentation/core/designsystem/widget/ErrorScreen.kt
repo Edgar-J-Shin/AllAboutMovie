@@ -34,10 +34,10 @@ fun ErrorScreen(
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge
         )
-        if (primaryButton != null) {
+        primaryButton?.let {
             Spacer(modifier = Modifier.height(15.dp))
+            it.invoke()
         }
-        primaryButton?.invoke()
     }
 }
 
