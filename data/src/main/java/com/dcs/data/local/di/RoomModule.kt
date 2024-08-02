@@ -2,7 +2,6 @@ package com.dcs.data.local.di
 
 import android.content.Context
 import androidx.room.Room
-import com.dcs.data.BuildConfig
 import com.dcs.data.local.room.AllAboutMovieDatabase
 import dagger.Module
 import dagger.Provides
@@ -30,5 +29,5 @@ object RoomModule {
     @Provides
     @Singleton
     fun provideUserEntityDao(allAboutMovieDatabase: AllAboutMovieDatabase) =
-        allAboutMovieDatabase.userEntityDao()
+        allAboutMovieDatabase.userDao()
 }

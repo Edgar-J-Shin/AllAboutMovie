@@ -1,6 +1,6 @@
 package com.dcs.data.local.datastore
 
-import com.dcs.data.local.room.dao.UserEntityDao
+import com.dcs.data.local.room.dao.UserDao
 import com.dcs.data.local.room.entity.mapper.toEntity
 import com.dcs.data.local.room.entity.mapper.toLocalData
 import com.dcs.domain.model.User
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AuthLocalDataSourceImpl @Inject constructor(
-    private val userEntityDao: UserEntityDao,
+    private val userEntityDao: UserDao,
 ) : AuthLocalDataSource {
     override fun getUser(): Flow<User?> {
         return userEntityDao.getFirstUser()

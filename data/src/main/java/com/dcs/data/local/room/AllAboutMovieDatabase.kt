@@ -2,7 +2,7 @@ package com.dcs.data.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.dcs.data.local.room.dao.UserEntityDao
+import com.dcs.data.local.room.dao.UserDao
 import com.dcs.data.local.room.entity.User
 
 /**
@@ -16,7 +16,7 @@ import com.dcs.data.local.room.entity.User
 )
 abstract class AllAboutMovieDatabase : RoomDatabase() {
 
-    abstract fun userEntityDao(): UserEntityDao
+    abstract fun userDao(): UserDao
 
     companion object {
         const val DATABASE_NAME = "dcs-allaboutmoive.db"

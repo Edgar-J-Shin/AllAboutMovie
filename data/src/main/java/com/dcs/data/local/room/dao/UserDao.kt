@@ -9,7 +9,7 @@ import com.dcs.data.local.room.entity.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface UserEntityDao {
+interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: User)
