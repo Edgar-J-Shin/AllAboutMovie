@@ -5,6 +5,7 @@ import com.dcs.data.local.room.entity.mapper.toEntity
 import com.dcs.data.local.room.entity.mapper.toLocalData
 import com.dcs.domain.model.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -14,6 +15,7 @@ class AuthLocalDataSourceImpl @Inject constructor(
     override fun getUser(): Flow<User?> {
         return userEntityDao.getFirstUser()
             .map { it?.toEntity() }
+            .distinctUntilChanged()
     }
 
     override suspend fun insertUser(user: User): Result<Unit> {
