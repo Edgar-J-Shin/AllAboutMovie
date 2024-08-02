@@ -52,7 +52,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun dispatch(event: SettingUiEvent) {
+    fun dispatchEvent(event: SettingUiEvent) {
         when (event) {
             SettingUiEvent.SignIn -> {
                 createRequestTokenAndNavigateToSignIn()

@@ -54,7 +54,7 @@ fun SignInRoute(
 
     SignInScreen(
         state = uiState,
-        onSignInEvent = viewModel::dispatch,
+        onSignInEvent = viewModel::dispatchEvent,
         modifier = modifier
             .systemBarsPadding()
             .background(color = White3)

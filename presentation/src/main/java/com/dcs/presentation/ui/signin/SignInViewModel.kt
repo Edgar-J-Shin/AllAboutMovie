@@ -49,7 +49,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun dispatch(event: SignInUiEvent) {
+    fun dispatchEvent(event: SignInUiEvent) {
         when (event) {
             is SignInUiEvent.SignIn -> {
                 // Handle sign in

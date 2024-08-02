@@ -71,7 +71,7 @@ fun SettingRoute(
 
     SettingScreen(
         state = state,
-        onSettingEvent = viewModel::dispatch,
+        onSettingEvent = viewModel::dispatchEvent,
         snackbarHostState = snackBarHostState,
         modifier = modifier
             .fillMaxSize(),
