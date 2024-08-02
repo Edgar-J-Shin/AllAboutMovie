@@ -60,6 +60,7 @@ class SettingUiStateProvider :
     PreviewParameterProvider<UiState<SettingUiState>> {
     override val values: Sequence<UiState<SettingUiState>>
         get() = sequenceOf(
+            UiState.Loading,
             UiState.Success(SettingUiState(UserProfile.NotLoggedIn)),
             UiState.Success(
                 SettingUiState(

@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -91,6 +93,11 @@ fun SettingScreen(
         when (state) {
             is UiState.Loading -> {
                 // Loading screen
+                Skeleton(
+                    modifier = modifier
+                        .padding(horizontal = 20.dp, vertical = 20.dp)
+                        .fillMaxWidth()
+                )
             }
 
             is UiState.Success -> {
@@ -190,6 +197,45 @@ private fun UserProfile(
                 } else {
                     stringResource(R.string.sign_in)
                 }
+            )
+        }
+    }
+}
+
+@Composable
+private fun Skeleton(
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Avatar Image
+            Box(
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
+                    .border(3.dp, Color.LightGray, CircleShape)
+                    .background(Gray1),
+            )
+
+            // Name
+            Box(
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .background(Gray1)
+                    .size(30.dp)
+                    .weight(1f),
+            )
+
+            // SignIn or SignOut Button
+            Box(
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .width(80.dp)
+                    .height(40.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Gray1),
             )
         }
     }
