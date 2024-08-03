@@ -35,6 +35,9 @@ class SignInViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<SignInEffect>()
     val effect = _effect.asSharedFlow()
 
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+
     private val requestToken: String = savedStateHandle[Screen.REQUEST_TOKEN_KEY]!!
 
     init {
@@ -69,15 +72,10 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             signInUseCase(requestToken)
                 .onStart {
-                    val uiState: SignInUiState =
-                        (_state.value as? UiState.Success)?.data ?: return@onStart
-                    _state.update { UiState.Success(uiState.copy(loading = true)) }
-
+                    _loading.update { true }
                 }
                 .onCompletion {
-                    val uiState: SignInUiState =
-                        (_state.value as? UiState.Success)?.data ?: return@onCompletion
-                    _state.update { UiState.Success(uiState.copy(loading = false)) }
+                    _loading.update { false }
                 }
                 .catch { throwable ->
                     // Handle failure

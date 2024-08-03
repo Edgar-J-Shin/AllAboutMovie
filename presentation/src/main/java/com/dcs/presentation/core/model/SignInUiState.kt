@@ -10,17 +10,10 @@ import com.dcs.presentation.core.state.UiState
 data class SignInUiState(
     val requestToken: RequestToken,
     val url: Uri,
-    val loading: Boolean = false,
 ) {
     constructor(baseUrl: String, requestToken: RequestToken) : this(
         requestToken = requestToken,
         url = requestToken.buildUrl(baseUrl),
-    )
-
-    constructor(baseUrl: String, requestToken: RequestToken, loading: Boolean) : this(
-        requestToken = requestToken,
-        url = requestToken.buildUrl(baseUrl),
-        loading = loading,
     )
 }
 
@@ -32,17 +25,16 @@ fun RequestToken.buildUrl(baseUrl: String): Uri {
 }
 
 class SignInUiStateProvider :
-    PreviewParameterProvider<UiState<SignInUiState>> {
-    override val values: Sequence<UiState<SignInUiState>>
+    PreviewParameterProvider<Pair<UiState<SignInUiState>, Boolean>> {
+    override val values: Sequence<Pair<UiState<SignInUiState>, Boolean>>
         get() = sequenceOf(
             UiState.Success(
                 SignInUiState(
                     requestToken = RequestToken("request_token"),
                     url = Uri.parse("https://www.themoviedb.org/auth/access?request_token=request_token"),
-                    loading = true
                 )
-            ),
-            UiState.Error(Exception())
+            ) to true,
+            UiState.Error(Exception()) to false
         )
 
 }
