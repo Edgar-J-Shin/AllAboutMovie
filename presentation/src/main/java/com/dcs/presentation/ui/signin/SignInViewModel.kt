@@ -36,9 +36,7 @@ class SignInViewModel @Inject constructor(
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
-
-    // commit message
-    // "
+    
     private val requestToken: String =
         savedStateHandle[Screen.SIGN_IN_REQUEST_TOKEN_KEY] ?: error("Request token not found")
 
