@@ -53,6 +53,7 @@ fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val loading by viewModel.loading.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
@@ -74,6 +75,7 @@ fun SettingRoute(
     SettingScreen(
         state = state,
         onSettingEvent = viewModel::dispatchEvent,
+        loading = loading,
         snackbarHostState = snackBarHostState,
         modifier = modifier
             .fillMaxSize(),
@@ -84,6 +86,7 @@ fun SettingRoute(
 fun SettingScreen(
     state: UiState<SettingUiState>,
     onSettingEvent: (SettingUiEvent) -> Unit,
+    loading: Boolean,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -92,12 +95,7 @@ fun SettingScreen(
     ) {
         when (state) {
             is UiState.Loading -> {
-                // Loading screen
-                Skeleton(
-                    modifier = modifier
-                        .padding(horizontal = 20.dp, vertical = 20.dp)
-                        .fillMaxWidth()
-                )
+                Skeleton()
             }
 
             is UiState.Success -> {
@@ -111,7 +109,7 @@ fun SettingScreen(
                             .fillMaxSize(),
                     )
 
-                    if (settingUiState.loading) {
+                    if (loading) {
                         LoadingScreen(
                             modifier = Modifier.fillMaxSize()
                         )
@@ -244,10 +242,11 @@ private fun Skeleton(
 @Preview(showBackground = true)
 @Composable
 fun SettingScreenPreview(
-    @PreviewParameter(SettingUiStateProvider::class) uiState: UiState<SettingUiState>,
+    @PreviewParameter(SettingUiStateProvider::class) state: Pair<UiState<SettingUiState>, Boolean>,
 ) {
     SettingScreen(
-        state = uiState,
+        state = state.first,
+        loading = state.second,
         onSettingEvent = {},
     )
 }

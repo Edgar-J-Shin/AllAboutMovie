@@ -36,6 +36,9 @@ class SettingViewModel @Inject constructor(
         MutableStateFlow<UiState<SettingUiState>>(UiState.Loading)
     val state = _state.asStateFlow()
 
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+
     init {
         checkIfUserLoggedIn()
     }
@@ -73,14 +76,10 @@ class SettingViewModel @Inject constructor(
         launch {
             createRequestTokenUseCase()
                 .onStart {
-                    val uiState: SettingUiState =
-                        (_state.value as? UiState.Success)?.data ?: return@onStart
-                    _state.update { UiState.Success(uiState.copy(loading = true)) }
+                    _loading.update { true }
                 }
                 .onCompletion {
-                    val uiState: SettingUiState =
-                        (_state.value as? UiState.Success)?.data ?: return@onCompletion
-                    _state.update { UiState.Success(uiState.copy(loading = false)) }
+                    _loading.update { false }
                 }
                 .catch { _ ->
                     _effect.emit(
@@ -108,14 +107,10 @@ class SettingViewModel @Inject constructor(
                 sessionId = user.sessionId
             )
                 .onStart {
-                    val uiState: SettingUiState =
-                        (_state.value as? UiState.Success)?.data ?: return@onStart
-                    _state.update { UiState.Success(uiState.copy(loading = true)) }
+                    _loading.update { true }
                 }
                 .onCompletion {
-                    val uiState: SettingUiState =
-                        (_state.value as? UiState.Success)?.data ?: return@onCompletion
-                    _state.update { UiState.Success(uiState.copy(loading = false)) }
+                    _loading.update { false }
                 }
                 .catch { _ ->
                     _effect.emit(

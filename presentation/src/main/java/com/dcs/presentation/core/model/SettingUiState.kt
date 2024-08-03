@@ -9,7 +9,6 @@ import com.dcs.presentation.core.state.UiState
 @Stable
 data class SettingUiState(
     val userProfile: UserProfile,
-    val loading: Boolean = false,
 )
 
 sealed interface UserProfile {
@@ -57,11 +56,11 @@ sealed interface UserProfile {
 }
 
 class SettingUiStateProvider :
-    PreviewParameterProvider<UiState<SettingUiState>> {
-    override val values: Sequence<UiState<SettingUiState>>
+    PreviewParameterProvider<Pair<UiState<SettingUiState>, Boolean>> {
+    override val values: Sequence<Pair<UiState<SettingUiState>, Boolean>>
         get() = sequenceOf(
-            UiState.Loading,
-            UiState.Success(SettingUiState(UserProfile.NotLoggedIn)),
+            UiState.Loading to false,
+            UiState.Success(SettingUiState(UserProfile.NotLoggedIn)) to false,
             UiState.Success(
                 SettingUiState(
                     UserProfile.User(
@@ -73,7 +72,7 @@ class SettingUiStateProvider :
                         avatarImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA4MDdfMTk5/MDAxNjkxNDA5NTk2MTcz.Zr7MEQr-w3PH_l5R2uzj_rTJlPOcMZka28xz7zLJWIQg.ts6pjnQVYkBLV_fXtlV2N0_A3mRlMW-woSdq9gUoGOkg.PNG.saontsdkss119/image.png?type=w800",
                     )
                 )
-            ),
+            ) to true,
             UiState.Success(
                 SettingUiState(
                     userProfile = UserProfile.User(
@@ -84,8 +83,7 @@ class SettingUiStateProvider :
                         sessionId = SessionId("sessionId"),
                         avatarImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMzA4MDdfMTk5/MDAxNjkxNDA5NTk2MTcz.Zr7MEQr-w3PH_l5R2uzj_rTJlPOcMZka28xz7zLJWIQg.ts6pjnQVYkBLV_fXtlV2N0_A3mRlMW-woSdq9gUoGOkg.PNG.saontsdkss119/image.png?type=w800",
                     ),
-                    loading = true,
                 )
-            ),
+            ) to false,
         )
 }
