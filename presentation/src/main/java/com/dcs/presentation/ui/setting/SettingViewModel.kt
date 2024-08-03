@@ -63,10 +63,6 @@ class SettingViewModel @Inject constructor(
             }
 
             is SettingUiEvent.SignOut -> {
-                /**
-                 * TODO: Implement sign out
-                 * https://github.com/Edgar-J-Shin/AllAboutMovie/issues/21
-                 */
                 signOut()
             }
         }
