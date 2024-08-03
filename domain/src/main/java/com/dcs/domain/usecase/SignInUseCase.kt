@@ -4,10 +4,13 @@ import com.dcs.domain.model.RequestToken
 import com.dcs.domain.model.User
 import com.dcs.domain.repository.AuthRepository
 import dagger.Reusable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @Reusable
@@ -24,9 +27,6 @@ class SignInUseCase @Inject constructor(
                 repo.signIn(
                     sessionId = sessionId,
                 )
-            }
-            .onEach {
-                // TODO: Save user to local storage
             }
     }
 }

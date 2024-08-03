@@ -3,7 +3,7 @@ package com.dcs.domain.model
 
 data class User(
     val avatar: Avatar,
-    val id: Int,
+    val id: Long,
     val includeAdult: Boolean,
     val iso31661: String,
     val iso6391: String,

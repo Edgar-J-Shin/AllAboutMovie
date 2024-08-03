@@ -1,6 +1,9 @@
 package com.dcs.presentation.ui
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,15 +19,43 @@ fun AllAboutMovieApp(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Main.route
+        startDestination = Main.route,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        }
     ) {
         composable(route = Main.route) {
             MainRoute(navController = navController)
         }
 
-        composable(route = SignIn.route) {
+        composable(
+            route = SignIn.route,
+            arguments = SignIn.navArguments
+        ) {
             SignInRoute(navController = navController)
         }
 
     }
 }
+
