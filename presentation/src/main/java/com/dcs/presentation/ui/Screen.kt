@@ -57,9 +57,9 @@ sealed class Screen(
     }
 
     data object SignIn : Screen(
-        route = "$ROUTE_SIGN_IN/{$REQUEST_TOKEN_KEY}",
+        route = "$ROUTE_SIGN_IN/{$SIGN_IN_REQUEST_TOKEN_KEY}",
         navArguments = listOf(
-            navArgument(REQUEST_TOKEN_KEY) {
+            navArgument(SIGN_IN_REQUEST_TOKEN_KEY) {
                 type = NavType.StringType
             }
         )
@@ -77,6 +77,6 @@ sealed class Screen(
         const val ROUTE_SIGN_IN = "signIn"
 
         const val ID_SAVED_STATE_KEY = "IdStateKey"
-        const val REQUEST_TOKEN_KEY = "RequestTokenKey"
+        const val SIGN_IN_REQUEST_TOKEN_KEY = "SignInRequestTokenKey"
     }
 }
