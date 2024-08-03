@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // kotlin - immutable for compose stable
+    implementation(libs.kotlinx.collections.immutable)
+
     // navigation
     api(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation)
