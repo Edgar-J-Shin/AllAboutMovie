@@ -3,12 +3,12 @@ package com.dcs.presentation.ui.signin
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.RequestToken
 import com.dcs.domain.usecase.SignInUseCase
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,7 +69,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun signIn(requestToken: RequestToken) {
-        viewModelScope.launch {
+        launch {
             signInUseCase(requestToken)
                 .onStart {
                     _loading.update { true }
@@ -90,7 +89,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun navigateBack() {
-        viewModelScope.launch {
+        launch {
             _effect.emit(SignInEffect.NavigateBack)
         }
     }
