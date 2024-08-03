@@ -10,6 +10,7 @@ import com.dcs.domain.model.SessionId
 import com.dcs.domain.model.User
 import com.dcs.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -46,6 +47,7 @@ class AuthRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun signIn(sessionId: SessionId): Flow<User> {
         return flow {
             val response = authRemoteDataSource.getUser(
@@ -71,12 +73,7 @@ class AuthRepositoryImpl @Inject constructor(
                         .getOrDefault(Unit)
                 )
             },
-            flow {
-                emit(
-                    deleteUserByUserId(userId)
-                        .getOrThrow()
-                )
-            },
+            deleteUserByUserId(userId),
         ) { _, _ -> }
             .flowOn(ioDispatcher)
     }
@@ -96,7 +93,10 @@ class AuthRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun deleteUserByUserId(userId: Long): Result<Unit> {
-        return authLocalDataSource.deleteUserByUserId(userId)
+    override fun deleteUserByUserId(userId: Long): Flow<Unit> {
+        return flow {
+            emit(authLocalDataSource.deleteUserByUserId(userId).getOrThrow())
+        }
+            .flowOn(ioDispatcher)
     }
 }

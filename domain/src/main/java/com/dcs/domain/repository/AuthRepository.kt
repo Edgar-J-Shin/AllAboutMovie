@@ -19,5 +19,5 @@ interface AuthRepository {
 
     fun insertUser(user: User): Flow<User>
 
-    suspend fun deleteUserByUserId(userId: Long): Result<Unit>
+    fun deleteUserByUserId(userId: Long): Flow<Unit>
 }
