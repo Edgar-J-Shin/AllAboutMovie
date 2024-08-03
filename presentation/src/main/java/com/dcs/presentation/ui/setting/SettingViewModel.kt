@@ -92,11 +92,8 @@ class SettingViewModel @Inject constructor(
 
     private fun signOut() {
         launch {
-            val user: UserProfile.User =
-                ((_state.value as? UiState.Success)
-                    ?.data
-                    ?.userProfile as? UserProfile.User)
-                    ?: return@launch
+            val uiState = (_state.value as? UiState.Success)?.data ?: return@launch
+            val user = uiState.userProfile as UserProfile.User
 
             signOutUseCase(
                 userId = user.id,
