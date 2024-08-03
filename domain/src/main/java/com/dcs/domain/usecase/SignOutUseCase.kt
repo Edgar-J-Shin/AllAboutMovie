@@ -11,11 +11,11 @@ class SignOutUseCase @Inject constructor(
     private val repo: AuthRepository,
 ) {
     operator fun invoke(
-        userTmdbId: Long,
+        userId: Long,
         sessionId: SessionId,
     ): Flow<Unit> {
         return repo.signOut(
-            userTmdbId = userTmdbId,
+            userId = userId,
             sessionId = sessionId,
         )
     }

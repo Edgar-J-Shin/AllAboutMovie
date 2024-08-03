@@ -13,11 +13,11 @@ interface AuthRepository {
 
     fun signIn(sessionId: SessionId): Flow<User>
 
-    fun signOut(userTmdbId: Long, sessionId: SessionId): Flow<Unit>
+    fun signOut(userId: Long, sessionId: SessionId): Flow<Unit>
 
     fun getUser(): Flow<User?>
 
-    suspend fun insertUser(user: User): Result<Unit>
+    fun insertUser(user: User): Flow<User>
 
-    suspend fun deleteUserByTmdbId(userTmdbId: Long): Result<Unit>
+    suspend fun deleteUserByUserId(userId: Long): Result<Unit>
 }

@@ -1,7 +1,6 @@
 package com.dcs.data.local.room.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -12,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(user: User)
+    suspend fun insert(user: User): Long
 
     @Query("SELECT * FROM users ORDER BY id ASC LIMIT 1")
     fun getFirstUser(): Flow<User?>
 
-    @Query("DELETE FROM users WHERE tmdb_id = :userId")
+    @Query("DELETE FROM users WHERE id = :userId")
     suspend fun delete(userId: Long)
 }

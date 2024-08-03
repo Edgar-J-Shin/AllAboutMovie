@@ -12,9 +12,9 @@ import com.dcs.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -54,13 +54,13 @@ class AuthRepositoryImpl @Inject constructor(
 
             emit(response.toEntity(sessionId))
         }
-            .onEach { user ->
+            .flatMapLatest { user ->
                 insertUser(user)
             }
             .flowOn(ioDispatcher)
     }
 
-    override fun signOut(userTmdbId: Long, sessionId: SessionId): Flow<Unit> {
+    override fun signOut(userId: Long, sessionId: SessionId): Flow<Unit> {
         return combine(
             flow {
                 emit(
@@ -73,7 +73,7 @@ class AuthRepositoryImpl @Inject constructor(
             },
             flow {
                 emit(
-                    deleteUserByTmdbId(userTmdbId)
+                    deleteUserByUserId(userId)
                         .getOrThrow()
                 )
             },
@@ -86,11 +86,17 @@ class AuthRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun insertUser(user: User): Result<Unit> {
-        return authLocalDataSource.insertUser(user)
+    override fun insertUser(user: User): Flow<User> {
+        return flow {
+            val result = authLocalDataSource.insertUser(user)
+                .getOrThrow()
+
+            emit(result)
+        }
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun deleteUserByTmdbId(userTmdbId: Long): Result<Unit> {
-        return authLocalDataSource.deleteUserByTmdbId(userTmdbId)
+    override suspend fun deleteUserByUserId(userId: Long): Result<Unit> {
+        return authLocalDataSource.deleteUserByUserId(userId)
     }
 }

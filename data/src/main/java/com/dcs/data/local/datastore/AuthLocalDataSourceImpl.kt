@@ -18,15 +18,16 @@ class AuthLocalDataSourceImpl @Inject constructor(
             .distinctUntilChanged()
     }
 
-    override suspend fun insertUser(user: User): Result<Unit> {
+    override suspend fun insertUser(user: User): Result<User> {
         return runCatching {
-            userEntityDao.insert(user.toLocalData())
+            val id = userEntityDao.insert(user.toLocalData())
+            user.copy(id = id)
         }
     }
 
-    override suspend fun deleteUserByTmdbId(userTmdbId: Long): Result<Unit> {
+    override suspend fun deleteUserByUserId(userId: Long): Result<Unit> {
         return runCatching {
-            userEntityDao.delete(userTmdbId)
+            userEntityDao.delete(userId)
         }
     }
 }

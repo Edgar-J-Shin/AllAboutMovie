@@ -99,7 +99,7 @@ class SettingViewModel @Inject constructor(
                     ?: return@launch
 
             signOutUseCase(
-                userTmdbId = user.id,
+                userId = user.id,
                 sessionId = user.sessionId
             )
                 .onStart {
