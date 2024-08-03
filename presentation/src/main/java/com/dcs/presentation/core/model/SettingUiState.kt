@@ -16,6 +16,7 @@ sealed interface UserProfile {
 
     data class User(
         val id: Long,
+        val tmdbId: Long,
         val includeAdult: Boolean,
         val name: String,
         val username: String,
@@ -37,6 +38,7 @@ sealed interface UserProfile {
             return if (user != null) {
                 User(
                     id = user.id,
+                    tmdbId = user.tmdbId,
                     includeAdult = user.includeAdult,
                     name = user.name,
                     username = user.username,
@@ -65,6 +67,7 @@ class SettingUiStateProvider :
                 SettingUiState(
                     UserProfile.User(
                         id = 1,
+                        tmdbId = 1,
                         includeAdult = true,
                         name = "name",
                         username = "username",
@@ -77,6 +80,7 @@ class SettingUiStateProvider :
                 SettingUiState(
                     userProfile = UserProfile.User(
                         id = 1,
+                        tmdbId = 1,
                         includeAdult = true,
                         name = "name",
                         username = "username",
