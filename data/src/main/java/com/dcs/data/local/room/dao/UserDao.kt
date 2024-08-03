@@ -18,5 +18,5 @@ interface UserDao {
     fun getFirstUser(): Flow<User?>
 
     @Query("DELETE FROM users WHERE tmdb_id = :userId")
-    fun delete(userId: Long)
+    suspend fun delete(userId: Long)
 }
