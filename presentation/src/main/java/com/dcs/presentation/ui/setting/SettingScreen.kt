@@ -53,7 +53,7 @@ fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
@@ -75,7 +75,7 @@ fun SettingRoute(
     SettingScreen(
         state = state,
         onSettingEvent = viewModel::dispatchEvent,
-        loading = loading,
+        isLoading = isLoading,
         snackbarHostState = snackBarHostState,
         modifier = modifier
             .fillMaxSize(),
@@ -86,7 +86,7 @@ fun SettingRoute(
 fun SettingScreen(
     state: UiState<SettingUiState>,
     onSettingEvent: (SettingUiEvent) -> Unit,
-    loading: Boolean,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -114,7 +114,7 @@ fun SettingScreen(
                             .fillMaxSize(),
                     )
 
-                    if (loading) {
+                    if (isLoading) {
                         LoadingScreen(
                             modifier = Modifier.fillMaxSize()
                         )
@@ -251,7 +251,7 @@ fun SettingScreenPreview(
 ) {
     SettingScreen(
         state = state.first,
-        loading = state.second,
+        isLoading = state.second,
         onSettingEvent = {},
     )
 }

@@ -34,9 +34,9 @@ class SignInViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<SignInEffect>()
     val effect = _effect.asSharedFlow()
 
-    private val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
-    
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
+
     private val requestToken: String =
         savedStateHandle[Screen.SIGN_IN_REQUEST_TOKEN_KEY] ?: error("Request token not found")
 
@@ -70,10 +70,10 @@ class SignInViewModel @Inject constructor(
         launch {
             signInUseCase(requestToken)
                 .onStart {
-                    _loading.update { true }
+                    _isLoading.update { true }
                 }
                 .onCompletion {
-                    _loading.update { false }
+                    _isLoading.update { false }
                 }
                 .catch { throwable ->
                     // Handle failure

@@ -36,8 +36,8 @@ class SettingViewModel @Inject constructor(
         MutableStateFlow<UiState<SettingUiState>>(UiState.Loading)
     val state = _state.asStateFlow()
 
-    private val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
     init {
         checkIfUserLoggedIn()
@@ -72,10 +72,10 @@ class SettingViewModel @Inject constructor(
         launch {
             createRequestTokenUseCase()
                 .onStart {
-                    _loading.update { true }
+                    _isLoading.update { true }
                 }
                 .onCompletion {
-                    _loading.update { false }
+                    _isLoading.update { false }
                 }
                 .catch { _ ->
                     _effect.emit(
@@ -100,10 +100,10 @@ class SettingViewModel @Inject constructor(
                 sessionId = user.sessionId
             )
                 .onStart {
-                    _loading.update { true }
+                    _isLoading.update { true }
                 }
                 .onCompletion {
-                    _loading.update { false }
+                    _isLoading.update { false }
                 }
                 .catch { _ ->
                     _effect.emit(

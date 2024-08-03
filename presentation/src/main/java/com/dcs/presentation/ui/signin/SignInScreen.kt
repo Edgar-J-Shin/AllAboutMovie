@@ -42,7 +42,7 @@ fun SignInRoute(
 ) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         viewModel.effect.collect {
@@ -57,7 +57,7 @@ fun SignInRoute(
     SignInScreen(
         state = uiState,
         onSignInEvent = viewModel::dispatchEvent,
-        loading = loading,
+        isLoading = isLoading,
         modifier = modifier
             .systemBarsPadding()
             .background(color = White3)
@@ -68,7 +68,7 @@ fun SignInRoute(
 private fun SignInScreen(
     state: UiState<SignInUiState>,
     onSignInEvent: (SignInUiEvent) -> Unit,
-    loading: Boolean,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -88,7 +88,7 @@ private fun SignInScreen(
                             .background(color = White3)
                     )
 
-                    if (loading) {
+                    if (isLoading) {
                         LoadingScreen()
                     }
                 }
@@ -166,7 +166,7 @@ fun SignInScreenPreview(
     AllAboutMovieTheme {
         SignInScreen(
             state = state.first,
-            loading = state.second,
+            isLoading = state.second,
             onSignInEvent = {},
         )
     }
