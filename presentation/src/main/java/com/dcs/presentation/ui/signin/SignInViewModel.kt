@@ -64,9 +64,7 @@ class SignInViewModel @Inject constructor(
 
             is SignInUiEvent.NavigateBack -> {
                 // Handle navigate back
-                viewModelScope.launch {
-                    _effect.emit(SignInEffect.NavigateBack)
-                }
+                navigateBack()
             }
         }
     }
@@ -88,6 +86,12 @@ class SignInViewModel @Inject constructor(
                 .collect {
                     _effect.emit(SignInEffect.NavigateBack)
                 }
+        }
+    }
+
+    private fun navigateBack() {
+        viewModelScope.launch {
+            _effect.emit(SignInEffect.NavigateBack)
         }
     }
 
