@@ -95,7 +95,12 @@ fun SettingScreen(
     ) {
         when (state) {
             is UiState.Loading -> {
-                Skeleton()
+                // Loading screen
+                Skeleton(
+                    modifier = modifier
+                        .padding(horizontal = 20.dp, vertical = 20.dp)
+                        .fillMaxWidth()
+                )
             }
 
             is UiState.Success -> {
