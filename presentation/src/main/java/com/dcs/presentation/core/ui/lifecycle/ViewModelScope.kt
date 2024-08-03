@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.ui
+package com.dcs.presentation.core.ui.lifecycle
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
