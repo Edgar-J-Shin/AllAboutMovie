@@ -6,10 +6,12 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.dcs.presentation.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 sealed class Screen(
     val route: String,
-    val navArguments: List<NamedNavArgument> = emptyList(),
+    val navArguments: ImmutableList<NamedNavArgument> = persistentListOf(),
 ) {
 
     data object Main : Screen(route = ROUTE_MAIN) {
@@ -18,7 +20,7 @@ sealed class Screen(
             route: String,
             @StringRes val titleResId: Int,
             @DrawableRes val iconResId: Int,
-        ) : Screen(route, emptyList()) {
+        ) : Screen(route, persistentListOf()) {
 
             data object Home : MainTab(
                 route = ROUTE_HOME,
@@ -48,7 +50,7 @@ sealed class Screen(
 
     data object DetailItem : Screen(
         route = "$ROUTE_DETAIL/{$ID_SAVED_STATE_KEY}",
-        navArguments = listOf(navArgument(ID_SAVED_STATE_KEY) {
+        navArguments = persistentListOf(navArgument(ID_SAVED_STATE_KEY) {
             type = NavType.StringType
         })
     ) {
@@ -57,9 +59,9 @@ sealed class Screen(
     }
 
     data object SignIn : Screen(
-        route = "$ROUTE_SIGN_IN/{$REQUEST_TOKEN_KEY}",
-        navArguments = listOf(
-            navArgument(REQUEST_TOKEN_KEY) {
+        route = "$ROUTE_SIGN_IN/{$SIGN_IN_REQUEST_TOKEN_KEY}",
+        navArguments = persistentListOf(
+            navArgument(SIGN_IN_REQUEST_TOKEN_KEY) {
                 type = NavType.StringType
             }
         )
@@ -77,6 +79,6 @@ sealed class Screen(
         const val ROUTE_SIGN_IN = "signIn"
 
         const val ID_SAVED_STATE_KEY = "IdStateKey"
-        const val REQUEST_TOKEN_KEY = "RequestTokenKey"
+        const val SIGN_IN_REQUEST_TOKEN_KEY = "SignInRequestTokenKey"
     }
 }

@@ -13,5 +13,8 @@ sealed class SnackbarState(
 
     data object SettingToSignInError :
         SnackbarState(messageResId = R.string.setting_to_sign_in_error)
+
+    data object SettingToSignOutError :
+        SnackbarState(messageResId = R.string.setting_to_sign_out_error)
 }
 

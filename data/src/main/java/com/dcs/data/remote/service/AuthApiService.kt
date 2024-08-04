@@ -6,9 +6,9 @@ import com.dcs.data.remote.model.CreateSessionIdResponse
 import com.dcs.data.remote.model.GetUserResponse
 import com.dcs.data.remote.network.NetworkResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface AuthApiService {
@@ -30,4 +30,9 @@ interface AuthApiService {
     suspend fun getAccountDetails(
         @Query("session_id") sessionId: String,
     ): NetworkResponse<GetUserResponse>
+
+    @DELETE("authentication/session")
+    suspend fun deleteSession(
+        @Query("session_id") sessionId: String,
+    ): NetworkResponse<Unit>
 }

@@ -12,4 +12,6 @@ interface AuthRemoteDataSource {
     suspend fun createSessionId(requestToken: String): Result<CreateSessionIdResponse>
 
     suspend fun getUser(sessionId: SessionId): Result<GetUserResponse>
+
+    suspend fun deleteSession(sessionId: SessionId): Result<Unit>
 }

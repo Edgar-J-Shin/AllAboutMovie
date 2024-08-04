@@ -2,14 +2,15 @@ package com.dcs.domain.model
 
 
 data class User(
+    val id: Long = 0,
     val avatar: Avatar,
-    val id: Long,
+    val tmdbId: Long,
     val includeAdult: Boolean,
     val iso31661: String,
     val iso6391: String,
     val name: String,
     val username: String,
-    val sessionId: SessionId
+    val sessionId: SessionId,
 )
 
 data class Avatar(

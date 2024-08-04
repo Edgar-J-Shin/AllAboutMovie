@@ -13,9 +13,11 @@ interface AuthRepository {
 
     fun signIn(sessionId: SessionId): Flow<User>
 
+    fun signOut(userId: Long, sessionId: SessionId): Flow<Unit>
+
     fun getUser(): Flow<User?>
 
-    suspend fun insertUser(user: User): Result<Unit>
+    fun insertUser(user: User): Flow<User>
 
-    suspend fun deleteUser(user: User): Result<Unit>
+    fun deleteUserByUserId(userId: Long): Flow<Unit>
 }

@@ -53,6 +53,7 @@ fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
@@ -74,6 +75,7 @@ fun SettingRoute(
     SettingScreen(
         state = state,
         onSettingEvent = viewModel::dispatchEvent,
+        isLoading = isLoading,
         snackbarHostState = snackBarHostState,
         modifier = modifier
             .fillMaxSize(),
@@ -84,6 +86,7 @@ fun SettingRoute(
 fun SettingScreen(
     state: UiState<SettingUiState>,
     onSettingEvent: (SettingUiEvent) -> Unit,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -111,7 +114,7 @@ fun SettingScreen(
                             .fillMaxSize(),
                     )
 
-                    if (settingUiState.loading) {
+                    if (isLoading) {
                         LoadingScreen(
                             modifier = Modifier.fillMaxSize()
                         )
@@ -244,10 +247,11 @@ private fun Skeleton(
 @Preview(showBackground = true)
 @Composable
 fun SettingScreenPreview(
-    @PreviewParameter(SettingUiStateProvider::class) uiState: UiState<SettingUiState>,
+    @PreviewParameter(SettingUiStateProvider::class) state: Pair<UiState<SettingUiState>, Boolean>,
 ) {
     SettingScreen(
-        state = uiState,
+        state = state.first,
+        isLoading = state.second,
         onSettingEvent = {},
     )
 }

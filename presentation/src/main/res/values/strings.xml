@@ -32,5 +32,6 @@
     # Snackbar
     <string name="setting_to_sign_in_error">일시적인 오류로 로그인을 할 수 없습니다. 잠시 후 다시 시작해주세요.</string>
     <string name="close">닫기</string>
+    <string name="setting_to_sign_out_error">일시적인 오류로 로그아웃 할 수 없습니다. 잠시 후 다시 시작해주세요.</string>
 
 </resources>

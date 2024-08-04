@@ -7,7 +7,7 @@ interface AuthLocalDataSource {
 
     fun getUser(): Flow<User?>
 
-    suspend fun insertUser(user: User): Result<Unit>
+    suspend fun insertUser(user: User): Result<User>
 
-    suspend fun deleteUser(user: User): Result<Unit>
+    suspend fun deleteUserByUserId(userId: Long): Result<Unit>
 }

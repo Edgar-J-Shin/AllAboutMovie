@@ -8,7 +8,7 @@ import com.dcs.domain.model.TmdbAvatarPath
 import com.dcs.domain.model.User
 
 fun GetUserResponse.toEntity(sessionId: SessionId) = User(
-    id = this.id,
+    tmdbId = this.id,
     name = this.name,
     username = this.username,
     avatar = this.avatar.toEntity(),
