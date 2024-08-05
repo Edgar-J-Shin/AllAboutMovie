@@ -50,10 +50,10 @@ sealed interface UserProfile {
                         "${BuildConfig.TMDB_IMAGE_URL}/w200${user.avatar.tmdb.value}"
                     } else {
                         "${BuildConfig.TMDB_GRAVATR_URL}${user.avatar.gravatar.value}.jpg?s=200"
-                    }
+                    },
                 )
             } else {
-                return NotLoggedIn
+                NotLoggedIn
             }
         }
     }
