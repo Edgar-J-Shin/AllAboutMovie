@@ -5,7 +5,7 @@ import com.dcs.data.remote.network.NetworkResponse
 
 interface PersonRemoteDataSource {
 
-    fun getPopularPeople(
+    suspend fun getPopularPeople(
         page: Int,
         language: String,
     ): Result<GetPopularPeopleResponse>

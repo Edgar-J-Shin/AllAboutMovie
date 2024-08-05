@@ -7,7 +7,7 @@ import javax.inject.Inject
 class PersonRemoteDataSourceImpl @Inject constructor(
     private val api: PersonApiService,
 ) : PersonRemoteDataSource {
-    override fun getPopularPeople(
+    override suspend fun getPopularPeople(
         page: Int,
         language: String,
     ): Result<GetPopularPeopleResponse> {

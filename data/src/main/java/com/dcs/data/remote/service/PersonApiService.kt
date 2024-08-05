@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface PersonApiService {
 
     @GET("person/popular")
-    fun getPopularPeople(
+    suspend fun getPopularPeople(
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetPopularPeopleResponse>
