@@ -1,23 +1,22 @@
 package com.dcs.data.remote.model
-import kotlinx.serialization.Serializable
 
 import kotlinx.serialization.SerialName
-
+import kotlinx.serialization.Serializable
 
 @Serializable
-data class AAResponse(
+data class GetPopularPeopleResponse(
     @SerialName("page")
     val page: Int,
     @SerialName("results")
-    val results: List<Result>,
+    val results: List<RemotePerson>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")
-    val totalResults: Int
+    val totalResults: Int,
 )
 
 @Serializable
-data class Result(
+data class RemotePerson(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")
@@ -25,7 +24,7 @@ data class Result(
     @SerialName("id")
     val id: Int,
     @SerialName("known_for")
-    val knownFor: List<KnownFor>,
+    val knownFor: List<RemoteKnownFor>,
     @SerialName("known_for_department")
     val knownForDepartment: String,
     @SerialName("name")
@@ -35,17 +34,17 @@ data class Result(
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("profile_path")
-    val profilePath: String
+    val profilePath: String,
 )
 
 @Serializable
-data class KnownFor(
+data class RemoteKnownFor(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String? = null,
     @SerialName("first_air_date")
-    val firstAirDate: String,
+    val firstAirDate: String? = null,
     @SerialName("genre_ids")
     val genreIds: List<Int>,
     @SerialName("id")
@@ -53,15 +52,15 @@ data class KnownFor(
     @SerialName("media_type")
     val mediaType: String,
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
     @SerialName("origin_country")
-    val originCountry: List<String>,
+    val originCountry: List<String>? = null,
     @SerialName("original_language")
     val originalLanguage: String,
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String? = null,
     @SerialName("original_title")
-    val originalTitle: String,
+    val originalTitle: String? = null,
     @SerialName("overview")
     val overview: String,
     @SerialName("popularity")
@@ -69,13 +68,13 @@ data class KnownFor(
     @SerialName("poster_path")
     val posterPath: String,
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String? = null,
     @SerialName("title")
-    val title: String,
+    val title: String? = null,
     @SerialName("video")
-    val video: Boolean,
+    val video: Boolean? = null,
     @SerialName("vote_average")
     val voteAverage: Double,
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int,
 )
