@@ -87,7 +87,7 @@ fun TrendMovies(
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     onTabClick: (Int) -> Unit = {},
 ) {
-    TrendMoviePanel(
+    TrendMovieSector(
         title = stringResource(id = R.string.movie_trend_title_trend),
         movies = movies,
         tabs = MovieTrendType.entries.map { it.toUiString() },
@@ -100,7 +100,7 @@ fun PopularContents(
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     onTabClick: (Int) -> Unit = {},
 ) {
-    TrendMoviePanel(
+    TrendMovieSector(
         title = stringResource(id = R.string.movie_trend_title_popular),
         movies = movies,
         tabs = MoviePopularType.entries.map { it.toUiString() },
@@ -112,14 +112,14 @@ fun PopularContents(
 fun UpcomingMovies(
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
-    TrendMoviePanel(
+    TrendMovieSector(
         title = stringResource(id = R.string.movie_trend_title_upcoming),
         movies = movies
     )
 }
 
 @Composable
-fun TrendMoviePanel(
+fun TrendMovieSector(
     title: String,
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     modifier: Modifier = Modifier,
@@ -208,7 +208,7 @@ fun TrendMovieUiState(
         when (uiState) {
             is UiState.Loading -> LoadingScreen()
 
-            is UiState.Success -> TrendMovieList(
+            is UiState.Success -> TrendMovies(
                 movieItems = movies.map {
                     (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
                 }
@@ -222,7 +222,7 @@ fun TrendMovieUiState(
 }
 
 @Composable
-fun TrendMovieList(
+fun TrendMovies(
     movieItems: Flow<PagingData<MovieItemUiState>>,
     modifier: Modifier = Modifier,
 ) {
