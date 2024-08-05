@@ -8,5 +8,5 @@ interface PersonRemoteDataSource {
     fun getPopularPeople(
         page: Int,
         language: String,
-    ): NetworkResponse<GetPopularPeopleResponse>
+    ): Result<GetPopularPeopleResponse>
 }

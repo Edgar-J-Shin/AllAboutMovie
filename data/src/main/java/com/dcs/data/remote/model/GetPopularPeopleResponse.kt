@@ -8,7 +8,7 @@ data class GetPopularPeopleResponse(
     @SerialName("page")
     val page: Int,
     @SerialName("results")
-    val results: List<Person>,
+    val results: List<RemotePerson>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")
@@ -16,7 +16,7 @@ data class GetPopularPeopleResponse(
 )
 
 @Serializable
-data class Person(
+data class RemotePerson(
     @SerialName("id")
     val id: Int,
     @SerialName("name")
@@ -28,7 +28,7 @@ data class Person(
     @SerialName("gender")
     val gender: Int,
     @SerialName("known_for")
-    val knownFor: List<KnownFor>,
+    val knownFor: List<RemoteKnownFor>,
     @SerialName("known_for_department")
     val knownForDepartment: String,
     @SerialName("popularity")
@@ -38,7 +38,7 @@ data class Person(
 )
 
 @Serializable
-data class KnownFor(
+data class RemoteKnownFor(
     @SerialName("id")
     val id: Int,
     @SerialName("original_name")
