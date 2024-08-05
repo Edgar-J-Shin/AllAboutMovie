@@ -1,7 +1,7 @@
 package com.dcs.data.local.di
 
-import com.dcs.data.local.datastore.AuthLocalDataSource
-import com.dcs.data.local.datastore.AuthLocalDataSourceImpl
+import com.dcs.data.local.datasource.AuthLocalDataSource
+import com.dcs.data.local.datasource.AuthLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
