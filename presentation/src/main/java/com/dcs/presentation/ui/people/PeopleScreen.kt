@@ -1,8 +1,11 @@
 package com.dcs.presentation.ui.people
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,10 +14,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -24,6 +32,10 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
+import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.model.PersonUiState
@@ -92,6 +104,70 @@ private fun PopularPeople(
     items: LazyPagingItems<PersonUiState>,
     modifier: Modifier = Modifier,
 ) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        contentPadding = PaddingValues(8.dp),
+        verticalItemSpacing = 12.dp,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = modifier.fillMaxSize()
+    ) {
+        items(items.itemCount) { index ->
+            val person = items[index] ?: return@items
+
+            PersonCard(
+                state = person,
+                modifier = Modifier
+                    .fillMaxWidth()
+
+            )
+
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+private fun PersonCard(
+    state: PersonUiState,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(
+            topStart = 16.dp,
+            topEnd = 16.dp,
+            bottomStart = 0.dp,
+            bottomEnd = 0.dp
+        )
+    ) {
+        GlideImage(
+            model = "${BuildConfig.TMDB_IMAGE_URL}original${state.profilePath}",
+            contentDescription = "profile image",
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier
+        )
+        if (state.knownFor.isNotEmpty()) {
+            val list = state.knownFor.take(3)
+            val text = list.foldIndexed("") { index, acc, knownFor ->
+                val title = knownFor.title ?: knownFor.originalTitle ?: ""
+                if (title.isEmpty()) {
+                    return@foldIndexed acc
+                }
+                if (index == 0) {
+                    title
+                } else {
+                    "$acc, $title"
+                }
+            }
+            if (text.isNotBlank()) {
+                Text(
+                    text = text,
+                    modifier = Modifier
+                        .padding(12.dp),
+                )
+            }
+        }
+    }
 }
 
 @Composable
