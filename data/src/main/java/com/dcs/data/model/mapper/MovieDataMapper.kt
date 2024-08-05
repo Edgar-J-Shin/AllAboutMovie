@@ -1,6 +1,6 @@
 package com.dcs.data.model.mapper
 
-import com.dcs.data.model.MovieData
+import com.dcs.data.remote.model.MovieData
 import com.dcs.domain.model.MovieEntity
 
 fun MovieData.toEntity() = MovieEntity(
