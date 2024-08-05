@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
@@ -42,7 +42,9 @@ import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.state.MoviePopularType
 import com.dcs.presentation.core.state.MovieTrendType
 import com.dcs.presentation.core.state.UiState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun TrendRoute(
@@ -148,7 +150,7 @@ fun TrendMoviePanel(
             }
         }
 
-        TrendMovieUiStateScreen(
+        TrendMovieUiState(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(280.dp),
@@ -194,7 +196,7 @@ fun CustomScrollableTabRow(
 }
 
 @Composable
-fun TrendMovieUiStateScreen(
+fun TrendMovieUiState(
     modifier: Modifier = Modifier,
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
@@ -207,7 +209,9 @@ fun TrendMovieUiStateScreen(
             is UiState.Loading -> LoadingScreen()
 
             is UiState.Success -> TrendMovieList(
-                movieItems = (uiState as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
+                movieItems = movies.map {
+                    (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
+                }
             )
 
             is UiState.Error -> ErrorScreen(
@@ -219,32 +223,48 @@ fun TrendMovieUiStateScreen(
 
 @Composable
 fun TrendMovieList(
-    movieItems: PagingData<MovieItemUiState>,
+    movieItems: Flow<PagingData<MovieItemUiState>>,
     modifier: Modifier = Modifier,
 ) {
-    val pagingItems = snapshotFlow { movieItems }.collectAsLazyPagingItems()
+    val pagingItems = movieItems.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
 
-    LazyRow(
-        modifier = modifier
-            .fillMaxWidth(),
-        state = listState,
-        contentPadding = PaddingValues(
-            horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
-            vertical = dimensionResource(id = R.dimen.list_margin_vertical)
+    val isLoading = pagingItems.loadState.refresh is LoadState.Loading
+    val isError = pagingItems.loadState.refresh is LoadState.Error
+    val isEmpty = pagingItems.itemCount == 0
+
+    when {
+        isLoading -> LoadingScreen()
+
+        isError -> ErrorScreen()
+
+        isEmpty -> ErrorScreen(
+            message = stringResource(id = R.string.empty_content_list_message)
         )
-    ) {
-        items(
-            count = pagingItems.itemCount,
-            key = { index -> index }
-        ) { index ->
-            pagingItems[index]?.let { movie ->
-                MovieItem(
-                    modifier = Modifier
-                        .width(dimensionResource(id = R.dimen.trend_item_width)),
-                    movie = movie,
-                    onClick = { }
+
+        else -> {
+            LazyRow(
+                modifier = modifier
+                    .fillMaxWidth(),
+                state = listState,
+                contentPadding = PaddingValues(
+                    horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
+                    vertical = dimensionResource(id = R.dimen.list_margin_vertical)
                 )
+            ) {
+                items(
+                    count = pagingItems.itemCount,
+                    key = { index -> index }
+                ) { index ->
+                    pagingItems[index]?.let { movie ->
+                        MovieItem(
+                            modifier = Modifier
+                                .width(dimensionResource(id = R.dimen.trend_item_width)),
+                            movie = movie,
+                            onClick = { }
+                        )
+                    }
+                }
             }
         }
     }
