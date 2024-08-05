@@ -1,9 +1,12 @@
 package com.dcs.presentation.core.model
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.domain.model.SessionId
 import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.R
 import com.dcs.presentation.core.state.UiState
 
 @Stable
@@ -44,7 +47,6 @@ sealed interface UserProfile {
                     username = user.username,
                     sessionId = user.sessionId,
                     avatarImageUrl = if (user.avatar.tmdb.value != null) {
-
                         "${BuildConfig.TMDB_IMAGE_URL}/w200${user.avatar.tmdb.value}"
                     } else {
                         "${BuildConfig.TMDB_GRAVATR_URL}${user.avatar.gravatar.value}.jpg?s=200"
@@ -56,6 +58,16 @@ sealed interface UserProfile {
         }
     }
 }
+
+@Composable
+fun UserProfile.toDisplayName() =
+    if (this is UserProfile.User) {
+        this.name.ifBlank { this.username }
+    } else {
+        stringResource(
+            R.string.ask_to_login
+        )
+    }
 
 class SettingUiStateProvider :
     PreviewParameterProvider<Pair<UiState<SettingUiState>, Boolean>> {
