@@ -10,11 +10,10 @@ import com.dcs.domain.model.MovieEntity
 class MoviePagingSource(
     private val trend: Trend,
     private val movieRemoteDataSource: MovieRemoteDataSource,
-    private val pageSize: Int,
-    private val language: String = "en-US"
+    private val language: String = "en-US",
 ) : PagingSource<Int, MovieEntity>() {
 
-    private val startPageIndex = 0
+    private val startPageIndex = 1
     override fun getRefreshKey(state: PagingState<Int, MovieEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
@@ -27,16 +26,15 @@ class MoviePagingSource(
 
         return try {
             val result = when (trend) {
-                is Trend.Trending -> movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page + 1, language)
-                is Trend.Popular -> movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page + 1, language)
-                Trend.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page + 1, language)
-                Trend.Upcoming -> movieRemoteDataSource.getMoviesByUpcoming(page + 1, language)
+                is Trend.Trending -> movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page, language)
+                is Trend.Popular -> movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page, language)
+                Trend.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page, language)
+                Trend.Upcoming -> movieRemoteDataSource.getMoviesByUpcoming(page, language)
             }
 
             val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
-
             val hasPrevPage = page != startPageIndex
-            val hasNextPage = movies.isNotEmpty() && !(page == startPageIndex && totalPages < pageSize)
+            val hasNextPage = page < totalPages
 
             LoadResult.Page(
                 data = movies.map { it.toEntity() }.distinct(),
