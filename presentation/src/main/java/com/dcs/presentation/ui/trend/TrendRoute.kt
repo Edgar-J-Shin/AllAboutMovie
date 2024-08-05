@@ -61,7 +61,7 @@ fun TrendRoute(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
-            TrendMovies(
+            TrendMovieItems(
                 movies = viewModel.moviesByTrending,
                 onTabClick = { tabIndex ->
                     viewModel.updateMovieTrendType(MovieTrendType.entries[tabIndex])
@@ -83,7 +83,7 @@ fun TrendRoute(
 }
 
 @Composable
-fun TrendMovies(
+fun TrendMovieItems(
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     onTabClick: (Int) -> Unit = {},
 ) {
@@ -150,11 +150,11 @@ fun TrendMovieSector(
             }
         }
 
-        TrendMovieUiState(
+        TrendMovies(
+            movies = movies,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(280.dp),
-            movies = movies
+                .height(280.dp)
         )
 
         HorizontalDivider(
@@ -196,7 +196,7 @@ fun CustomScrollableTabRow(
 }
 
 @Composable
-fun TrendMovieUiState(
+fun TrendMovies(
     modifier: Modifier = Modifier,
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
@@ -208,21 +208,21 @@ fun TrendMovieUiState(
         when (uiState) {
             is UiState.Loading -> LoadingScreen()
 
-            is UiState.Success -> TrendMovies(
-                movieItems = movies.map {
-                    (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
-                }
-            )
+            is UiState.Success -> {
+                TrendMovieItems(
+                    movieItems = movies.map {
+                        (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
+                    }
+                )
+            }
 
-            is UiState.Error -> ErrorScreen(
-                message = stringResource(id = R.string.api_response_error_message)
-            )
+            is UiState.Error -> ErrorScreen(message = stringResource(id = R.string.api_response_error_message))
         }
     }
 }
 
 @Composable
-fun TrendMovies(
+fun TrendMovieItems(
     movieItems: Flow<PagingData<MovieItemUiState>>,
     modifier: Modifier = Modifier,
 ) {
@@ -238,19 +238,17 @@ fun TrendMovies(
 
         isError -> ErrorScreen()
 
-        isEmpty -> ErrorScreen(
-            message = stringResource(id = R.string.empty_content_list_message)
-        )
+        isEmpty -> ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
 
         else -> {
             LazyRow(
-                modifier = modifier
-                    .fillMaxWidth(),
                 state = listState,
                 contentPadding = PaddingValues(
                     horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
                     vertical = dimensionResource(id = R.dimen.list_margin_vertical)
-                )
+                ),
+                modifier = modifier
+                    .fillMaxWidth(),
             ) {
                 items(
                     count = pagingItems.itemCount,
@@ -258,10 +256,10 @@ fun TrendMovies(
                 ) { index ->
                     pagingItems[index]?.let { movie ->
                         MovieItem(
-                            modifier = Modifier
-                                .width(dimensionResource(id = R.dimen.trend_item_width)),
                             movie = movie,
-                            onClick = { }
+                            onClick = { },
+                            modifier = Modifier
+                                .width(dimensionResource(id = R.dimen.trend_item_width))
                         )
                     }
                 }
