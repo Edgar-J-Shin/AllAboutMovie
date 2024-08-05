@@ -38,23 +38,22 @@ sealed interface UserProfile {
         operator fun invoke(
             user: com.dcs.domain.model.User?,
         ): UserProfile {
-            return if (user != null) {
-                User(
-                    id = user.id,
-                    tmdbId = user.tmdbId,
-                    includeAdult = user.includeAdult,
-                    name = user.name,
-                    username = user.username,
-                    sessionId = user.sessionId,
-                    avatarImageUrl = if (user.avatar.tmdb.value != null) {
-                        "${BuildConfig.TMDB_IMAGE_URL}/w200${user.avatar.tmdb.value}"
-                    } else {
-                        "${BuildConfig.TMDB_GRAVATR_URL}${user.avatar.gravatar.value}.jpg?s=200"
-                    },
-                )
-            } else {
-                NotLoggedIn
+            if (user == null) {
+                return NotLoggedIn
             }
+            return User(
+                id = user.id,
+                tmdbId = user.tmdbId,
+                includeAdult = user.includeAdult,
+                name = user.name,
+                username = user.username,
+                sessionId = user.sessionId,
+                avatarImageUrl = if (user.avatar.tmdb.value != null) {
+                    "${BuildConfig.TMDB_IMAGE_URL}/w200${user.avatar.tmdb.value}"
+                } else {
+                    "${BuildConfig.TMDB_GRAVATR_URL}${user.avatar.gravatar.value}.jpg?s=200"
+                },
+            )
         }
     }
 }
