@@ -61,7 +61,7 @@ fun TrendRoute(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
-            TrendMovieItems(
+            TrendMovie(
                 movies = viewModel.moviesByTrending,
                 onTabClick = { tabIndex ->
                     viewModel.updateMovieTrendType(MovieTrendType.entries[tabIndex])
@@ -83,7 +83,7 @@ fun TrendRoute(
 }
 
 @Composable
-fun TrendMovieItems(
+fun TrendMovie(
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     onTabClick: (Int) -> Unit = {},
 ) {
@@ -150,7 +150,7 @@ fun TrendMovieSector(
             }
         }
 
-        TrendMovies(
+        TrendMovieContents(
             movies = movies,
             modifier = Modifier
                 .fillMaxWidth()
@@ -196,7 +196,7 @@ fun CustomScrollableTabRow(
 }
 
 @Composable
-fun TrendMovies(
+fun TrendMovieContents(
     modifier: Modifier = Modifier,
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
@@ -209,7 +209,7 @@ fun TrendMovies(
             is UiState.Loading -> LoadingScreen()
 
             is UiState.Success -> {
-                TrendMovieItems(
+                TrendMovie(
                     movieItems = movies.map {
                         (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
                     }
@@ -222,7 +222,7 @@ fun TrendMovies(
 }
 
 @Composable
-fun TrendMovieItems(
+fun TrendMovie(
     movieItems: Flow<PagingData<MovieItemUiState>>,
     modifier: Modifier = Modifier,
 ) {
