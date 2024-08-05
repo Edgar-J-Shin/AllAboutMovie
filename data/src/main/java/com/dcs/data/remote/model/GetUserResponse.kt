@@ -39,5 +39,5 @@ data class Gravatar(
 @Serializable
 data class Tmdb(
     @SerialName("avatar_path")
-    val avatarPath: String,
+    val avatarPath: String?,
 )
