@@ -41,7 +41,7 @@ fun PeopleRoute(
     val popularPeople = viewModel.popularPeople.collectAsLazyPagingItems()
 
     PeopleScreen(
-        popularPeople = popularPeople,
+        items = popularPeople,
         modifier = modifier
             .fillMaxSize()
             .padding(20.dp)
@@ -50,7 +50,7 @@ fun PeopleRoute(
 
 @Composable
 private fun PeopleScreen(
-    popularPeople: LazyPagingItems<PersonUiState>,
+    items: LazyPagingItems<PersonUiState>,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -59,7 +59,7 @@ private fun PeopleScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        when (popularPeople.loadState.refresh) {
+        when (items.loadState.refresh) {
             is LoadState.Loading -> {
                 Skeleton()
             }
@@ -69,7 +69,7 @@ private fun PeopleScreen(
                     message = stringResource(id = R.string.api_response_error_message),
                     primaryButton = {
                         Button(
-                            onClick = popularPeople::retry
+                            onClick = items::retry
                         ) {
                             Text(text = stringResource(id = R.string.retry))
                         }
@@ -79,7 +79,7 @@ private fun PeopleScreen(
 
             is LoadState.NotLoading -> {
                 PopularPeople(
-                    popularPeople = popularPeople,
+                    items = items,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -89,7 +89,7 @@ private fun PeopleScreen(
 
 @Composable
 private fun PopularPeople(
-    popularPeople: LazyPagingItems<PersonUiState>,
+    items: LazyPagingItems<PersonUiState>,
     modifier: Modifier = Modifier,
 ) {
 }
@@ -151,7 +151,7 @@ fun PeopleScreenPreview(
             .collectAsLazyPagingItems()
 
         PeopleScreen(
-            popularPeople = people,
+            items = people,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)
