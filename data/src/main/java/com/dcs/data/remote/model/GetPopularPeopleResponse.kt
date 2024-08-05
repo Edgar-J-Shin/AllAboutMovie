@@ -1,14 +1,15 @@
 package com.dcs.data.remote.model
-
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+import kotlinx.serialization.SerialName
+
+
 @Serializable
-data class GetPopularPeopleResponse(
+data class AAResponse(
     @SerialName("page")
     val page: Int,
     @SerialName("results")
-    val results: List<RemotePerson>,
+    val results: List<Result>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")
@@ -16,35 +17,29 @@ data class GetPopularPeopleResponse(
 )
 
 @Serializable
-data class RemotePerson(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("name")
-    val name: String,
-    @SerialName("original_name")
-    val originalName: String,
+data class Result(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")
     val gender: Int,
+    @SerialName("id")
+    val id: Int,
     @SerialName("known_for")
-    val knownFor: List<RemoteKnownFor>,
+    val knownFor: List<KnownFor>,
     @SerialName("known_for_department")
     val knownForDepartment: String,
+    @SerialName("name")
+    val name: String,
+    @SerialName("original_name")
+    val originalName: String,
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("profile_path")
-    val profilePath: String,
+    val profilePath: String
 )
 
 @Serializable
-data class RemoteKnownFor(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("original_name")
-    val originalName: String,
-    @SerialName("name")
-    val name: String,
+data class KnownFor(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
@@ -53,12 +48,18 @@ data class RemoteKnownFor(
     val firstAirDate: String,
     @SerialName("genre_ids")
     val genreIds: List<Int>,
+    @SerialName("id")
+    val id: Int,
     @SerialName("media_type")
     val mediaType: String,
+    @SerialName("name")
+    val name: String,
     @SerialName("origin_country")
     val originCountry: List<String>,
     @SerialName("original_language")
     val originalLanguage: String,
+    @SerialName("original_name")
+    val originalName: String,
     @SerialName("original_title")
     val originalTitle: String,
     @SerialName("overview")
