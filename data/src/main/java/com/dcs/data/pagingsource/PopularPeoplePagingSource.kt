@@ -6,7 +6,7 @@ import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.PersonRemoteDataSource
 import com.dcs.domain.model.Person
 
-class PopularPersonPagingSource(
+class PopularPeoplePagingSource(
     private val remote: PersonRemoteDataSource,
     private val pageSize: Int,
     private val language: String = "en-US",

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dcs.data.di.IoDispatcher
-import com.dcs.data.pagingsource.PopularPersonPagingSource
+import com.dcs.data.pagingsource.PopularPeoplePagingSource
 import com.dcs.data.remote.datasource.PersonRemoteDataSource
 import com.dcs.domain.model.Person
 import com.dcs.domain.repository.PersonRepository
@@ -24,7 +24,7 @@ class PersonRepositoryImpl @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                PopularPersonPagingSource(
+                PopularPeoplePagingSource(
                     remote = remote,
                     pageSize = 20
                 )
