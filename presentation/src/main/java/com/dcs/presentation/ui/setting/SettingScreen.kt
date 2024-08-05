@@ -42,6 +42,7 @@ import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.SettingUiStateProvider
 import com.dcs.presentation.core.model.UserProfile
+import com.dcs.presentation.core.model.toDisplayName
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.theme.Gray1
 import com.dcs.presentation.ui.Screen
@@ -174,7 +175,7 @@ private fun UserProfile(
 
         // Name
         Text(
-            text = if (userProfile is UserProfile.User) userProfile.name else stringResource(R.string.ask_to_login),
+            text = userProfile.toDisplayName(),
             fontSize = 16.sp,
             modifier = Modifier
                 .weight(1f)
