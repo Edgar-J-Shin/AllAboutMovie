@@ -2,7 +2,7 @@ package com.dcs.data.repository
 
 import androidx.annotation.WorkerThread
 import com.dcs.data.di.IoDispatcher
-import com.dcs.data.local.datastore.AuthLocalDataSource
+import com.dcs.data.local.datasource.AuthLocalDataSource
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.AuthRemoteDataSource
 import com.dcs.domain.model.RequestToken

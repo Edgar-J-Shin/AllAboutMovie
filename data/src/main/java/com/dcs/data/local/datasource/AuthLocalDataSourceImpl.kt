@@ -1,4 +1,4 @@
-package com.dcs.data.local.datastore
+package com.dcs.data.local.datasource
 
 import com.dcs.data.local.room.dao.UserDao
 import com.dcs.data.local.room.entity.mapper.toEntity
