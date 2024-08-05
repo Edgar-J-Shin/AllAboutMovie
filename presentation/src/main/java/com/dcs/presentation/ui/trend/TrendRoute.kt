@@ -61,7 +61,7 @@ fun TrendRoute(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
-            TrendMovie(
+            TrendMovies(
                 movies = viewModel.moviesByTrending,
                 onTabClick = { tabIndex ->
                     viewModel.updateMovieTrendType(MovieTrendType.entries[tabIndex])
@@ -83,7 +83,7 @@ fun TrendRoute(
 }
 
 @Composable
-fun TrendMovie(
+fun TrendMovies(
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
     onTabClick: (Int) -> Unit = {},
 ) {
@@ -209,7 +209,7 @@ fun TrendMovieContents(
             is UiState.Loading -> LoadingScreen()
 
             is UiState.Success -> {
-                TrendMovie(
+                TrendMovies(
                     movieItems = movies.map {
                         (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
                     }
@@ -222,7 +222,7 @@ fun TrendMovieContents(
 }
 
 @Composable
-fun TrendMovie(
+fun TrendMovies(
     movieItems: Flow<PagingData<MovieItemUiState>>,
     modifier: Modifier = Modifier,
 ) {
