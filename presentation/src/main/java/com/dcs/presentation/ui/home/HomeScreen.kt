@@ -31,7 +31,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
@@ -47,12 +46,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
-import com.dcs.presentation.core.common.ErrorScreen
-import com.dcs.presentation.core.common.LoadingScreen
+import com.dcs.presentation.core.designsystem.widget.ErrorScreen
+import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.ui.trend.MovieItem
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun HomeRoute(
@@ -73,7 +74,7 @@ fun HomeRoute(
             modifier = modifier
                 .padding(innerPadding)
         ) {
-            SearchUiStateScreen(
+            SearchMovieContents(
                 modifier = Modifier
                     .fillMaxSize(),
                 movies = viewModel.searchResult
@@ -125,15 +126,15 @@ private fun SearchTopBar(
         trailingIcon = {
             if (active) {
                 Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = R.string.desc_clear),
                     modifier = Modifier.clickable {
                         if (queryText.isNotEmpty()) {
                             onQueryClear()
                         } else {
                             active = false
                         }
-                    },
-                    imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(id = R.string.desc_clear)
+                    }
                 )
             }
         },
@@ -158,30 +159,30 @@ private fun SearchTopBar(
                             .fillMaxWidth()
                     )
                     Icon(
-                        modifier = Modifier.clickable { searchHistory.remove(it) },
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.desc_clear)
+                        contentDescription = stringResource(id = R.string.desc_clear),
+                        modifier = Modifier.clickable { searchHistory.remove(it) }
                     )
                 }
             }
         }
         HorizontalDivider()
         Text(
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            text = stringResource(id = R.string.clear_all_history),
             modifier = Modifier
                 .padding(all = 12.dp)
                 .fillMaxWidth()
                 .clickable {
                     searchHistory.clear()
-                },
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            text = stringResource(id = R.string.clear_all_history)
+                }
         )
     }
 }
 
 @Composable
-fun SearchUiStateScreen(
+fun SearchMovieContents(
     modifier: Modifier = Modifier,
     movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
@@ -193,33 +194,39 @@ fun SearchUiStateScreen(
         when (uiState) {
             is UiState.Loading -> LoadingScreen()
 
-            is UiState.Success -> GridMovieList(
-                movieItems = (uiState as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
-            )
+            is UiState.Success -> {
+                VerticalGridMovie(
+                    movieItems = movies.map { moviesUiState ->
+                        if (moviesUiState is UiState.Success) {
+                            moviesUiState.data as PagingData<MovieItemUiState>
+                        } else {
+                            PagingData.empty()
+                        }
+                    }
+                )
+            }
 
-            is UiState.Error -> ErrorScreen(
-                message = stringResource(id = R.string.api_response_error_message)
-            )
+            is UiState.Error -> ErrorScreen(message = stringResource(id = R.string.api_response_error_message))
         }
     }
 }
 
 @Composable
-fun GridMovieList(
-    movieItems: PagingData<MovieItemUiState>,
+fun VerticalGridMovie(
+    movieItems: Flow<PagingData<MovieItemUiState>>,
     modifier: Modifier = Modifier,
 ) {
-    val pagingItems = snapshotFlow { movieItems }.collectAsLazyPagingItems()
+    val pagingItems = movieItems.collectAsLazyPagingItems()
     val gridState = rememberLazyGridState()
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = modifier,
         state = gridState,
         contentPadding = PaddingValues(
             horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
             vertical = dimensionResource(id = R.dimen.list_margin_vertical)
-        )
+        ),
+        modifier = modifier
     ) {
         items(
             count = pagingItems.itemCount,
