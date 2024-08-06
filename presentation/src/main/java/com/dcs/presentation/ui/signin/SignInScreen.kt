@@ -25,7 +25,7 @@ import androidx.navigation.NavHostController
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicWebView
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.designsystem.widget.LoadingDialog
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.model.SignInUiStateProvider
 import com.dcs.presentation.core.state.UiState
@@ -89,7 +89,7 @@ private fun SignInScreen(
                     )
 
                     if (isLoading) {
-                        LoadingScreen()
+                        LoadingDialog()
                     }
                 }
             }
