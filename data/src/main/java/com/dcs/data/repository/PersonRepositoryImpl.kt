@@ -20,15 +20,18 @@ class PersonRepositoryImpl @Inject constructor(
     override fun getPopularPeople(): Flow<PagingData<Person>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = DEFAULT_PAGE_SIZE,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 PopularPeoplePagingSource(
                     remote = remote,
-                    pageSize = 20
                 )
             }
         ).flow
+    }
+
+    companion object {
+        private const val DEFAULT_PAGE_SIZE = 20
     }
 }
