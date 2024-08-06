@@ -1,7 +1,6 @@
 package com.dcs.presentation.core.designsystem.widget
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,7 +23,6 @@ fun LoadingDialog(
         onDismissRequest = onDismissRequest,
         properties = properties,
     ) {
-        Card { }
         CircularProgressIndicator(
             modifier = Modifier
                 .size(circularProgressIndicator.size),
