@@ -1,5 +1,6 @@
 package com.dcs.data.pagingsource
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.dcs.data.model.mapper.toEntity
@@ -8,9 +9,8 @@ import com.dcs.domain.model.Person
 
 class PopularPeoplePagingSource(
     private val remote: PersonRemoteDataSource,
-    private val pageSize: Int,
     private val language: String = "en-US",
-    private val startPageIndex: Int = 0,
+    private val startPageIndex: Int = 1,
 ) : PagingSource<Int, Person>() {
 
     override fun getRefreshKey(state: PagingState<Int, Person>): Int? {
@@ -21,24 +21,23 @@ class PopularPeoplePagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Person> {
-        val page = params.key ?: startPageIndex
-
-        return runCatching {
-            val (popular, totalPage) = remote
-                .getPopularPeople(page + 1, language)
+        return try {
+            val page = params.key ?: startPageIndex
+            val (popular, totalPages) = remote
+                .getPopularPeople(page, language)
                 .getOrThrow()
                 .let { it.results to it.totalPages }
 
-            val hasPrevPage = page != startPageIndex
-            val hasNextPage =
-                popular.isNotEmpty() && !(page == startPageIndex && totalPage < pageSize)
+            val prevKey = if (page == startPageIndex) null else page - 1
+            val nextKey = if (page < totalPages) page + 1 else null
 
             LoadResult.Page(
                 data = popular.map { it.toEntity() },
-                prevKey = if (hasPrevPage) page - 1 else null,
-                nextKey = if (hasNextPage) page + 1 else null
+                prevKey = prevKey,
+                nextKey = nextKey,
             )
-        }.getOrElse { e ->
+        } catch (e: Exception) {
+            Log.e("PopularPeoplePagingSource", "load error", e)
             LoadResult.Error(e)
         }
     }
