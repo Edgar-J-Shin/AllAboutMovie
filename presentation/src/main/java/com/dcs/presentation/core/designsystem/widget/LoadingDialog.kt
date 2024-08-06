@@ -33,11 +33,15 @@ fun LoadingDialog(
 
 object LoadingDialogDefaults {
     @Composable
-    fun dialogProperties(): DialogProperties {
+    fun dialogProperties(
+        dismissOnBackPress: Boolean = false,
+        dismissOnClickOutside: Boolean = false,
+        usePlatformDefaultWidth: Boolean = false,
+    ): DialogProperties {
         return DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false,
+            dismissOnBackPress = dismissOnBackPress,
+            dismissOnClickOutside = dismissOnClickOutside,
+            usePlatformDefaultWidth = usePlatformDefaultWidth,
         )
     }
 
