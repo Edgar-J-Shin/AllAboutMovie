@@ -5,7 +5,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -50,7 +49,7 @@ object LoadingDialogDefaults {
 
 @Immutable
 data class LoadingDialogCircularProgressIndicator(
-    @Stable val size: Dp,
+    val size: Dp,
     val color: Color,
     val trackColor: Color,
 ) {
