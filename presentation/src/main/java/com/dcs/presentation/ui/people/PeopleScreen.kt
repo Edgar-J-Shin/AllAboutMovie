@@ -33,11 +33,11 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.PersonUiStateProvider
+import com.dcs.presentation.core.model.toProfileUrl
 import com.dcs.presentation.core.model.toTitle
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
@@ -139,7 +139,7 @@ private fun PersonCard(
         )
     ) {
         GlideImage(
-            model = "${BuildConfig.TMDB_IMAGE_URL}original${state.profilePath}",
+            model = state.toProfileUrl(),
             contentDescription = "profile image",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier

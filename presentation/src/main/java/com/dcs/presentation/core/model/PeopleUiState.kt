@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
+import com.dcs.presentation.BuildConfig
 
 data class PersonUiState(
     val id: Int,
@@ -52,6 +53,10 @@ fun List<KnownForUiState>.toTitle(): String {
     }
 }
 
+@Composable
+fun PersonUiState.toProfileUrl(): String {
+    return "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
+}
 
 class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>> {
     override val values: Sequence<PagingData<PersonUiState>>
