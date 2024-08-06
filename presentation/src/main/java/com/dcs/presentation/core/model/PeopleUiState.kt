@@ -1,5 +1,6 @@
 package com.dcs.presentation.core.model
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
@@ -38,6 +39,19 @@ data class KnownForUiState(
     val voteAverage: Double,
     val voteCount: Int,
 )
+
+@Composable
+fun List<KnownForUiState>.toTitle(): String {
+    return if (isEmpty()) {
+        ""
+    } else {
+        this
+            .filterNot { it.title.isNullOrBlank() && it.originalTitle.isNullOrBlank() }
+            .take(3)
+            .joinToString { it.title ?: it.originalTitle ?: "" }
+    }
+}
+
 
 class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>> {
     override val values: Sequence<PagingData<PersonUiState>>

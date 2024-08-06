@@ -1,6 +1,5 @@
 package com.dcs.presentation.ui.people
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,12 +33,12 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.PersonUiStateProvider
+import com.dcs.presentation.core.model.toTitle
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
 import kotlinx.coroutines.flow.flowOf
@@ -118,7 +117,6 @@ private fun PopularPeople(
                 state = person,
                 modifier = Modifier
                     .fillMaxWidth()
-
             )
 
         }
@@ -146,26 +144,13 @@ private fun PersonCard(
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
         )
-        if (state.knownFor.isNotEmpty()) {
-            val list = state.knownFor.take(3)
-            val text = list.foldIndexed("") { index, acc, knownFor ->
-                val title = knownFor.title ?: knownFor.originalTitle ?: ""
-                if (title.isEmpty()) {
-                    return@foldIndexed acc
-                }
-                if (index == 0) {
-                    title
-                } else {
-                    "$acc, $title"
-                }
-            }
-            if (text.isNotBlank()) {
-                Text(
-                    text = text,
-                    modifier = Modifier
-                        .padding(12.dp),
-                )
-            }
+        val knownForTitle = state.knownFor.toTitle()
+        if (knownForTitle.isNotEmpty()) {
+            Text(
+                text = knownForTitle,
+                modifier = Modifier
+                    .padding(12.dp),
+            )
         }
     }
 }
