@@ -42,9 +42,9 @@ data class RemoteKnownFor(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
-    val backdropPath: String? = null,
+    val backdropPath: String = "",
     @SerialName("first_air_date")
-    val firstAirDate: String? = null,
+    val firstAirDate: String = "",
     @SerialName("genre_ids")
     val genreIds: List<Int>,
     @SerialName("id")
@@ -52,27 +52,27 @@ data class RemoteKnownFor(
     @SerialName("media_type")
     val mediaType: String,
     @SerialName("name")
-    val name: String? = null,
+    val name: String = "",
     @SerialName("origin_country")
-    val originCountry: List<String>? = null,
+    val originCountry: List<String> = emptyList(),
     @SerialName("original_language")
     val originalLanguage: String,
     @SerialName("original_name")
-    val originalName: String? = null,
+    val originalName: String = "",
     @SerialName("original_title")
-    val originalTitle: String? = null,
+    val originalTitle: String = "",
     @SerialName("overview")
     val overview: String,
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("poster_path")
-    val posterPath: String?,
+    val posterPath: String = "",
     @SerialName("release_date")
-    val releaseDate: String? = null,
+    val releaseDate: String = "",
     @SerialName("title")
-    val title: String? = null,
+    val title: String = "",
     @SerialName("video")
-    val video: Boolean? = null,
+    val video: Boolean = false,
     @SerialName("vote_average")
     val voteAverage: Double,
     @SerialName("vote_count")
