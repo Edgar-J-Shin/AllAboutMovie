@@ -10,7 +10,6 @@ import com.dcs.domain.model.Person
 class PopularPeoplePagingSource(
     private val remote: PersonRemoteDataSource,
     private val language: String = "en-US",
-    private val startPageIndex: Int = 1,
 ) : PagingSource<Int, Person>() {
 
     override fun getRefreshKey(state: PagingState<Int, Person>): Int? {
@@ -22,13 +21,13 @@ class PopularPeoplePagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Person> {
         return try {
-            val page = params.key ?: startPageIndex
+            val page = params.key ?: START_PAGE_INDEX
             val (popular, totalPages) = remote
                 .getPopularPeople(page, language)
                 .getOrThrow()
                 .let { it.results to it.totalPages }
 
-            val prevKey = if (page == startPageIndex) null else page - 1
+            val prevKey = if (page == START_PAGE_INDEX) null else page - 1
             val nextKey = if (page < totalPages) page + 1 else null
 
             LoadResult.Page(
@@ -40,5 +39,9 @@ class PopularPeoplePagingSource(
             Log.e("PopularPeoplePagingSource", "load error", e)
             LoadResult.Error(e)
         }
+    }
+
+    companion object {
+        private const val START_PAGE_INDEX = 1
     }
 }
