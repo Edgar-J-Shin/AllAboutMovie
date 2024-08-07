@@ -13,7 +13,6 @@ class MoviePagingSource(
     private val language: String = "en-US",
 ) : PagingSource<Int, MovieEntity>() {
 
-    private val startPageIndex = 1
     override fun getRefreshKey(state: PagingState<Int, MovieEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
@@ -22,27 +21,40 @@ class MoviePagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieEntity> {
-        val page = params.key ?: startPageIndex
+        val page = params.key ?: START_PAGE_INDEX
 
         return try {
             val result = when (trend) {
-                is Trend.Trending -> movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page, language)
-                is Trend.Popular -> movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page, language)
-                Trend.TopRated -> movieRemoteDataSource.getMoviesByTopRated(page, language)
-                Trend.Upcoming -> movieRemoteDataSource.getMoviesByUpcoming(page, language)
+                is Trend.Trending -> {
+                    movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page, language)
+                }
+
+                is Trend.Popular -> {
+                    movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page, language)
+                }
+
+                Trend.TopRated -> {
+                    movieRemoteDataSource.getMoviesByTopRated(page, language)
+                }
+
+                Trend.Upcoming -> {
+                    movieRemoteDataSource.getMoviesByUpcoming(page, language)
+                }
             }
 
-            val (movies, totalPages) = result.getOrThrow().run { results to totalPages }
-            val hasPrevPage = page != startPageIndex
-            val hasNextPage = page < totalPages
+            val (movies, totalPages) = result.getOrThrow().let { it.results to it.totalPages }
 
             LoadResult.Page(
                 data = movies.map { it.toEntity() }.distinct(),
-                prevKey = if (hasPrevPage) page - 1 else null,
-                nextKey = if (hasNextPage) page + 1 else null
+                prevKey = if (page != START_PAGE_INDEX) page - 1 else null,
+                nextKey = if (page < totalPages) page + 1 else null
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
+    }
+
+    companion object {
+        private const val START_PAGE_INDEX = 1
     }
 }
