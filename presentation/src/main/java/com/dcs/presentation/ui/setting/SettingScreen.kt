@@ -37,7 +37,7 @@ import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.designsystem.widget.LoadingDialog
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.SettingUiStateProvider
@@ -116,9 +116,7 @@ fun SettingScreen(
                     )
 
                     if (isLoading) {
-                        LoadingScreen(
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        LoadingDialog()
                     }
                 }
             }
