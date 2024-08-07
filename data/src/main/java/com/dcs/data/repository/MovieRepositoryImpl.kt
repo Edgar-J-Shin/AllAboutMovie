@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource,
-    @IoDispatcher val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : MovieRepository {
 
     @WorkerThread
@@ -42,7 +42,6 @@ class MovieRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 MoviePagingSource(
                     trend = Trend.TopRated,
-                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
@@ -55,7 +54,6 @@ class MovieRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 MoviePagingSource(
                     trend = Trend.Trending(timeWindow = timeWindow),
-                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
@@ -68,7 +66,6 @@ class MovieRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 MoviePagingSource(
                     trend = Trend.Popular(mediaType = mediaType),
-                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
@@ -80,7 +77,6 @@ class MovieRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 MoviePagingSource(
                     trend = Trend.Upcoming,
-                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
