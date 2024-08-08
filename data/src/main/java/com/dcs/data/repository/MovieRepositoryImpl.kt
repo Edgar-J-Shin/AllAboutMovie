@@ -6,20 +6,24 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dcs.data.Trend
 import com.dcs.data.di.IoDispatcher
+import com.dcs.data.local.datasource.KeywordLocalDataSource
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.pagingsource.MoviePagingSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.data.remote.model.MoviesResponse
+import com.dcs.domain.model.KeywordEntity
 import com.dcs.domain.model.MovieEntity
 import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource,
+    private val keywordLocalDataSource: KeywordLocalDataSource,
     @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : MovieRepository {
 
@@ -82,19 +86,24 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
-    override fun getSearchMulti(query: String): Flow<PagingData<MovieEntity>>  =
+    override fun getSearchContents(query: String): Flow<PagingData<MovieEntity>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
                     trend = Trend.Search(query),
-                    pageSize = DEFAULT_PAGE_SIZE,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
-        ).flow
+        )
+            .flow
+            .onEach {
+                keywordLocalDataSource.insertKeyword(KeywordEntity(query))
+            }
 
     companion object {
         const val DEFAULT_PAGE_SIZE: Int = 20
     }
 }
+
+

@@ -1,16 +1,24 @@
 package com.dcs.data.local.room.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.dcs.data.local.room.entity.Keyword
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface KeywordDao: BaseDao<Keyword> {
+interface KeywordDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(keyword: Keyword): Long
 
     @Query("SELECT * FROM keywords ")
-    fun getKeywordAll(): Flow<Keyword>
+    fun getKeywordAll(): Flow<List<Keyword>>
 
-    @Query("DELETE FROM keywords WHERE id = :keyword")
+    @Query("DELETE FROM keywords WHERE keyword = :keyword")
     suspend fun delete(keyword: String)
+
+    @Query("DELETE FROM keywords")
+    suspend fun deleteAll()
 }

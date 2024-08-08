@@ -1,6 +1,5 @@
 package com.dcs.domain.model
 
-data class Keyword(
-    val id: Long = 0,
+data class KeywordEntity(
     val keyword: String,
 )

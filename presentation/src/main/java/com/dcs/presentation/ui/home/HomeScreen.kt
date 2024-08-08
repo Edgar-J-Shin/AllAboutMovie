@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -27,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,42 +44,37 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.model.KeywordUiState
 import com.dcs.presentation.core.model.MovieItemUiState
-import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.ui.trend.MovieItem
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
             SearchTopBar(
-                viewModel.queryText,
-                viewModel::onSearchTextChange,
-                viewModel::onSearchTextClear
+                queryText = viewModel.queryText,
+                searchHistory = searchHistory,
+                onHomeUiEvent = viewModel::dispatchEvent
             )
-        }
+        },
+        modifier = modifier.fillMaxSize(),
     ) { innerPadding ->
-        Box(
-            modifier = modifier
+        SearchScreen(
+            movies = viewModel.searchResult,
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
-        ) {
-            SearchMovieContents(
-                modifier = Modifier
-                    .fillMaxSize(),
-                movies = viewModel.searchResult
-            )
-        }
+        )
     }
 }
 
@@ -87,8 +82,8 @@ fun HomeRoute(
 @Composable
 private fun SearchTopBar(
     queryText: String,
-    onQueryChange: (String) -> Unit,
-    onQueryClear: () -> Unit,
+    searchHistory: List<KeywordUiState>,
+    onHomeUiEvent: (HomeUiEvent) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val view = LocalView.current
@@ -104,20 +99,22 @@ private fun SearchTopBar(
         }
 
         viewTreeObserver.addOnGlobalLayoutListener(listener)
+
         onDispose {
             viewTreeObserver.removeOnGlobalLayoutListener(listener)
         }
     }
 
     var active by remember { mutableStateOf(false) }
-    val searchHistory = remember { mutableStateListOf("") }
 
     SearchBar(
         query = queryText,
-        onQueryChange = onQueryChange,
+        onQueryChange = {
+            onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
+        },
         onSearch = {
             active = false
-            searchHistory.add(it)
+            onHomeUiEvent(HomeUiEvent.SearchText(it))
         },
         active = active,
         onActiveChange = { active = it },
@@ -130,7 +127,7 @@ private fun SearchTopBar(
                     contentDescription = stringResource(id = R.string.desc_clear),
                     modifier = Modifier.clickable {
                         if (queryText.isNotEmpty()) {
-                            onQueryClear()
+                            onHomeUiEvent(HomeUiEvent.ClearSearchText)
                         } else {
                             active = false
                         }
@@ -142,30 +139,22 @@ private fun SearchTopBar(
             .fillMaxWidth()
             .focusable()
     ) {
-        searchHistory.forEach {
-            if (it.isNotEmpty()) {
-                Row(
-                    modifier = Modifier.padding(all = 12.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.History,
-                        contentDescription = stringResource(id = R.string.desc_history)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = it)
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    )
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.desc_clear),
-                        modifier = Modifier.clickable { searchHistory.remove(it) }
-                    )
-                }
+        LazyColumn {
+            items(
+                count = searchHistory.count(),
+                key = { index -> index }
+            ) { index ->
+                HistoryItem(
+                    keyword = searchHistory[index].keyword,
+                    onClick = {
+                        active = false
+                        onHomeUiEvent(HomeUiEvent.SearchText(it))
+                    },
+                    onClickRemove = { onHomeUiEvent(HomeUiEvent.DeleteHistory(it)) }
+                )
             }
         }
+
         HorizontalDivider()
         Text(
             textAlign = TextAlign.Center,
@@ -175,48 +164,64 @@ private fun SearchTopBar(
                 .padding(all = 12.dp)
                 .fillMaxWidth()
                 .clickable {
-                    searchHistory.clear()
+                    onHomeUiEvent(HomeUiEvent.DeleteAllHistory)
                 }
         )
     }
 }
 
 @Composable
-fun SearchMovieContents(
+fun HistoryItem(
+    keyword: String,
     modifier: Modifier = Modifier,
-    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
+    onClick: (String) -> Unit = {},
+    onClickRemove: (String) -> Unit = {},
 ) {
+    Row(
+        modifier = modifier
+            .padding(all = 12.dp)
+            .clickable { onClick(keyword) }
+    ) {
+        Icon(
+            imageVector = Icons.Default.History,
+            contentDescription = stringResource(id = R.string.desc_history)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = keyword)
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        )
+        Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = stringResource(id = R.string.desc_clear),
+            modifier = Modifier.clickable { onClickRemove(keyword) }
+        )
+    }
+}
+
+@Composable
+fun SearchScreen(
+    movies: StateFlow<PagingData<MovieItemUiState>>,
+    modifier: Modifier = Modifier,
+) {
+    val pagingItems = movies.collectAsLazyPagingItems()
+
     Box(
         modifier = modifier
     ) {
-        val uiState by movies.collectAsStateWithLifecycle()
-
-        when (uiState) {
-            is UiState.Loading -> LoadingScreen()
-
-            is UiState.Success -> {
-                VerticalGridMovie(
-                    movieItems = movies.map { moviesUiState ->
-                        if (moviesUiState is UiState.Success) {
-                            moviesUiState.data as PagingData<MovieItemUiState>
-                        } else {
-                            PagingData.empty()
-                        }
-                    }
-                )
-            }
-
-            is UiState.Error -> ErrorScreen(message = stringResource(id = R.string.api_response_error_message))
-        }
+        VerticalGridMovie(
+            movieItems = pagingItems
+        )
     }
 }
 
 @Composable
 fun VerticalGridMovie(
-    movieItems: Flow<PagingData<MovieItemUiState>>,
+    movieItems: LazyPagingItems<MovieItemUiState>,
     modifier: Modifier = Modifier,
 ) {
-    val pagingItems = movieItems.collectAsLazyPagingItems()
     val gridState = rememberLazyGridState()
 
     LazyVerticalGrid(
@@ -229,10 +234,10 @@ fun VerticalGridMovie(
         modifier = modifier
     ) {
         items(
-            count = pagingItems.itemCount,
+            count = movieItems.itemCount,
             key = { index -> index }
         ) { index ->
-            pagingItems[index]?.let { movie ->
+            movieItems[index]?.let { movie ->
                 MovieItem(
                     modifier = Modifier
                         .fillMaxWidth(),

@@ -17,5 +17,5 @@ interface MovieRemoteDataSource {
 
     suspend fun getMoviesByUpcoming(page: Int, language: String): Result<MoviesResponse>
 
-    suspend fun getSearchMulti(query: String, page: Int, language: String): Result<MoviesResponse>
+    suspend fun getSearchContents(query: String, page: Int, language: String): Result<MoviesResponse>
 }
