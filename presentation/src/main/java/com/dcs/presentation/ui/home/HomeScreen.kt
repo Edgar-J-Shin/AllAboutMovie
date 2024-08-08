@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -64,7 +65,7 @@ fun HomeRoute(
             SearchTopBar(
                 queryText = viewModel.queryText,
                 searchHistory = searchHistory,
-                onHomeUiEvent = viewModel::dispatchEvent
+                onHomeUiEvent = viewModel::dispatchEvent,
             )
         },
         modifier = modifier.fillMaxSize(),
@@ -118,8 +119,15 @@ private fun SearchTopBar(
         },
         active = active,
         onActiveChange = { active = it },
-        placeholder = { Text(text = stringResource(id = R.string.searchbar_hint)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(id = R.string.desc_search)) },
+        placeholder = {
+            Text(text = stringResource(id = R.string.searchbar_hint))
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = stringResource(id = R.string.desc_search)
+            )
+        },
         trailingIcon = {
             if (active) {
                 Icon(
@@ -135,7 +143,12 @@ private fun SearchTopBar(
                 )
             }
         },
+        windowInsets = WindowInsets(
+            top = 0.dp,
+            bottom = 0.dp
+        ),
         modifier = Modifier
+            .padding(8.dp)
             .fillMaxWidth()
             .focusable()
     ) {
@@ -153,20 +166,23 @@ private fun SearchTopBar(
                     onClickRemove = { onHomeUiEvent(HomeUiEvent.DeleteHistory(it)) }
                 )
             }
-        }
 
-        HorizontalDivider()
-        Text(
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            text = stringResource(id = R.string.clear_all_history),
-            modifier = Modifier
-                .padding(all = 12.dp)
-                .fillMaxWidth()
-                .clickable {
-                    onHomeUiEvent(HomeUiEvent.DeleteAllHistory)
-                }
-        )
+            item {
+                HorizontalDivider()
+
+                Text(
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(id = R.string.clear_all_history),
+                    modifier = Modifier
+                        .padding(all = 12.dp)
+                        .fillMaxWidth()
+                        .clickable {
+                            onHomeUiEvent(HomeUiEvent.DeleteAllHistory)
+                        }
+                )
+            }
+        }
     }
 }
 
