@@ -6,10 +6,10 @@ import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetSearchMultiUseCase @Inject constructor(
+class GetSearchContentsUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     operator fun invoke(query: String): Flow<PagingData<MovieEntity>> {
-        return movieRepository.getSearchMulti(query = query)
+        return movieRepository.getSearchContents(query = query)
     }
 }

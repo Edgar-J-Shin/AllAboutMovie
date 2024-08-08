@@ -15,5 +15,5 @@ interface MovieRepository {
 
     fun getMoviesByUpcoming(): Flow<PagingData<MovieEntity>>
 
-    fun getSearchMulti(query: String): Flow<PagingData<MovieEntity>>
+    fun getSearchContents(query: String): Flow<PagingData<MovieEntity>>
 }

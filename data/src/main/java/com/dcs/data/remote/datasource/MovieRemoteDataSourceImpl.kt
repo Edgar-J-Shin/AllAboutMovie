@@ -57,7 +57,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             it.data as MoviesResponse
         }
 
-    override suspend fun getSearchMulti(query: String, page: Int, language: String): Result<MoviesResponse> =
+    override suspend fun getSearchContents(query: String, page: Int, language: String): Result<MoviesResponse> =
         movieService.fetchSearchMultiByQuery(
             query = query,
             page = page,

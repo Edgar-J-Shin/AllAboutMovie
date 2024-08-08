@@ -41,7 +41,7 @@ class MoviePagingSource(
                     movieRemoteDataSource.getMoviesByUpcoming(page, language)
                 }
                 is Trend.Search -> {
-                    movieRemoteDataSource.getSearchMulti(trend.query, page, language)
+                    movieRemoteDataSource.getSearchContents(trend.query, page, language)
                 }
             }
 
