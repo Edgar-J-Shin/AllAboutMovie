@@ -1,11 +1,11 @@
 package com.dcs.domain.repository
 
-import com.dcs.domain.model.KeywordEntity
+import com.dcs.domain.model.Keyword
 import kotlinx.coroutines.flow.Flow
 
 interface KeywordsRepository {
 
-    fun getKeywords(): Flow<List<KeywordEntity>>
+    fun getKeywords(): Flow<List<Keyword>>
 
     fun deleteKeyword(keyword: String): Flow<Unit>
 

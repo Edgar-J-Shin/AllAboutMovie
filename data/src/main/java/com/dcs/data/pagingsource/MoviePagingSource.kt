@@ -5,22 +5,22 @@ import androidx.paging.PagingState
 import com.dcs.data.Trend
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
-import com.dcs.domain.model.MovieEntity
+import com.dcs.domain.model.Movie
 
 class MoviePagingSource(
     private val trend: Trend,
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val language: String = "en-US",
-) : PagingSource<Int, MovieEntity>() {
+) : PagingSource<Int, Movie>() {
 
-    override fun getRefreshKey(state: PagingState<Int, MovieEntity>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieEntity> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         val page = params.key ?: START_PAGE_INDEX
 
         return try {
