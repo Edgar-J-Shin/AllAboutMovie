@@ -58,6 +58,16 @@ sealed class Screen(
 
     }
 
+    data object SearchResult : Screen(
+        route = "$ROUTE_SEARCH_RESULT/{$SEARCH_RESULT_KEYWORD}",
+        navArguments = persistentListOf(
+            navArgument(SEARCH_RESULT_KEYWORD) {
+                type = NavType.StringType
+            })
+    ) {
+        fun createRoute(keyword: String) = "$ROUTE_SEARCH_RESULT/${keyword}"
+    }
+
     data object SignIn : Screen(
         route = "$ROUTE_SIGN_IN/{$SIGN_IN_REQUEST_TOKEN_KEY}",
         navArguments = persistentListOf(
@@ -77,8 +87,10 @@ sealed class Screen(
         const val ROUTE_SETTING = "setting"
         const val ROUTE_DETAIL = "detail"
         const val ROUTE_SIGN_IN = "signIn"
+        const val ROUTE_SEARCH_RESULT = "searchResult"
 
         const val ID_SAVED_STATE_KEY = "IdStateKey"
         const val SIGN_IN_REQUEST_TOKEN_KEY = "SignInRequestTokenKey"
+        const val SEARCH_RESULT_KEYWORD = "SearchResultKeyword"
     }
 }

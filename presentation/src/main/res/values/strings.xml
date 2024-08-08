@@ -18,6 +18,9 @@
     <string name="searchbar_hint">Enter query text.</string>
     <string name="clear_all_history">Clear all history</string>
 
+    # SearchResult
+    <string name="route_search_result_name">Search Result</string>
+
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>
     <string name="movie_trend_title_popular">Popular Contents</string>

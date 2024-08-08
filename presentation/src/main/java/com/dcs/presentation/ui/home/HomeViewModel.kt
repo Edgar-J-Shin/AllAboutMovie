@@ -5,19 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.dcs.domain.usecase.DeleteSearchKeywordAllUseCase
 import com.dcs.domain.usecase.DeleteSearchKeywordUseCase
-import com.dcs.domain.usecase.GetSearchContentsUseCase
 import com.dcs.domain.usecase.GetSearchKeywordsUseCase
-import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.model.mapper.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -26,7 +21,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getSearchContentsUseCase: GetSearchContentsUseCase,
     getSearchKeywordsUseCase: GetSearchKeywordsUseCase,
     private val deleteSearchKeywordUseCase: DeleteSearchKeywordUseCase,
     private val deleteSearchKeywordAllUseCase: DeleteSearchKeywordAllUseCase,
@@ -34,8 +28,8 @@ class HomeViewModel @Inject constructor(
 
     var queryText by mutableStateOf("")
 
-    private val _searchResult: MutableStateFlow<PagingData<MovieItemUiState>> = MutableStateFlow(PagingData.empty())
-    val searchResult = _searchResult.asStateFlow()
+    private val _effect = MutableSharedFlow<HomeEffect>()
+    val effect = _effect.asSharedFlow()
 
     val searchHistory = getSearchKeywordsUseCase()
         .map { keywordEntities ->
@@ -61,14 +55,7 @@ class HomeViewModel @Inject constructor(
         queryText = query
 
         viewModelScope.launch {
-            if (queryText.isNotEmpty()) {
-                getSearchContentsUseCase(query)
-                    .cachedIn(viewModelScope)
-                    .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
-                    .collect {
-                        _searchResult.emit(it)
-                    }
-            }
+            _effect.emit(HomeEffect.NavigateToSearchResult(query))
         }
     }
 

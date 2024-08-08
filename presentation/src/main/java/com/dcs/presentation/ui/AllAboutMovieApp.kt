@@ -3,14 +3,15 @@ package com.dcs.presentation.ui
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dcs.presentation.ui.Screen.Main
+import com.dcs.presentation.ui.Screen.SearchResult
 import com.dcs.presentation.ui.Screen.SignIn
 import com.dcs.presentation.ui.main.MainRoute
+import com.dcs.presentation.ui.searchresult.SearchResultRoute
 import com.dcs.presentation.ui.signin.SignInRoute
 
 @Composable
@@ -54,6 +55,13 @@ fun AllAboutMovieApp(
             arguments = SignIn.navArguments
         ) {
             SignInRoute(navController = navController)
+        }
+
+        composable(
+            route = SearchResult.route,
+            arguments = SearchResult.navArguments
+        ) {
+            SearchResultRoute(navController = navController)
         }
 
     }

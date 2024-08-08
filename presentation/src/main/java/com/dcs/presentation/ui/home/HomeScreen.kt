@@ -3,19 +3,13 @@ package com.dcs.presentation.ui.home
 import android.view.ViewTreeObserver
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
@@ -23,11 +17,11 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -44,37 +37,37 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.navigation.NavHostController
 import com.dcs.presentation.R
 import com.dcs.presentation.core.model.KeywordUiState
-import com.dcs.presentation.core.model.MovieItemUiState
-import com.dcs.presentation.ui.trend.MovieItem
-import kotlinx.coroutines.flow.StateFlow
+import com.dcs.presentation.ui.Screen
 
 @Composable
 fun HomeRoute(
-    modifier: Modifier = Modifier,
+    navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
-            SearchTopBar(
-                queryText = viewModel.queryText,
-                searchHistory = searchHistory,
-                onHomeUiEvent = viewModel::dispatchEvent,
-            )
-        },
-        modifier = modifier.fillMaxSize(),
-    ) { innerPadding ->
-        SearchScreen(
-            movies = viewModel.searchResult,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+    LaunchedEffect(key1 = HomeViewModel::class) {
+        viewModel.effect.collect {
+            when (it) {
+                HomeEffect.NavigateBack -> {
+                    navController.popBackStack()
+                }
+
+                is HomeEffect.NavigateToSearchResult -> {
+                    navController.navigate(Screen.SearchResult.createRoute(it.keyword))
+                }
+            }
+        }
+    }
+
+    Row {
+        SearchTopBar(
+            queryText = viewModel.queryText,
+            searchHistory = searchHistory,
+            onHomeUiEvent = viewModel::dispatchEvent,
         )
     }
 }
@@ -214,54 +207,6 @@ fun HistoryItem(
             contentDescription = stringResource(id = R.string.desc_clear),
             modifier = Modifier.clickable { onClickRemove(keyword) }
         )
-    }
-}
-
-@Composable
-fun SearchScreen(
-    movies: StateFlow<PagingData<MovieItemUiState>>,
-    modifier: Modifier = Modifier,
-) {
-    val pagingItems = movies.collectAsLazyPagingItems()
-
-    Box(
-        modifier = modifier
-    ) {
-        VerticalGridMovie(
-            movieItems = pagingItems
-        )
-    }
-}
-
-@Composable
-fun VerticalGridMovie(
-    movieItems: LazyPagingItems<MovieItemUiState>,
-    modifier: Modifier = Modifier,
-) {
-    val gridState = rememberLazyGridState()
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        state = gridState,
-        contentPadding = PaddingValues(
-            horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
-            vertical = dimensionResource(id = R.dimen.list_margin_vertical)
-        ),
-        modifier = modifier
-    ) {
-        items(
-            count = movieItems.itemCount,
-            key = { index -> index }
-        ) { index ->
-            movieItems[index]?.let { movie ->
-                MovieItem(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    movie = movie,
-                    onClick = { }
-                )
-            }
-        }
     }
 }
 
