@@ -75,7 +75,9 @@ private fun MainNavHost(
         startDestination = startDestination
     ) {
         composable(route = MainTab.Home.route) {
-            HomeRoute()
+            HomeRoute(
+                navController = appNavHostController,
+            )
         }
 
         composable(route = MainTab.Trend.route) {
