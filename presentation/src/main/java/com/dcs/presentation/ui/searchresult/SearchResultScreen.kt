@@ -24,13 +24,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.ui.trend.MovieItem
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SearchResultRoute(
@@ -38,6 +36,8 @@ fun SearchResultRoute(
     modifier: Modifier = Modifier,
     viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
+    val pagingItems = viewModel.searchResult.collectAsLazyPagingItems()
+
     LaunchedEffect(key1 = SearchResultViewModel::class) {
         viewModel.effect.collect {
             when (it) {
@@ -48,24 +48,40 @@ fun SearchResultRoute(
         }
     }
 
+    SearchResultScreen(
+        pagingItems = pagingItems,
+        onSearchResultEvent = viewModel::dispatchEvent,
+        modifier = modifier.fillMaxSize()
+    )
+}
+
+@Composable
+private fun SearchResultScreen(
+    pagingItems: LazyPagingItems<MovieItemUiState>,
+    onSearchResultEvent: (SearchResultUiEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         topBar = {
-            SearchResultTopAppBar(onBackClick = { viewModel.dispatchEvent(SearchResultUiEvent.NavigateBack) })
+            SearchResultTopAppBar(onBackClick = { onSearchResultEvent(SearchResultUiEvent.NavigateBack) })
         },
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
     ) { innerPadding ->
-        SearchResultScreen(
-            movies = viewModel.searchResult,
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        )
+        ) {
+            VerticalGridMovie(
+                movieItems = pagingItems
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SearchResultTopAppBar(
+fun SearchResultTopAppBar(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -83,22 +99,6 @@ private fun SearchResultTopAppBar(
             }
         },
     )
-}
-
-@Composable
-fun SearchResultScreen(
-    movies: StateFlow<PagingData<MovieItemUiState>>,
-    modifier: Modifier = Modifier,
-) {
-    val pagingItems = movies.collectAsLazyPagingItems()
-
-    Box(
-        modifier = modifier
-    ) {
-        VerticalGridMovie(
-            movieItems = pagingItems
-        )
-    }
 }
 
 @Composable

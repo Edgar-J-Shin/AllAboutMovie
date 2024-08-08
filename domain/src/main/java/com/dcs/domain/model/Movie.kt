@@ -1,9 +1,6 @@
 package com.dcs.domain.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class MovieEntity(
+data class Movie(
     val adult: Boolean,
     val backdropPath: String,
     val genreIds: List<Int>,

@@ -2,7 +2,7 @@ package com.dcs.data.repository
 
 import com.dcs.data.di.IoDispatcher
 import com.dcs.data.local.datasource.KeywordLocalDataSource
-import com.dcs.domain.model.KeywordEntity
+import com.dcs.domain.model.Keyword
 import com.dcs.domain.repository.KeywordsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ class KeywordsRepositoryImpl @Inject constructor(
     private val keywordLocalDataSource: KeywordLocalDataSource,
     @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : KeywordsRepository {
-    override fun getKeywords(): Flow<List<KeywordEntity>> =
+    override fun getKeywords(): Flow<List<Keyword>> =
         keywordLocalDataSource.getKeywordAll()
             .flowOn(ioDispatcher)
 

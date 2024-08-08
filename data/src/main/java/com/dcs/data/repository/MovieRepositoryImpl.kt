@@ -11,8 +11,8 @@ import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.pagingsource.MoviePagingSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.data.remote.model.MoviesResponse
-import com.dcs.domain.model.KeywordEntity
-import com.dcs.domain.model.MovieEntity
+import com.dcs.domain.model.Keyword
+import com.dcs.domain.model.Movie
 import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ class MovieRepositoryImpl @Inject constructor(
 ) : MovieRepository {
 
     @WorkerThread
-    override suspend fun fetchMoviesByTopRated(): Flow<Result<List<MovieEntity>>> = flow {
+    override suspend fun fetchMoviesByTopRated(): Flow<Result<List<Movie>>> = flow {
         val result = movieRemoteDataSource.fetchMoviesByTopRated().asResult { response ->
             (response.data as MoviesResponse).results.map { movieResult ->
                 movieResult.toEntity()
@@ -40,7 +40,7 @@ class MovieRepositoryImpl @Inject constructor(
     }.flowOn(ioDispatcher)
 
     @WorkerThread
-    override fun getMoviesByTopRated(): Flow<PagingData<MovieEntity>> =
+    override fun getMoviesByTopRated(): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -52,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow
 
     @WorkerThread
-    override fun getMoviesByTrending(timeWindow: String): Flow<PagingData<MovieEntity>> =
+    override fun getMoviesByTrending(timeWindow: String): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -64,7 +64,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow
 
     @WorkerThread
-    override fun getMoviesByPopular(mediaType: String): Flow<PagingData<MovieEntity>> =
+    override fun getMoviesByPopular(mediaType: String): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -75,7 +75,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
-    override fun getMoviesByUpcoming(): Flow<PagingData<MovieEntity>> =
+    override fun getMoviesByUpcoming(): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -86,7 +86,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
-    override fun getSearchContents(query: String): Flow<PagingData<MovieEntity>> =
+    override fun getSearchContents(query: String): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -98,7 +98,7 @@ class MovieRepositoryImpl @Inject constructor(
         )
             .flow
             .onEach {
-                keywordLocalDataSource.insertKeyword(KeywordEntity(query))
+                keywordLocalDataSource.insertKeyword(Keyword(query))
             }
 
     companion object {

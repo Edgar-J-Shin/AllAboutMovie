@@ -8,7 +8,7 @@ data class MoviesResponse(
     @SerialName("page")
     val page: Int,
     @SerialName("results")
-    val results: List<MovieData>,
+    val results: List<RemoteMovie>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")
@@ -17,7 +17,7 @@ data class MoviesResponse(
 
 
 @Serializable
-data class MovieData(
+data class RemoteMovie(
     @SerialName("adult")
     val adult: Boolean = false,
     @SerialName("backdrop_path")

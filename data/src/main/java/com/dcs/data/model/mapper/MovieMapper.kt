@@ -1,9 +1,9 @@
 package com.dcs.data.model.mapper
 
-import com.dcs.data.remote.model.MovieData
-import com.dcs.domain.model.MovieEntity
+import com.dcs.data.remote.model.RemoteMovie
+import com.dcs.domain.model.Movie
 
-fun MovieData.toEntity() = MovieEntity(
+fun RemoteMovie.toEntity() = Movie(
     adult = adult,
     backdropPath = backdropPath,
     genreIds = genreIds,

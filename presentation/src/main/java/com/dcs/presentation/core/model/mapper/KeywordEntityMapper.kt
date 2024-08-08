@@ -1,9 +1,9 @@
 package com.dcs.presentation.core.model.mapper
 
-import com.dcs.domain.model.KeywordEntity
+import com.dcs.domain.model.Keyword
 import com.dcs.presentation.core.model.KeywordUiState
 
-fun KeywordEntity.toUiState() = KeywordUiState(
+fun Keyword.toUiState() = KeywordUiState(
     keyword = keyword
 
 )
