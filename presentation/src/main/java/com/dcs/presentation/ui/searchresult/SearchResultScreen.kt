@@ -24,9 +24,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.widget.ErrorScreen
+import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.ui.trend.MovieItem
 
@@ -72,9 +75,24 @@ private fun SearchResultScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            VerticalGridMovie(
-                movieItems = pagingItems
-            )
+            val isLoading = pagingItems.loadState.refresh is LoadState.Loading
+            val isNotLoading = pagingItems.loadState.refresh is LoadState.NotLoading
+            val isError = pagingItems.loadState.refresh is LoadState.Error
+            val isEmpty = pagingItems.itemCount == 0
+
+            when {
+                isLoading -> LoadingScreen()
+
+                isError -> ErrorScreen()
+
+                isEmpty -> ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
+
+                isNotLoading -> {
+                    VerticalGridMovie(
+                        movieItems = pagingItems
+                    )
+                }
+            }
         }
     }
 }
