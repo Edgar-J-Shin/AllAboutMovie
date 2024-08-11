@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,16 +23,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.model.MovieItemUiState
+import com.dcs.presentation.core.model.MovieItemUiStateProvider
+import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.ui.trend.MovieItem
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SearchResultRoute(
@@ -81,11 +88,26 @@ private fun SearchResultScreen(
             val isEmpty = pagingItems.itemCount == 0
 
             when {
-                isLoading -> LoadingScreen()
+                isLoading -> {
+                    LoadingScreen()
+                }
 
-                isError -> ErrorScreen()
+                isError -> {
+                    ErrorScreen(
+                        message = stringResource(id = R.string.api_response_error_message),
+                        primaryButton = {
+                            Button(
+                                onClick = pagingItems::retry
+                            ) {
+                                Text(text = stringResource(id = R.string.retry))
+                            }
+                        },
+                    )
+                }
 
-                isEmpty -> ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
+                isEmpty -> {
+                    ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
+                }
 
                 isNotLoading -> {
                     VerticalGridMovie(
@@ -148,6 +170,22 @@ fun VerticalGridMovie(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SearchResultScreenPreview(
+    @PreviewParameter(MovieItemUiStateProvider::class) items: PagingData<MovieItemUiState>,
+) {
+    AllAboutMovieTheme {
+        val pagingItems = flowOf(items).collectAsLazyPagingItems()
+
+        SearchResultScreen(
+            pagingItems = pagingItems,
+            onSearchResultEvent = { },
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 
