@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -47,6 +48,7 @@ import kotlinx.coroutines.flow.flowOf
 fun PeopleRoute(
     modifier: Modifier = Modifier,
     viewModel: PeopleViewModel = hiltViewModel(),
+    showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
 
     val popularPeople = viewModel.popularPeople.collectAsLazyPagingItems()

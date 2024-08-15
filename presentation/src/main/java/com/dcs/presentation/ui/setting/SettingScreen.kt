@@ -14,12 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,10 +50,10 @@ fun SettingRoute(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: SettingViewModel = hiltViewModel(),
+    showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     viewModel.effect.collectAsEffect { effect ->
@@ -65,9 +63,9 @@ fun SettingRoute(
             }
 
             is SettingEffect.ShowSnackbar -> {
-                snackBarHostState.showSnackbar(
-                    message = context.getString(effect.state.messageResId),
-                    duration = effect.state.duration,
+                showSnackBar(
+                    context.getString(effect.state.messageResId),
+                    effect.state.duration
                 )
             }
         }
@@ -77,7 +75,6 @@ fun SettingRoute(
         state = state,
         onSettingEvent = viewModel::dispatchEvent,
         isLoading = isLoading,
-        snackbarHostState = snackBarHostState,
         modifier = modifier
             .fillMaxSize(),
     )
@@ -89,7 +86,6 @@ fun SettingScreen(
     onSettingEvent: (SettingUiEvent) -> Unit,
     isLoading: Boolean,
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Box(
         modifier = modifier,
@@ -125,10 +121,6 @@ fun SettingScreen(
                 // Error screen
             }
         }
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter),
-        )
     }
 }
 
