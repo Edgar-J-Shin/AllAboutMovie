@@ -26,7 +26,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
@@ -43,8 +42,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.dcs.presentation.R
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.core.model.KeywordUiState
-import com.dcs.presentation.core.model.KeywordUiStateProvider
+import com.dcs.presentation.core.model.SearchUiState
+import com.dcs.presentation.core.model.SearchUiStateProvider
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.ui.Screen
 
@@ -54,9 +53,6 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
-    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
-    val keywordUiState by viewModel.keyword.collectAsStateWithLifecycle()
-
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             is HomeEffect.NavigateToSearchResult -> {
@@ -65,9 +61,15 @@ fun HomeRoute(
         }
     }
 
+    val searchKeywords by viewModel.searchKeywords.collectAsStateWithLifecycle()
+    val query by viewModel.keyword.collectAsStateWithLifecycle()
+
     HomeScreen(
-        keywordUiState = keywordUiState,
-        searchHistory = searchHistory,
+        searchUiState = SearchUiState(
+            searchKeywords = searchKeywords,
+            query = query,
+            searchActive = remember { mutableStateOf(false) }
+        ),
         onHomeUiEvent = viewModel::dispatchEvent,
         modifier = Modifier.fillMaxSize()
     )
@@ -75,8 +77,7 @@ fun HomeRoute(
 
 @Composable
 private fun HomeScreen(
-    keywordUiState: KeywordUiState,
-    searchHistory: List<KeywordUiState>,
+    searchUiState: SearchUiState,
     onHomeUiEvent: (HomeUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -84,8 +85,7 @@ private fun HomeScreen(
         modifier = modifier,
     ) {
         SearchTopBar(
-            keywordUiState = keywordUiState,
-            searchHistory = searchHistory,
+            searchUiState = searchUiState,
             onHomeUiEvent = onHomeUiEvent,
         )
     }
@@ -94,8 +94,7 @@ private fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTopBar(
-    keywordUiState: KeywordUiState,
-    searchHistory: List<KeywordUiState>,
+    searchUiState: SearchUiState,
     onHomeUiEvent: (HomeUiEvent) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -118,19 +117,17 @@ private fun SearchTopBar(
         }
     }
 
-    var active by remember { mutableStateOf(false) }
-
     SearchBar(
-        query = keywordUiState.keyword,
+        query = searchUiState.query.keyword,
         onQueryChange = {
             onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
         },
         onSearch = {
-            active = false
+            searchUiState.searchActive.value = false
             onHomeUiEvent(HomeUiEvent.SearchText(it))
         },
-        active = active,
-        onActiveChange = { active = it },
+        active = searchUiState.searchActive.value,
+        onActiveChange = { searchUiState.searchActive.value = it },
         placeholder = {
             Text(text = stringResource(id = R.string.searchbar_hint))
         },
@@ -141,15 +138,15 @@ private fun SearchTopBar(
             )
         },
         trailingIcon = {
-            if (active) {
+            if (searchUiState.searchActive.value) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(id = R.string.desc_clear),
                     modifier = Modifier.clickable {
-                        if (keywordUiState.keyword.isNotEmpty()) {
+                        if (searchUiState.queryNotEmpty()) {
                             onHomeUiEvent(HomeUiEvent.ClearSearchText)
                         } else {
-                            active = false
+                            searchUiState.searchActive.value = false
                         }
                     }
                 )
@@ -166,13 +163,13 @@ private fun SearchTopBar(
     ) {
         LazyColumn {
             items(
-                count = searchHistory.count(),
+                count = searchUiState.searchKeywords.count(),
                 key = { index -> index }
             ) { index ->
                 SearchKeyword(
-                    keyword = searchHistory[index].keyword,
+                    keyword = searchUiState.searchKeywords[index].keyword,
                     onClick = {
-                        active = false
+                        searchUiState.searchActive.value = false
                         onHomeUiEvent(HomeUiEvent.SearchText(it))
                     },
                     onClickRemove = { onHomeUiEvent(HomeUiEvent.DeleteHistory(it)) }
@@ -232,12 +229,11 @@ fun SearchKeyword(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview(
-    @PreviewParameter(KeywordUiStateProvider::class) items: List<KeywordUiState>,
+    @PreviewParameter(SearchUiStateProvider::class) uiState: SearchUiState,
 ) {
     AllAboutMovieTheme {
         HomeScreen(
-            keywordUiState = KeywordUiState("keyword"),
-            searchHistory = items,
+            searchUiState = uiState,
             onHomeUiEvent = { },
             modifier = Modifier.fillMaxSize()
         )
