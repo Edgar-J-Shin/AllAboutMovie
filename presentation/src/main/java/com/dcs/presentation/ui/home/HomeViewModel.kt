@@ -7,6 +7,7 @@ import com.dcs.domain.usecase.DeleteSearchKeywordUseCase
 import com.dcs.domain.usecase.GetSearchKeywordsUseCase
 import com.dcs.presentation.core.model.KeywordUiState
 import com.dcs.presentation.core.model.mapper.toUiState
+import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun search(query: String) {
-        viewModelScope.launch {
+        launch {
             _effect.emit(HomeEffect.NavigateToSearchResult(query))
         }
     }
