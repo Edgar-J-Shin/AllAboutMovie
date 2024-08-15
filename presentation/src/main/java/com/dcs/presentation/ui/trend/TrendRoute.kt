@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import kotlinx.coroutines.flow.map
 fun TrendRoute(
     modifier: Modifier = Modifier,
     viewModel: TrendViewModel = hiltViewModel(),
+    showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> }
 ) {
 
     Scaffold { innerPadding ->
