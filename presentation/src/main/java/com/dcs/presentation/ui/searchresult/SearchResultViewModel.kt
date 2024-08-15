@@ -41,8 +41,8 @@ class SearchResultViewModel @Inject constructor(
         launch {
             if (keyword.isNotEmpty()) {
                 getSearchContentsUseCase(keyword)
-                    .cachedIn(viewModelScope)
                     .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+                    .cachedIn(viewModelScope)
                     .collect {
                         _searchResult.emit(it)
                     }

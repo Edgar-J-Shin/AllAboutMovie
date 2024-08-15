@@ -43,8 +43,8 @@ class TrendViewModel @Inject constructor(
         .map { it.toString().lowercase(Locale.getDefault()) }
         .flatMapLatest { type ->
             getMoviesByTrendingUseCase(type)
-                .cachedIn(viewModelScope)
                 .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+                .cachedIn(viewModelScope)
         }
         .asUiState()
         .stateIn(
@@ -58,8 +58,8 @@ class TrendViewModel @Inject constructor(
         .map { it.toString().lowercase(Locale.getDefault()) }
         .flatMapLatest { type ->
             getContentsByPopularUseCase(type)
-                .cachedIn(viewModelScope)
                 .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+                .cachedIn(viewModelScope)
         }
         .asUiState()
         .stateIn(
@@ -69,8 +69,8 @@ class TrendViewModel @Inject constructor(
         )
 
     internal val moviesByUpcoming = getMoviesByUpcomingUseCase()
-        .cachedIn(viewModelScope)
         .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+        .cachedIn(viewModelScope)
         .asUiState()
         .stateIn(
             scope = viewModelScope,
