@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<HomeEffect>()
     val effect = _effect.asSharedFlow()
 
-    val searchHistory = getSearchKeywordsUseCase()
+    val searchHistory = getSearchKeywordsUseCase(KEYWORD_COUNT_LIMIT)
         .map { keywordEntities -> keywordEntities.map { it.toUiState() } }
         .stateIn(
             scope = viewModelScope,
@@ -87,5 +87,9 @@ class HomeViewModel @Inject constructor(
                 deleteAllHistory()
             }
         }
+    }
+
+    companion object {
+        private const val KEYWORD_COUNT_LIMIT = 20
     }
 }

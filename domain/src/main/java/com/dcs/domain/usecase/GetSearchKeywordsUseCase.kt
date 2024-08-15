@@ -9,10 +9,12 @@ import javax.inject.Inject
 class GetSearchKeywordsUseCase @Inject constructor(
     private val keywordsRepository: KeywordsRepository,
 ) {
-    operator fun invoke(): Flow<List<Keyword>> {
+    operator fun invoke(count: Int): Flow<List<Keyword>> {
         return keywordsRepository.getAllKeywords()
             .map { keywordEntities ->
-                keywordEntities.reversed()
+                keywordEntities
+                    .reversed()
+                    .take(count)
             }
     }
 }
