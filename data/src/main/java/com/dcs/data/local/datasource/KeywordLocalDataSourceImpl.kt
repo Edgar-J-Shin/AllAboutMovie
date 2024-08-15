@@ -14,8 +14,8 @@ class KeywordLocalDataSourceImpl @Inject constructor(
     private val keywordDao: KeywordDao,
 ) : KeywordLocalDataSource {
     @WorkerThread
-    override fun getKeywordAll(): Flow<List<Keyword>> {
-        return keywordDao.getKeywordAll()
+    override fun getAllKeywords(): Flow<List<Keyword>> {
+        return keywordDao.getAllKeywords()
             .map { keywords -> keywords.map { it.toEntity() } }
             .distinctUntilChanged()
     }

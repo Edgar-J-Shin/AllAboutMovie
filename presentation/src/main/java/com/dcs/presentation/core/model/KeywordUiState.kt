@@ -12,6 +12,16 @@ class KeywordUiStateProvider : PreviewParameterProvider<List<KeywordUiState>> {
 
     override val values: Sequence<List<KeywordUiState>>
         get() = sequenceOf(
-            listOf(),
+            listOf(
+                KeywordUiState("test"),
+                KeywordUiState("test1"),
+                KeywordUiState("test2"),
+                KeywordUiState("test3"),
+                KeywordUiState("test4"),
+                KeywordUiState("a"),
+                KeywordUiState("ab"),
+                KeywordUiState("c"),
+                KeywordUiState("asdc"),
+            )
         )
 }

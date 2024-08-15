@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface KeywordsRepository {
 
-    fun getKeywords(): Flow<List<Keyword>>
+    fun getAllKeywords(): Flow<List<Keyword>>
 
     fun deleteKeyword(keyword: String): Flow<Unit>
 

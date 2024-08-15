@@ -14,7 +14,7 @@ interface KeywordDao {
     suspend fun insert(keyword: Keyword): Long
 
     @Query("SELECT * FROM keywords ")
-    fun getKeywordAll(): Flow<List<Keyword>>
+    fun getAllKeywords(): Flow<List<Keyword>>
 
     @Query("DELETE FROM keywords WHERE keyword = :keyword")
     suspend fun delete(keyword: String)

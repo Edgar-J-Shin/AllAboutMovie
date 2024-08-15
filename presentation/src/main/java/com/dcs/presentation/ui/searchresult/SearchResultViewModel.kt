@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,10 +33,14 @@ class SearchResultViewModel @Inject constructor(
     private val keyword: String =
         savedStateHandle[Screen.SEARCH_RESULT_KEYWORD] ?: error("Search result keyword not found")
 
-    private fun search(query: String) {
-        viewModelScope.launch {
-            if (query.isNotEmpty()) {
-                getSearchContentsUseCase(query)
+    init {
+        search(keyword)
+    }
+
+    private fun search(keyword: String) {
+        launch {
+            if (keyword.isNotEmpty()) {
+                getSearchContentsUseCase(keyword)
                     .cachedIn(viewModelScope)
                     .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
                     .collect {
@@ -59,9 +62,5 @@ class SearchResultViewModel @Inject constructor(
                 navigateBack()
             }
         }
-    }
-
-    init {
-        search(keyword)
     }
 }

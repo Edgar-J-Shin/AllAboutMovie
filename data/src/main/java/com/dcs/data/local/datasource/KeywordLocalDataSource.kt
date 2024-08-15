@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface KeywordLocalDataSource {
 
-    fun getKeywordAll(): Flow<List<Keyword>>
+    fun getAllKeywords(): Flow<List<Keyword>>
 
     suspend fun insertKeyword(keyword: Keyword): Result<Unit>
 

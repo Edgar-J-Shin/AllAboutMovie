@@ -14,8 +14,8 @@ class KeywordsRepositoryImpl @Inject constructor(
     private val keywordLocalDataSource: KeywordLocalDataSource,
     @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : KeywordsRepository {
-    override fun getKeywords(): Flow<List<Keyword>> =
-        keywordLocalDataSource.getKeywordAll()
+    override fun getAllKeywords(): Flow<List<Keyword>> =
+        keywordLocalDataSource.getAllKeywords()
             .flowOn(ioDispatcher)
 
     override fun deleteKeyword(keyword: String): Flow<Unit> = flow<Unit> {
