@@ -50,6 +50,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun search(query: String) {
+        if (query.isEmpty()) return
+
         launch {
             _effect.emit(HomeEffect.NavigateToSearchResult(query))
         }

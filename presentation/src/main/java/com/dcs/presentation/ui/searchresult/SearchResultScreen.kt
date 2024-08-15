@@ -19,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +33,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.model.MovieItemUiStateProvider
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
@@ -48,12 +48,10 @@ fun SearchResultRoute(
 ) {
     val pagingItems = viewModel.searchResult.collectAsLazyPagingItems()
 
-    LaunchedEffect(key1 = SearchResultViewModel::class) {
-        viewModel.effect.collect {
-            when (it) {
-                SearchResultEffect.NavigateBack -> {
-                    navController.popBackStack()
-                }
+    viewModel.effect.collectAsEffect { effect ->
+        when (effect) {
+            SearchResultEffect.NavigateBack -> {
+                navController.popBackStack()
             }
         }
     }

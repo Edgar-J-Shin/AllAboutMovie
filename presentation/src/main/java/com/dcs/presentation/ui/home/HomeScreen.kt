@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.dcs.presentation.R
+import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.KeywordUiState
 import com.dcs.presentation.core.model.KeywordUiStateProvider
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
@@ -57,12 +57,10 @@ fun HomeRoute(
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     val keywordUiState by viewModel.keyword.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = HomeViewModel::class) {
-        viewModel.effect.collect {
-            when (it) {
-                is HomeEffect.NavigateToSearchResult -> {
-                    navController.navigate(Screen.SearchResult.createRoute(it.keyword))
-                }
+    viewModel.effect.collectAsEffect { effect ->
+        when (effect) {
+            is HomeEffect.NavigateToSearchResult -> {
+                navController.navigate(Screen.SearchResult.createRoute(effect.keyword))
             }
         }
     }
