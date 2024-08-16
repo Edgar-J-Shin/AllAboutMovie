@@ -90,7 +90,8 @@ private fun MainNavHost(
             HomeRoute(
                 navController = appNavHostController,
                 searchActive = searchActive,
-                onSearchActiveChange = onSearchActiveChange
+                onSearchActiveChange = onSearchActiveChange,
+                showSnackBar = showSnackBar
             )
         }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dcs.domain.usecase.DeleteSearchKeywordAllUseCase
 import com.dcs.domain.usecase.DeleteSearchKeywordUseCase
 import com.dcs.domain.usecase.GetSearchKeywordsUseCase
+import com.dcs.presentation.core.designsystem.state.SnackbarState
 import com.dcs.presentation.core.model.KeywordUiState
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
@@ -50,10 +51,14 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun search(query: String) {
-        if (query.isEmpty()) return
-
         launch {
-            _effect.emit(HomeEffect.NavigateToSearchResult(query))
+            _effect.emit(
+                if (query.isEmpty()) {
+                    HomeEffect.ShowSnackbar(state = SnackbarState.SearchQueryEmptyError)
+                } else {
+                    HomeEffect.NavigateToSearchResult(keyword = query)
+                }
+            )
         }
     }
 

@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -53,10 +54,18 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
+    val context = LocalContext.current
+
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             is HomeEffect.NavigateToSearchResult -> {
                 navController.navigate(Screen.SearchResult.createRoute(effect.keyword))
+            }
+            is HomeEffect.ShowSnackbar -> {
+                showSnackBar(
+                    context.getString(effect.state.messageResId),
+                    effect.state.duration
+                )
             }
         }
     }

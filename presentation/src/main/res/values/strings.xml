@@ -17,6 +17,7 @@
     # Search > Searchbar
     <string name="searchbar_hint">Enter query text.</string>
     <string name="clear_all_history">Clear all history</string>
+    <string name="search_query_empty_error">Please, enter your query.</string>
 
     # SearchResult
     <string name="route_search_result_name">Search Result</string>

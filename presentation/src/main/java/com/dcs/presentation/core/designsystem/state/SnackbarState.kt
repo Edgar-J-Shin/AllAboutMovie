@@ -16,5 +16,8 @@ sealed class SnackbarState(
 
     data object SettingToSignOutError :
         SnackbarState(messageResId = R.string.setting_to_sign_out_error)
+
+    data object SearchQueryEmptyError :
+        SnackbarState(messageResId = R.string.search_query_empty_error)
 }
 
