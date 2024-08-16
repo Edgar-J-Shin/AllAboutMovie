@@ -7,6 +7,7 @@ import com.dcs.domain.usecase.DeleteSearchKeywordUseCase
 import com.dcs.domain.usecase.GetSearchKeywordsUseCase
 import com.dcs.presentation.core.designsystem.state.SnackbarState
 import com.dcs.presentation.core.model.KeywordUiState
+import com.dcs.presentation.core.model.SearchUiState
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -28,26 +30,35 @@ class HomeViewModel @Inject constructor(
     private val deleteSearchKeywordAllUseCase: DeleteSearchKeywordAllUseCase,
 ) : ViewModel() {
 
-    private val _keyword = MutableStateFlow(KeywordUiState(keyword = ""))
-    val keyword = _keyword.asStateFlow()
+    private val searchKeywords = getSearchKeywordsUseCase(KEYWORD_COUNT_LIMIT)
+        .map { keywordEntities -> keywordEntities.map { it.toUiState() } }
+
+    private val _searchUiState = MutableStateFlow(
+        SearchUiState(
+            searchKeywords = emptyList(),
+            query = KeywordUiState("")
+        )
+    )
+    val searchUiState = combine(_searchUiState.asStateFlow(), searchKeywords) { searchUiState, searchKeywords ->
+        searchUiState.copy(searchKeywords = searchKeywords)
+    }.stateIn(
+        scope = viewModelScope,
+        initialValue = SearchUiState(
+            searchKeywords = emptyList(),
+            query = KeywordUiState("")
+        ),
+        started = SharingStarted.WhileSubscribed(5_000)
+    )
 
     private val _effect = MutableSharedFlow<HomeEffect>()
     val effect = _effect.asSharedFlow()
 
-    val searchKeywords = getSearchKeywordsUseCase(KEYWORD_COUNT_LIMIT)
-        .map { keywordEntities -> keywordEntities.map { it.toUiState() } }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = emptyList(),
-            started = SharingStarted.WhileSubscribed(5_000)
-        )
-
     private fun changeSearchText(newText: String) {
-        _keyword.update { KeywordUiState(newText) }
+        _searchUiState.update { it.copy(query = KeywordUiState(newText)) }
     }
 
     private fun clearSearchText() {
-        _keyword.update { KeywordUiState("") }
+        _searchUiState.update { it.copy(query = KeywordUiState("")) }
     }
 
     private fun search(query: String) {

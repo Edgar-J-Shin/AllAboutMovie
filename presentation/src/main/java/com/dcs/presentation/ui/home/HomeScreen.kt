@@ -19,8 +19,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.Text
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -61,6 +61,7 @@ fun HomeRoute(
             is HomeEffect.NavigateToSearchResult -> {
                 navController.navigate(Screen.SearchResult.createRoute(effect.keyword))
             }
+
             is HomeEffect.ShowSnackbar -> {
                 showSnackBar(
                     context.getString(effect.state.messageResId),
@@ -70,16 +71,12 @@ fun HomeRoute(
         }
     }
 
-    val searchKeywords by viewModel.searchKeywords.collectAsStateWithLifecycle()
-    val query by viewModel.keyword.collectAsStateWithLifecycle()
+    val searchUiState by viewModel.searchUiState.collectAsStateWithLifecycle()
 
     HomeScreen(
-        searchUiState = SearchUiState(
-            searchKeywords = searchKeywords,
-            query = query,
-            searchActive = searchActive,
-            onSearchActiveChange = onSearchActiveChange
-        ),
+        searchUiState = searchUiState,
+        searchActive = searchActive,
+        onSearchActiveChange = onSearchActiveChange,
         onHomeUiEvent = viewModel::dispatchEvent,
         modifier = Modifier.fillMaxSize()
     )
@@ -88,6 +85,8 @@ fun HomeRoute(
 @Composable
 private fun HomeScreen(
     searchUiState: SearchUiState,
+    searchActive: Boolean,
+    onSearchActiveChange: (Boolean) -> Unit,
     onHomeUiEvent: (HomeUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -96,6 +95,8 @@ private fun HomeScreen(
     ) {
         SearchTopBar(
             searchUiState = searchUiState,
+            searchActive = searchActive,
+            onSearchActiveChange = onSearchActiveChange,
             onHomeUiEvent = onHomeUiEvent,
         )
     }
@@ -105,6 +106,8 @@ private fun HomeScreen(
 @Composable
 private fun SearchTopBar(
     searchUiState: SearchUiState,
+    searchActive: Boolean,
+    onSearchActiveChange: (Boolean) -> Unit,
     onHomeUiEvent: (HomeUiEvent) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -133,11 +136,11 @@ private fun SearchTopBar(
             onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
         },
         onSearch = {
-            searchUiState.onSearchActiveChange(false)
+            onSearchActiveChange(false)
             onHomeUiEvent(HomeUiEvent.SearchText(it))
         },
-        active = searchUiState.searchActive,
-        onActiveChange = { searchUiState.onSearchActiveChange(it) },
+        active = searchActive,
+        onActiveChange = { onSearchActiveChange(it) },
         placeholder = {
             Text(text = stringResource(id = R.string.searchbar_hint))
         },
@@ -148,7 +151,7 @@ private fun SearchTopBar(
             )
         },
         trailingIcon = {
-            if (searchUiState.searchActive) {
+            if (searchActive) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(id = R.string.desc_clear),
@@ -156,7 +159,7 @@ private fun SearchTopBar(
                         if (searchUiState.queryNotEmpty()) {
                             onHomeUiEvent(HomeUiEvent.ClearSearchText)
                         } else {
-                            searchUiState.onSearchActiveChange(false)
+                            onSearchActiveChange(false)
                         }
                     }
                 )
@@ -178,7 +181,8 @@ private fun SearchTopBar(
                 SearchKeyword(
                     keyword = searchUiState.searchKeywords[index].keyword,
                     onClick = {
-                        searchUiState.onSearchActiveChange(false)
+                        onSearchActiveChange(false)
+                        onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
                         onHomeUiEvent(HomeUiEvent.SearchText(it))
                     },
                     onClickRemove = { onHomeUiEvent(HomeUiEvent.DeleteHistory(it)) }
@@ -238,11 +242,13 @@ fun SearchKeyword(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview(
-    @PreviewParameter(SearchUiStateProvider::class) uiState: SearchUiState,
+    @PreviewParameter(SearchUiStateProvider::class) items: Pair<SearchUiState, Boolean>,
 ) {
     AllAboutMovieTheme {
         HomeScreen(
-            searchUiState = uiState,
+            searchUiState = items.first,
+            searchActive = items.second,
+            onSearchActiveChange = {},
             onHomeUiEvent = { },
             modifier = Modifier.fillMaxSize()
         )

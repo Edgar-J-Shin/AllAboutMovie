@@ -7,22 +7,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 data class SearchUiState(
     val searchKeywords: List<KeywordUiState>,
     val query: KeywordUiState,
-    val searchActive: Boolean,
-    val onSearchActiveChange: (Boolean) -> Unit,
 ) {
     fun queryNotEmpty() = query.keyword.isNotEmpty()
 }
 
-class SearchUiStateProvider : PreviewParameterProvider<SearchUiState> {
+class SearchUiStateProvider : PreviewParameterProvider<Pair<SearchUiState, Boolean>> {
 
-    override val values: Sequence<SearchUiState>
+    override val values: Sequence<Pair<SearchUiState, Boolean>>
         get() = sequenceOf(
             SearchUiState(
                 searchKeywords = emptyList(),
                 query = KeywordUiState(""),
-                searchActive = false,
-                onSearchActiveChange = { }
-            ),
+            ) to false,
             SearchUiState(
                 searchKeywords = listOf(
                     KeywordUiState("test"),
@@ -36,8 +32,6 @@ class SearchUiStateProvider : PreviewParameterProvider<SearchUiState> {
                     KeywordUiState("test8"),
                 ),
                 query = KeywordUiState("test"),
-                searchActive = true,
-                onSearchActiveChange = { }
-            ),
+            ) to true,
         )
 }
