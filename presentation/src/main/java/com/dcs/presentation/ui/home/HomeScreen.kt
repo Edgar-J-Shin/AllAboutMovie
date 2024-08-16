@@ -23,9 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
@@ -50,6 +49,7 @@ import com.dcs.presentation.ui.Screen
 @Composable
 fun HomeRoute(
     navController: NavHostController,
+    searchActive: MutableState<Boolean>,
     viewModel: HomeViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
@@ -68,7 +68,7 @@ fun HomeRoute(
         searchUiState = SearchUiState(
             searchKeywords = searchKeywords,
             query = query,
-            searchActive = remember { mutableStateOf(false) }
+            searchActive = searchActive
         ),
         onHomeUiEvent = viewModel::dispatchEvent,
         modifier = Modifier.fillMaxSize()
@@ -157,7 +157,6 @@ private fun SearchTopBar(
             bottom = 0.dp
         ),
         modifier = Modifier
-            .padding(8.dp)
             .fillMaxWidth()
             .focusable()
     ) {
