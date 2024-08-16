@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -49,7 +48,8 @@ import com.dcs.presentation.ui.Screen
 @Composable
 fun HomeRoute(
     navController: NavHostController,
-    searchActive: MutableState<Boolean>,
+    searchActive: Boolean,
+    onSearchActiveChange: (Boolean) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
@@ -68,7 +68,8 @@ fun HomeRoute(
         searchUiState = SearchUiState(
             searchKeywords = searchKeywords,
             query = query,
-            searchActive = searchActive
+            searchActive = searchActive,
+            onSearchActiveChange = onSearchActiveChange
         ),
         onHomeUiEvent = viewModel::dispatchEvent,
         modifier = Modifier.fillMaxSize()
@@ -123,11 +124,11 @@ private fun SearchTopBar(
             onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
         },
         onSearch = {
-            searchUiState.searchActive.value = false
+            searchUiState.onSearchActiveChange(false)
             onHomeUiEvent(HomeUiEvent.SearchText(it))
         },
-        active = searchUiState.searchActive.value,
-        onActiveChange = { searchUiState.searchActive.value = it },
+        active = searchUiState.searchActive,
+        onActiveChange = { searchUiState.onSearchActiveChange(it) },
         placeholder = {
             Text(text = stringResource(id = R.string.searchbar_hint))
         },
@@ -138,7 +139,7 @@ private fun SearchTopBar(
             )
         },
         trailingIcon = {
-            if (searchUiState.searchActive.value) {
+            if (searchUiState.searchActive) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(id = R.string.desc_clear),
@@ -146,7 +147,7 @@ private fun SearchTopBar(
                         if (searchUiState.queryNotEmpty()) {
                             onHomeUiEvent(HomeUiEvent.ClearSearchText)
                         } else {
-                            searchUiState.searchActive.value = false
+                            searchUiState.onSearchActiveChange(false)
                         }
                     }
                 )
@@ -168,7 +169,7 @@ private fun SearchTopBar(
                 SearchKeyword(
                     keyword = searchUiState.searchKeywords[index].keyword,
                     onClick = {
-                        searchUiState.searchActive.value = false
+                        searchUiState.onSearchActiveChange(false)
                         onHomeUiEvent(HomeUiEvent.SearchText(it))
                     },
                     onClickRemove = { onHomeUiEvent(HomeUiEvent.DeleteHistory(it)) }

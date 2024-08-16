@@ -1,15 +1,14 @@
 package com.dcs.presentation.core.model
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Stable
 data class SearchUiState(
     val searchKeywords: List<KeywordUiState>,
     val query: KeywordUiState,
-    val searchActive: MutableState<Boolean>,
+    val searchActive: Boolean,
+    val onSearchActiveChange: (Boolean) -> Unit,
 ) {
     fun queryNotEmpty() = query.keyword.isNotEmpty()
 }
@@ -21,7 +20,8 @@ class SearchUiStateProvider : PreviewParameterProvider<SearchUiState> {
             SearchUiState(
                 searchKeywords = emptyList(),
                 query = KeywordUiState(""),
-                searchActive = mutableStateOf(false)
+                searchActive = false,
+                onSearchActiveChange = { }
             ),
             SearchUiState(
                 searchKeywords = listOf(
@@ -36,7 +36,8 @@ class SearchUiStateProvider : PreviewParameterProvider<SearchUiState> {
                     KeywordUiState("test8"),
                 ),
                 query = KeywordUiState("test"),
-                searchActive = mutableStateOf(true)
+                searchActive = true,
+                onSearchActiveChange = { }
             ),
         )
 }

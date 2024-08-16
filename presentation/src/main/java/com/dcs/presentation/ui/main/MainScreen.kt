@@ -38,7 +38,7 @@ fun MainRoute(
         bottomBar = {
             MainBottomNavigation(
                 navController = mainNavController,
-                searchActive = searchActive,
+                searchActive = searchActive.value
             )
         },
         snackbarHost = {
@@ -53,7 +53,10 @@ fun MainRoute(
                 mainNavController = mainNavController,
                 appNavHostController = navController,
                 startDestination = MainTab.Home.route,
-                searchActive = searchActive,
+                searchActive = searchActive.value,
+                onSearchActiveChange = { active ->
+                    searchActive.value = active
+                },
                 showSnackBar = { message, duration ->
                     scope.launch {
                         snackBarHostState.showSnackbar(
@@ -72,7 +75,8 @@ private fun MainNavHost(
     mainNavController: NavHostController,
     appNavHostController: NavHostController,
     startDestination: String,
-    searchActive: MutableState<Boolean>,
+    searchActive: Boolean,
+    onSearchActiveChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
@@ -86,6 +90,7 @@ private fun MainNavHost(
             HomeRoute(
                 navController = appNavHostController,
                 searchActive = searchActive,
+                onSearchActiveChange = onSearchActiveChange
             )
         }
 
