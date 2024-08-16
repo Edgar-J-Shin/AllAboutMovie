@@ -20,6 +20,9 @@ import com.dcs.presentation.ui.Screen.Main.MainTab
 
 @Composable
 fun MainBottomNavigation(
+    navController: NavHostController,
+    searchActive: Boolean,
+    modifier: Modifier = Modifier,
     items: List<MainTab> =
         listOf(
             MainTab.Home,
@@ -27,13 +30,11 @@ fun MainBottomNavigation(
             MainTab.People,
             MainTab.Setting,
         ),
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    AnimatedVisibility(visible = items.any { it.route == currentDestination?.route }) {
+    AnimatedVisibility(visible = !searchActive && items.any { it.route == currentDestination?.route }) {
         NavigationBar(
             modifier = modifier,
         ) {

@@ -1,4 +1,4 @@
-package com.dcs.data.local.datastore
+package com.dcs.data.local.datasource
 
 import com.dcs.domain.model.User
 import kotlinx.coroutines.flow.Flow

@@ -269,3 +269,4 @@ fun TrendMovies(
         }
     }
 }
+

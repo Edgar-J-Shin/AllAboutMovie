@@ -89,3 +89,4 @@ fun MovieItem(
         )
     }
 }
+

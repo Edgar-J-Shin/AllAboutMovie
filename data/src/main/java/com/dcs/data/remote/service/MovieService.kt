@@ -81,4 +81,22 @@ interface MovieService {
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US"
     ): NetworkResponse<MoviesResponse>
+
+    /**
+     * Search for keywords by their name.
+     *
+     * @param query
+     * @param page
+     * @param language
+     *
+     * @return [MoviesResponse]
+     */
+    @GET("search/multi")
+    suspend fun fetchSearchMultiByQuery(
+        @Query("query") query: String,
+        @Query("include_adult") includeAdult: Boolean = false,
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = "en-US"
+    ): NetworkResponse<MoviesResponse>
 }
+

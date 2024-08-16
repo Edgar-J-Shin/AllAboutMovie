@@ -8,6 +8,8 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -27,13 +29,17 @@ fun MainRoute(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     mainNavController: NavHostController = rememberNavController(),
+    searchActive: MutableState<Boolean> = remember { mutableStateOf(false) },
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     Scaffold(
         bottomBar = {
-            MainBottomNavigation(navController = mainNavController)
+            MainBottomNavigation(
+                navController = mainNavController,
+                searchActive = searchActive.value
+            )
         },
         snackbarHost = {
             SnackbarHost(
@@ -47,6 +53,10 @@ fun MainRoute(
                 mainNavController = mainNavController,
                 appNavHostController = navController,
                 startDestination = MainTab.Home.route,
+                searchActive = searchActive.value,
+                onSearchActiveChange = { active ->
+                    searchActive.value = active
+                },
                 showSnackBar = { message, duration ->
                     scope.launch {
                         snackBarHostState.showSnackbar(
@@ -65,6 +75,8 @@ private fun MainNavHost(
     mainNavController: NavHostController,
     appNavHostController: NavHostController,
     startDestination: String,
+    searchActive: Boolean,
+    onSearchActiveChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
@@ -75,7 +87,12 @@ private fun MainNavHost(
         startDestination = startDestination
     ) {
         composable(route = MainTab.Home.route) {
-            HomeRoute()
+            HomeRoute(
+                navController = appNavHostController,
+                searchActive = searchActive,
+                onSearchActiveChange = onSearchActiveChange,
+                showSnackBar = showSnackBar
+            )
         }
 
         composable(route = MainTab.Trend.route) {
