@@ -33,20 +33,12 @@ class HomeViewModel @Inject constructor(
     private val searchKeywords = getSearchKeywordsUseCase(KEYWORD_COUNT_LIMIT)
         .map { keywordEntities -> keywordEntities.map { it.toUiState() } }
 
-    private val _searchUiState = MutableStateFlow(
-        SearchUiState(
-            searchKeywords = emptyList(),
-            query = KeywordUiState("")
-        )
-    )
+    private val _searchUiState = MutableStateFlow(INIT_SEARCH_UI_STATE)
     val searchUiState = combine(_searchUiState.asStateFlow(), searchKeywords) { searchUiState, searchKeywords ->
         searchUiState.copy(searchKeywords = searchKeywords)
     }.stateIn(
         scope = viewModelScope,
-        initialValue = SearchUiState(
-            searchKeywords = emptyList(),
-            query = KeywordUiState("")
-        ),
+        initialValue = INIT_SEARCH_UI_STATE,
         started = SharingStarted.WhileSubscribed(5_000)
     )
 
@@ -109,5 +101,10 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         private const val KEYWORD_COUNT_LIMIT = 20
+
+        private val INIT_SEARCH_UI_STATE = SearchUiState(
+            searchKeywords = emptyList(),
+            query = KeywordUiState("")
+        )
     }
 }
