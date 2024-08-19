@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +40,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
@@ -49,6 +51,20 @@ fun TrendRoute(
     viewModel: TrendViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
+
+    val context = LocalContext.current
+
+    viewModel.effect.collectAsEffect { effect ->
+        when (effect) {
+
+            is TrendEffect.ShowSnackbar -> {
+                showSnackBar(
+                    context.getString(effect.state.messageResId),
+                    effect.state.duration
+                )
+            }
+        }
+    }
 
     val scrollState = rememberScrollState()
     val trendingMovies = viewModel.moviesByTrending.collectAsLazyPagingItems()
