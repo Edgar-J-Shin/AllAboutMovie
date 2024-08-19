@@ -8,11 +8,11 @@ import androidx.paging.map
 import com.dcs.domain.usecase.GetContentsByPopularUseCase
 import com.dcs.domain.usecase.GetMoviesByTrendingUseCase
 import com.dcs.domain.usecase.GetMoviesByUpcomingUseCase
+import com.dcs.presentation.core.model.mapper.toMediaType
+import com.dcs.presentation.core.model.mapper.toTimeWindow
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.state.MoviePopularType
-import com.dcs.presentation.core.state.MovieTrendType
-import com.dcs.presentation.core.state.UiState
-import com.dcs.presentation.core.state.asUiState
+import com.dcs.presentation.core.state.MoviePopularUiType
+import com.dcs.presentation.core.state.MovieTrendUiType
 import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,61 +31,58 @@ class TrendViewModel @Inject constructor(
     getMoviesByUpcomingUseCase: GetMoviesByUpcomingUseCase,
 ) : ViewModel() {
 
-    private var _movieTrendType = MutableStateFlow(MovieTrendType.DAY)
-    val movieTrendType = _movieTrendType.asStateFlow()
+    private var _movieTrendUiType = MutableStateFlow(MovieTrendUiType.DAY)
+    private val movieTrendType = _movieTrendUiType.asStateFlow()
 
-    private var _moviePopularType = MutableStateFlow(MoviePopularType.TV)
-    val moviePopularType = _moviePopularType.asStateFlow()
+    private var _moviePopularUiType = MutableStateFlow(MoviePopularUiType.TV)
+    private val moviePopularType = _moviePopularUiType.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     internal val moviesByTrending = movieTrendType
-        .map { it.toString().lowercase(Locale.getDefault()) }
-        .flatMapLatest { type ->
-            getMoviesByTrendingUseCase(type)
+        .map { it.toTimeWindow() }
+        .flatMapLatest { timeWindow ->
+            getMoviesByTrendingUseCase(timeWindow)
                 .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
                 .cachedIn(viewModelScope)
         }
-        .asUiState()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Success(PagingData.empty()),
+            initialValue = PagingData.empty(),
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     internal val moviesByPopular = moviePopularType
-        .map { it.toString().lowercase(Locale.getDefault()) }
-        .flatMapLatest { type ->
-            getContentsByPopularUseCase(type)
+        .map { it.toMediaType() }
+        .flatMapLatest { mediaType ->
+            getContentsByPopularUseCase(mediaType)
                 .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
                 .cachedIn(viewModelScope)
         }
-        .asUiState()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Success(PagingData.empty()),
+            initialValue = PagingData.empty(),
         )
 
     internal val moviesByUpcoming = getMoviesByUpcomingUseCase()
         .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
         .cachedIn(viewModelScope)
-        .asUiState()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Success(PagingData.empty()),
+            initialValue = PagingData.empty(),
         )
 
-    fun updateMovieTrendType(movieTrendType: MovieTrendType) {
+    fun updateMovieTrendType(movieTrendUiType: MovieTrendUiType) {
         launch {
-            _movieTrendType.emit(movieTrendType)
+            _movieTrendUiType.emit(movieTrendUiType)
         }
     }
 
-    fun updateMoviePopularType(moviePopularType: MoviePopularType) {
+    fun updateMoviePopularType(moviePopularUiType: MoviePopularUiType) {
         launch {
-            _moviePopularType.emit(moviePopularType)
+            _moviePopularUiType.emit(moviePopularUiType)
         }
     }
 }

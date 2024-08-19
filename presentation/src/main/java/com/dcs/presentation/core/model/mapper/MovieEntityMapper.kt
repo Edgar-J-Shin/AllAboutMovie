@@ -1,7 +1,11 @@
 package com.dcs.presentation.core.model.mapper
 
+import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.Movie
+import com.dcs.domain.model.TimeWindow
 import com.dcs.presentation.core.model.MovieItemUiState
+import com.dcs.presentation.core.state.MoviePopularUiType
+import com.dcs.presentation.core.state.MovieTrendUiType
 
 fun Movie.toUiState() = MovieItemUiState(
     adult = adult,
@@ -24,3 +28,7 @@ fun Movie.toUiState() = MovieItemUiState(
     firstAirDate = firstAirDate,
     originalCountry = originalCountry
 )
+
+fun MovieTrendUiType.toTimeWindow() = TimeWindow.timeWindow(this.toString())
+
+fun MoviePopularUiType.toMediaType() = MediaType.mediaType(this.toString())

@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.dcs.presentation.R
 
-enum class MovieFreeType {
-    MOVIE,
-    TV;
+enum class MovieTrendUiType {
+    DAY,
+    WEEK;
 
     @Composable
     fun toUiString() = when (this) {
-        MOVIE -> stringResource(id = R.string.movie_free_type_movie)
-        TV -> stringResource(id = R.string.movie_free_type_tv)
+        DAY -> stringResource(id = R.string.movie_trend_type_day)
+        WEEK -> stringResource(id = R.string.movie_trend_type_week)
     }
 }
