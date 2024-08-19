@@ -31,10 +31,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
@@ -42,8 +45,11 @@ import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieItemUiState
+import com.dcs.presentation.core.model.MovieItemUiStateProvider
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.theme.AllAboutMovieTheme
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun TrendRoute(
@@ -244,11 +250,19 @@ fun MovieContents(
         val isEmpty = pagingItems.itemCount == 0
 
         when {
-            isLoading -> LoadingScreen()
+            isLoading -> {
+                LoadingScreen()
+            }
 
-            isError -> ErrorScreen()
+            isError -> {
+                ErrorScreen(
+                    message = stringResource(id = R.string.api_response_error_message)
+                )
+            }
 
-            isEmpty -> ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
+            isEmpty -> {
+                ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
+            }
 
             else -> {
                 MovieItems(
@@ -290,4 +304,25 @@ fun MovieItems(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun TrendScreenPreview(
+    @PreviewParameter(MovieItemUiStateProvider::class) items: PagingData<MovieItemUiState>,
+) {
+    val pagingItems1 = flowOf(items).collectAsLazyPagingItems()
+    val pagingItems2 = flowOf(items).collectAsLazyPagingItems()
+    val pagingItems3 = flowOf(items).collectAsLazyPagingItems()
+
+    AllAboutMovieTheme {
+        TrendScreen(
+            trendingMovies = pagingItems1,
+            popularMovies = pagingItems2,
+            upcomingMovies = pagingItems3,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+
 
