@@ -2,8 +2,10 @@ package com.dcs.data.remote.datasource
 
 import com.dcs.data.model.MovieType
 import com.dcs.data.remote.model.MoviesResponse
+import com.dcs.data.remote.model.RemoteMovie
 import com.dcs.data.remote.network.NetworkResponse
 import com.dcs.data.remote.service.MovieService
+import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.TimeWindow
 import javax.inject.Inject
@@ -101,4 +103,15 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             page = page,
             language = language
         )
+
+    override suspend fun getMovieById(
+        movieId: MovieId,
+        language: String,
+    ): Result<RemoteMovie> =
+        movieService.fetchMovieDetails(
+            movieId = movieId.value,
+            language = language
+        ).asResult {
+            it.data as RemoteMovie
+        }
 }

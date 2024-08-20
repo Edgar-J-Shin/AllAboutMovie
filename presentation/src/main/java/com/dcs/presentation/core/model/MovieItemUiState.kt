@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
+import com.dcs.domain.model.MovieId
 
 @Stable
 data class MovieItemUiState(
@@ -28,6 +29,8 @@ data class MovieItemUiState(
     val originalCountry: List<String>,
     val firstAirDate: String,
 )
+
+fun MovieItemUiState.toMovieId() = MovieId(this.id)
 
 class MovieItemUiStateProvider : PreviewParameterProvider<PagingData<MovieItemUiState>> {
 

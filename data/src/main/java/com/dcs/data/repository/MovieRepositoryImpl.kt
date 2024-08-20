@@ -11,6 +11,7 @@ import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.Keyword
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.Movie
+import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.TimeWindow
 import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -83,6 +84,19 @@ class MovieRepositoryImpl @Inject constructor(
             .onEach {
                 keywordLocalDataSource.insertKeyword(Keyword(query))
             }
+
+    override fun getMovieById(
+        movieId: MovieId,
+    ): Flow<Movie> = flow {
+        val result = movieRemoteDataSource
+            .getMovieById(
+                movieId = movieId
+            )
+            .getOrThrow()
+            .toEntity()
+
+        emit(result)
+    }.flowOn(ioDispatcher)
 
     companion object {
         const val DEFAULT_PAGE_SIZE: Int = 20

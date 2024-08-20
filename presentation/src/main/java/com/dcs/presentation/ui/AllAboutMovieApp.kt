@@ -11,6 +11,7 @@ import com.dcs.presentation.ui.Screen.Main
 import com.dcs.presentation.ui.Screen.SearchResult
 import com.dcs.presentation.ui.Screen.SignIn
 import com.dcs.presentation.ui.main.MainRoute
+import com.dcs.presentation.ui.moviedetail.MovieDetailRoute
 import com.dcs.presentation.ui.searchresult.SearchResultRoute
 import com.dcs.presentation.ui.signin.SignInRoute
 
@@ -64,6 +65,12 @@ fun AllAboutMovieApp(
             SearchResultRoute(navController = navController)
         }
 
+        composable(
+            route = Screen.MovieDetail.route,
+            arguments = Screen.MovieDetail.navArguments
+        ) {
+            MovieDetailRoute(navController = navController)
+        }
     }
 }
 

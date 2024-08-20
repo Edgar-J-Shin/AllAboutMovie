@@ -30,13 +30,16 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.dcs.domain.model.MovieId
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.model.MovieItemUiStateProvider
+import com.dcs.presentation.core.model.toMovieId
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
+import com.dcs.presentation.ui.Screen
 import com.dcs.presentation.ui.trend.MovieItem
 import kotlinx.coroutines.flow.flowOf
 
@@ -52,6 +55,10 @@ fun SearchResultRoute(
         when (effect) {
             SearchResultEffect.NavigateBack -> {
                 navController.popBackStack()
+            }
+
+            is SearchResultEffect.NavigateToMovieDetails -> {
+                navController.navigate(Screen.MovieDetail.createRoute(effect.movieId.value))
             }
         }
     }
@@ -109,7 +116,14 @@ private fun SearchResultScreen(
 
                 isNotLoading -> {
                     VerticalGridMovie(
-                        movieItems = pagingItems
+                        movieItems = pagingItems,
+                        onItemClick = { movieId ->
+                            onSearchResultEvent(
+                                SearchResultUiEvent.NavigateToMovieDetails(
+                                    movieId = movieId
+                                )
+                            )
+                        },
                     )
                 }
             }
@@ -142,6 +156,7 @@ fun SearchResultTopAppBar(
 @Composable
 fun VerticalGridMovie(
     movieItems: LazyPagingItems<MovieItemUiState>,
+    onItemClick: (MovieId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val gridState = rememberLazyGridState()
@@ -164,7 +179,9 @@ fun VerticalGridMovie(
                     modifier = Modifier
                         .fillMaxWidth(),
                     movie = movie,
-                    onClick = { }
+                    onClick = {
+                        onItemClick(movie.toMovieId())
+                    }
                 )
             }
         }

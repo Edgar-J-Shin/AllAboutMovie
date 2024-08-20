@@ -1,13 +1,17 @@
 package com.dcs.data.remote.network
 
+import com.dcs.data.remote.model.ErrorResponse
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+
 
 class CustomCall<T : Any>(
-    private val callDelegate: Call<T>
+    private val callDelegate: Call<T>,
+    private val retrofit: Retrofit,
 ) : Call<NetworkResponse<T>> {
 
     override fun enqueue(callback: Callback<NetworkResponse<T>>) = callDelegate.enqueue(object : Callback<T> {
@@ -17,7 +21,19 @@ class CustomCall<T : Any>(
                     NetworkResponse.Success(it, response.code())
                 } ?: NetworkResponse.Unexpected(Throwable())
             } else {
-                NetworkResponse.Failure(response.message(), response.code())
+                response.errorBody()?.let { responseBody ->
+                    retrofit.responseBodyConverter<ErrorResponse>(
+                        ErrorResponse::class.java,
+                        ErrorResponse::class.java.annotations
+                    )
+                        .convert(responseBody)
+                        ?.let { errorResponse ->
+                            val message: String = errorResponse.statusMessage
+                            val code: Int = errorResponse.statusCode
+
+                            NetworkResponse.Failure(message, code)
+                        }
+                } ?: NetworkResponse.Failure(response.message(), response.code())
             }
 
             callback.onResponse(this@CustomCall, Response.success(networkResponse))
@@ -29,7 +45,7 @@ class CustomCall<T : Any>(
         }
     })
 
-    override fun clone(): Call<NetworkResponse<T>> = CustomCall(callDelegate.clone())
+    override fun clone(): Call<NetworkResponse<T>> = CustomCall(callDelegate.clone(), retrofit)
 
     override fun execute(): Response<NetworkResponse<T>> = throw UnsupportedOperationException("ResponseCall does not support execute.")
 
