@@ -42,11 +42,9 @@ class PersonRepositoryImpl @Inject constructor(
             remote.getSearchPerson(personDetailResponse.name).getOrThrow()
 
         val knownFor: List<KnownFor> =
-            if (searchPersonResponse.results.isNotEmpty()) {
-                searchPersonResponse.results[0].knownFor.map { it.toEntity() }
-            } else {
-                emptyList()
-            }
+            searchPersonResponse.results
+                .flatMap { it.knownFor }
+                .map { it.toEntity() }
         emit(personDetailResponse.toEntity(knownFor))
 
     }
