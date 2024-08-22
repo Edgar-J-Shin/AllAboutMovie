@@ -1,5 +1,5 @@
 package com.dcs.presentation.ui.people
 
 sealed interface PeopleEffect {
-    data class NavigateToDetail(val personId: String) : PeopleEffect
+    data class NavigateToDetail(val personId: Long) : PeopleEffect
 }

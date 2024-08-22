@@ -48,7 +48,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun PeopleRoute(
-    navigateToDetail: (String) -> Unit,
+    navigateToDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PeopleViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },

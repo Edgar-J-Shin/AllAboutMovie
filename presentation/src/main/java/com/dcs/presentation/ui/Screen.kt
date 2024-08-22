@@ -82,10 +82,10 @@ sealed class Screen(
     data object PersonDetail : Screen(
         route = "$ROUTE_PERSON_DETAIL/{$PERSON_DETAIL_ID_KEY}",
         navArguments = persistentListOf(navArgument(PERSON_DETAIL_ID_KEY) {
-            type = NavType.StringType
+            type = NavType.LongType
         })
     ) {
-        fun createRoute(personId: String) = "$ROUTE_PERSON_DETAIL/${personId}"
+        fun createRoute(personId: Long) = "$ROUTE_PERSON_DETAIL/${personId}"
     }
 
     companion object {

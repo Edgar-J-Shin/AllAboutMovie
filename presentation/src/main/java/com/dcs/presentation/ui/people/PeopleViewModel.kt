@@ -45,7 +45,7 @@ class PeopleViewModel @Inject constructor(
 
     private fun saveAndNavigateToDetail(state: PersonUiState) {
         launch {
-            _effect.emit(PeopleEffect.NavigateToDetail(state.id.toString()))
+            _effect.emit(PeopleEffect.NavigateToDetail(state.id))
         }
     }
 }
