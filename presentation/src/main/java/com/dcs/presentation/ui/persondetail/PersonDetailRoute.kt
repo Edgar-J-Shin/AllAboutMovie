@@ -160,8 +160,10 @@ private fun KnownForSection(
     knownFor: List<KnownForUiState>,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = modifier
+    ) {
         Text(
             text = "Known For",
             style = MaterialTheme.typography.headlineSmall,
@@ -204,7 +206,10 @@ private fun BiographySection(
     biography: String,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = modifier
+    ) {
         Text(
             text = "Biography",
             style = MaterialTheme.typography.headlineSmall,
@@ -227,19 +232,21 @@ private fun PersonalInfoSection(
     credits: Int,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = modifier
+    ) {
         Text(
             text = "Personal Info",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(12.dp))
         Row(
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             KnownForDepartment(
                 knownForDepartment = knownForDepartment,
-                modifier = modifier.weight(1f),
+                modifier = Modifier.weight(1f),
             )
 
             KnownCredits(
@@ -247,14 +254,8 @@ private fun PersonalInfoSection(
                 modifier = Modifier.weight(1f)
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        // Gender
         Gender(gender)
-        Spacer(modifier = Modifier.height(12.dp))
-        // Birthday
         Birthday(birthday)
-        Spacer(modifier = Modifier.height(12.dp))
-        // Place of Birth
         PlaceOfBirth(placeOfBirth)
     }
 }
