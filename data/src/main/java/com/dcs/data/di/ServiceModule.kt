@@ -1,8 +1,9 @@
 package com.dcs.data.di
 
-import com.dcs.data.remote.service.AuthApiService
+import com.dcs.data.remote.service.AuthService
 import com.dcs.data.remote.service.MovieService
-import com.dcs.data.remote.service.PersonApiService
+import com.dcs.data.remote.service.PersonService
+import com.dcs.data.remote.service.SearchService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,10 +19,14 @@ class ServiceModule {
         retrofit.create(MovieService::class.java)
 
     @Provides
-    fun provideAuthApiService(retrofit: Retrofit): AuthApiService =
-        retrofit.create(AuthApiService::class.java)
+    fun provideAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 
     @Provides
-    fun providePersonApiService(retrofit: Retrofit): PersonApiService =
-        retrofit.create(PersonApiService::class.java)
+    fun providePersonService(retrofit: Retrofit): PersonService =
+        retrofit.create(PersonService::class.java)
+
+    @Provides
+    fun provideSearchService(retrofit: Retrofit): SearchService =
+        retrofit.create(SearchService::class.java)
 }
