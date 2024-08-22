@@ -4,6 +4,7 @@ import com.dcs.data.remote.model.GetPersonDetailResponse
 import com.dcs.data.remote.model.GetPopularPeopleResponse
 import com.dcs.data.remote.network.NetworkResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PersonService {
@@ -16,7 +17,7 @@ interface PersonService {
 
     @GET("person/{person_id}")
     suspend fun getPersonDetail(
-        @Query("person_id") personId: Long,
+        @Path("person_id") personId: Long,
         @Query("language") language: String = "en-US",
         @Query("append_to_response") appendToResponse: String = "combined_credits",
     ): NetworkResponse<GetPersonDetailResponse>
