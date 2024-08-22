@@ -21,12 +21,13 @@ fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
     placeOfBirth = placeOfBirth,
     popularity = popularity,
     profilePath = profilePath,
-    credits = combinedCredits.cast.map { it.toEntity() },
+    casts = combinedCredits.cast.map { it.toEntity() },
     crews = combinedCredits.crew.map { it.toEntity() },
     knownFor = knownFor,
 )
 
 fun RemoteCast.toEntity() = com.dcs.domain.model.Cast(
+    id = id,
     adult = adult,
     backdropPath = backdropPath,
     character = character,
@@ -34,7 +35,6 @@ fun RemoteCast.toEntity() = com.dcs.domain.model.Cast(
     episodeCount = episodeCount,
     firstAirDate = firstAirDate,
     genreIds = genreIds,
-    id = id,
     mediaType = mediaType,
     name = name,
     order = order,

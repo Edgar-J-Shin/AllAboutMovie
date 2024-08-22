@@ -48,6 +48,8 @@ data class CombinedCredits(
 
 @Serializable
 data class RemoteCast(
+    @SerialName("id")
+    val id: Long,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
@@ -62,8 +64,6 @@ data class RemoteCast(
     val firstAirDate: String = "",
     @SerialName("genre_ids")
     val genreIds: List<Int>,
-    @SerialName("id")
-    val id: Int,
     @SerialName("media_type")
     val mediaType: String,
     @SerialName("name")

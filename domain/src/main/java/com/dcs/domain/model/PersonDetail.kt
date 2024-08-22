@@ -15,12 +15,13 @@ data class PersonDetail(
     val placeOfBirth: String,
     val popularity: Double,
     val profilePath: String,
-    val credits: List<Cast>,
+    val casts: List<Cast>,
     val crews: List<Crew>,
     val knownFor: List<KnownFor>,
 )
 
 data class Cast(
+    val id: Long,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -28,7 +29,6 @@ data class Cast(
     val episodeCount: Int,
     val firstAirDate: String,
     val genreIds: List<Int>,
-    val id: Int,
     val mediaType: String,
     val name: String,
     val order: Int,
