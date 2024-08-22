@@ -48,7 +48,7 @@ import com.dcs.presentation.ui.Screen
 
 @Composable
 fun HomeRoute(
-    navController: NavHostController,
+    navigateToSearchDetail: (String) -> Unit,
     searchActive: Boolean,
     onSearchActiveChange: (Boolean) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -59,7 +59,7 @@ fun HomeRoute(
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             is HomeEffect.NavigateToSearchResult -> {
-                navController.navigate(Screen.SearchResult.createRoute(effect.keyword))
+                navigateToSearchDetail(effect.keyword)
             }
 
             is HomeEffect.ShowSnackbar -> {

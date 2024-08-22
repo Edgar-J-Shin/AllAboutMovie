@@ -89,7 +89,9 @@ private fun MainNavHost(
     ) {
         composable(route = MainTab.Home.route) {
             HomeRoute(
-                navController = appNavHostController,
+                navigateToSearchDetail = { keyword ->
+                    appNavHostController.navigate(Screen.SearchResult.createRoute(keyword))
+                },
                 searchActive = searchActive,
                 onSearchActiveChange = onSearchActiveChange,
                 showSnackBar = showSnackBar
@@ -112,7 +114,9 @@ private fun MainNavHost(
 
         composable(route = MainTab.Setting.route) {
             SettingRoute(
-                navController = appNavHostController,
+                navigateToSignIn = { requestToken ->
+                    appNavHostController.navigate(Screen.SignIn.createRoute(requestToken))
+                },
                 showSnackBar = showSnackBar
             )
         }
