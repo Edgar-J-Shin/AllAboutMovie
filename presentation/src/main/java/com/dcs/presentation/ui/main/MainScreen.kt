@@ -17,6 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dcs.presentation.ui.Screen
 import com.dcs.presentation.ui.Screen.Main.MainTab
 import com.dcs.presentation.ui.home.HomeRoute
 import com.dcs.presentation.ui.people.PeopleRoute
@@ -102,7 +103,11 @@ private fun MainNavHost(
         }
 
         composable(route = MainTab.People.route) {
-            PeopleRoute()
+            PeopleRoute(
+                navigateToDetail = { personId ->
+                    appNavHostController.navigate(Screen.PersonDetail.createRoute(personId))
+                }
+            )
         }
 
         composable(route = MainTab.Setting.route) {
