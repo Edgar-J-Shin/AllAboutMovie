@@ -17,12 +17,12 @@ data class GetPopularPeopleResponse(
 
 @Serializable
 data class RemotePerson(
+    @SerialName("id")
+    val id: Long,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")
     val gender: Int,
-    @SerialName("id")
-    val id: Int,
     @SerialName("known_for")
     val knownFor: List<RemoteKnownFor>,
     @SerialName("known_for_department")
@@ -39,6 +39,8 @@ data class RemotePerson(
 
 @Serializable
 data class RemoteKnownFor(
+    @SerialName("id")
+    val id: Long,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
@@ -47,8 +49,6 @@ data class RemoteKnownFor(
     val firstAirDate: String = "",
     @SerialName("genre_ids")
     val genreIds: List<Int>,
-    @SerialName("id")
-    val id: Int,
     @SerialName("media_type")
     val mediaType: String,
     @SerialName("name")
