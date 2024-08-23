@@ -1,5 +1,6 @@
 package com.dcs.presentation.ui.trend
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,12 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Tab
@@ -26,104 +27,143 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieItemUiState
-import com.dcs.presentation.core.state.MoviePopularType
-import com.dcs.presentation.core.state.MovieTrendType
-import com.dcs.presentation.core.state.UiState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import com.dcs.presentation.core.model.MovieItemUiStateProvider
+import com.dcs.presentation.core.state.MoviePopularUiType
+import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.theme.AllAboutMovieTheme
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun TrendRoute(
     modifier: Modifier = Modifier,
     viewModel: TrendViewModel = hiltViewModel(),
-    showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> }
+    showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
 
-    Scaffold { innerPadding ->
-        val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(scrollState)
-        ) {
-            TrendMovies(
-                movies = viewModel.moviesByTrending,
-                onTabClick = { tabIndex ->
-                    viewModel.updateMovieTrendType(MovieTrendType.entries[tabIndex])
-                }
-            )
+    viewModel.effect.collectAsEffect { effect ->
+        when (effect) {
 
-            PopularContents(
-                movies = viewModel.moviesByPopular,
-                onTabClick = { tabIndex ->
-                    viewModel.updateMoviePopularType(MoviePopularType.entries[tabIndex])
-                }
-            )
-
-            UpcomingMovies(
-                movies = viewModel.moviesByUpcoming
-            )
+            is TrendEffect.ShowSnackbar -> {
+                showSnackBar(
+                    context.getString(effect.state.messageResId),
+                    effect.state.duration
+                )
+            }
         }
+    }
+
+    val scrollState = rememberScrollState()
+    val trendingMovies = viewModel.moviesByTrending.collectAsLazyPagingItems()
+    val popularMovies = viewModel.moviesByPopular.collectAsLazyPagingItems()
+    val upcomingMovies = viewModel.moviesByUpcoming.collectAsLazyPagingItems()
+
+    TrendScreen(
+        trendingMovies = trendingMovies,
+        popularMovies = popularMovies,
+        upcomingMovies = upcomingMovies,
+        onMovieTrendTypeChange = { type ->
+            viewModel.updateMovieTrendType(type)
+        },
+        onMoviePopularTypeChange = { type ->
+            viewModel.updateMoviePopularType(type)
+        },
+        scrollState = scrollState,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun TrendScreen(
+    trendingMovies: LazyPagingItems<MovieItemUiState>,
+    popularMovies: LazyPagingItems<MovieItemUiState>,
+    upcomingMovies: LazyPagingItems<MovieItemUiState>,
+    modifier: Modifier = Modifier,
+    onMovieTrendTypeChange: (MovieTrendUiType) -> Unit = {},
+    onMoviePopularTypeChange: (MoviePopularUiType) -> Unit = {},
+    scrollState: ScrollState = rememberScrollState(),
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
+
+        TrendMovieSector(
+            pagingItems = trendingMovies,
+            onTabClick = { tabIndex -> onMovieTrendTypeChange(MovieTrendUiType.entries[tabIndex]) }
+        )
+
+        PopularMovieSector(
+            pagingItems = popularMovies,
+            onTabClick = { tabIndex -> onMoviePopularTypeChange(MoviePopularUiType.entries[tabIndex]) }
+        )
+
+        UpcomingMovieSector(
+            pagingItems = upcomingMovies
+        )
     }
 }
 
 @Composable
-fun TrendMovies(
-    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
-    onTabClick: (Int) -> Unit = {},
-) {
-    TrendMovieSector(
-        title = stringResource(id = R.string.movie_trend_title_trend),
-        movies = movies,
-        tabs = MovieTrendType.entries.map { it.toUiString() },
-        onTabClick = onTabClick
-    )
-}
-
-@Composable
-fun PopularContents(
-    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
-    onTabClick: (Int) -> Unit = {},
-) {
-    TrendMovieSector(
-        title = stringResource(id = R.string.movie_trend_title_popular),
-        movies = movies,
-        tabs = MoviePopularType.entries.map { it.toUiString() },
-        onTabClick = onTabClick
-    )
-}
-
-@Composable
-fun UpcomingMovies(
-    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
-) {
-    TrendMovieSector(
-        title = stringResource(id = R.string.movie_trend_title_upcoming),
-        movies = movies
-    )
-}
-
-@Composable
 fun TrendMovieSector(
+    pagingItems: LazyPagingItems<MovieItemUiState>,
+    onTabClick: (Int) -> Unit = {},
+) {
+    MovieSector(
+        title = stringResource(id = R.string.movie_trend_title_trend),
+        pagingItems = pagingItems,
+        tabs = MovieTrendUiType.entries.map { it.toUiString() },
+        onTabClick = onTabClick
+    )
+}
+
+@Composable
+fun PopularMovieSector(
+    pagingItems: LazyPagingItems<MovieItemUiState>,
+    onTabClick: (Int) -> Unit = {},
+) {
+    MovieSector(
+        title = stringResource(id = R.string.movie_trend_title_popular),
+        pagingItems = pagingItems,
+        tabs = MoviePopularUiType.entries.map { it.toUiString() },
+        onTabClick = onTabClick
+    )
+}
+
+@Composable
+fun UpcomingMovieSector(
+    pagingItems: LazyPagingItems<MovieItemUiState>,
+) {
+    MovieSector(
+        title = stringResource(id = R.string.movie_trend_title_upcoming),
+        pagingItems = pagingItems
+    )
+}
+
+@Composable
+fun MovieSector(
     title: String,
-    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
+    pagingItems: LazyPagingItems<MovieItemUiState>,
     modifier: Modifier = Modifier,
     tabs: List<String> = listOf(),
     onTabClick: (Int) -> Unit = {},
@@ -152,8 +192,8 @@ fun TrendMovieSector(
             }
         }
 
-        TrendMovieContents(
-            movies = movies,
+        MovieContents(
+            pagingItems = pagingItems,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(280.dp)
@@ -198,75 +238,91 @@ fun CustomScrollableTabRow(
 }
 
 @Composable
-fun TrendMovieContents(
+fun MovieContents(
+    pagingItems: LazyPagingItems<MovieItemUiState>,
     modifier: Modifier = Modifier,
-    movies: StateFlow<UiState<PagingData<MovieItemUiState>>>,
 ) {
     Box(
         modifier = modifier
     ) {
-        val uiState by movies.collectAsStateWithLifecycle()
+        val isLoading = pagingItems.loadState.refresh is LoadState.Loading
+        val isError = pagingItems.loadState.refresh is LoadState.Error
+        val isEmpty = pagingItems.itemCount == 0
 
-        when (uiState) {
-            is UiState.Loading -> LoadingScreen()
+        when {
+            isLoading -> {
+                LoadingScreen()
+            }
 
-            is UiState.Success -> {
-                TrendMovies(
-                    movieItems = movies.map {
-                        (it as UiState.Success<PagingData<MovieItemUiState>>).data as PagingData<MovieItemUiState>
-                    }
+            isError -> {
+                ErrorScreen(
+                    message = stringResource(id = R.string.api_response_error_message)
                 )
             }
 
-            is UiState.Error -> ErrorScreen(message = stringResource(id = R.string.api_response_error_message))
+            isEmpty -> {
+                ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
+            }
+
+            else -> {
+                MovieItems(
+                    pagingItems = pagingItems
+                )
+            }
         }
     }
 }
 
 @Composable
-fun TrendMovies(
-    movieItems: Flow<PagingData<MovieItemUiState>>,
+fun MovieItems(
+    pagingItems: LazyPagingItems<MovieItemUiState>,
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
 ) {
-    val pagingItems = movieItems.collectAsLazyPagingItems()
-    val listState = rememberLazyListState()
 
-    val isLoading = pagingItems.loadState.refresh is LoadState.Loading
-    val isError = pagingItems.loadState.refresh is LoadState.Error
-    val isEmpty = pagingItems.itemCount == 0
-
-    when {
-        isLoading -> LoadingScreen()
-
-        isError -> ErrorScreen()
-
-        isEmpty -> ErrorScreen(message = stringResource(id = R.string.empty_content_list_message))
-
-        else -> {
-            LazyRow(
-                state = listState,
-                contentPadding = PaddingValues(
-                    horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
-                    vertical = dimensionResource(id = R.dimen.list_margin_vertical)
-                ),
-                modifier = modifier
-                    .fillMaxWidth(),
-            ) {
-                items(
-                    count = pagingItems.itemCount,
-                    key = { index -> index }
-                ) { index ->
-                    pagingItems[index]?.let { movie ->
-                        MovieItem(
-                            movie = movie,
-                            onClick = { },
-                            modifier = Modifier
-                                .width(dimensionResource(id = R.dimen.trend_item_width))
-                        )
-                    }
-                }
+    LazyRow(
+        state = listState,
+        contentPadding = PaddingValues(
+            horizontal = dimensionResource(id = R.dimen.list_margin_horizontal),
+            vertical = dimensionResource(id = R.dimen.list_margin_vertical)
+        ),
+        modifier = modifier
+            .fillMaxWidth(),
+    ) {
+        items(
+            count = pagingItems.itemCount,
+            key = { index -> index }
+        ) { index ->
+            pagingItems[index]?.let { movie ->
+                MovieItem(
+                    movie = movie,
+                    onClick = { },
+                    modifier = Modifier
+                        .width(dimensionResource(id = R.dimen.trend_item_width))
+                )
             }
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun TrendScreenPreview(
+    @PreviewParameter(MovieItemUiStateProvider::class) items: PagingData<MovieItemUiState>,
+) {
+    val pagingItems1 = flowOf(items).collectAsLazyPagingItems()
+    val pagingItems2 = flowOf(items).collectAsLazyPagingItems()
+    val pagingItems3 = flowOf(items).collectAsLazyPagingItems()
+
+    AllAboutMovieTheme {
+        TrendScreen(
+            trendingMovies = pagingItems1,
+            popularMovies = pagingItems2,
+            upcomingMovies = pagingItems3,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+
 

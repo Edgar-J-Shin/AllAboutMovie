@@ -4,40 +4,23 @@ import androidx.annotation.WorkerThread
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.dcs.data.Trend
-import com.dcs.data.di.IoDispatcher
 import com.dcs.data.local.datasource.KeywordLocalDataSource
-import com.dcs.data.model.mapper.toEntity
+import com.dcs.data.model.MovieType
 import com.dcs.data.pagingsource.MoviePagingSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
-import com.dcs.data.remote.model.MoviesResponse
 import com.dcs.domain.model.Keyword
+import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.Movie
+import com.dcs.domain.model.TimeWindow
 import com.dcs.domain.repository.MovieRepository
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val keywordLocalDataSource: KeywordLocalDataSource,
-    @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : MovieRepository {
-
-    @WorkerThread
-    override suspend fun fetchMoviesByTopRated(): Flow<Result<List<Movie>>> = flow {
-        val result = movieRemoteDataSource.fetchMoviesByTopRated().asResult { response ->
-            (response.data as MoviesResponse).results.map { movieResult ->
-                movieResult.toEntity()
-            }
-        }
-
-        emit(result)
-
-    }.flowOn(ioDispatcher)
 
     @WorkerThread
     override fun getMoviesByTopRated(): Flow<PagingData<Movie>> =
@@ -45,31 +28,31 @@ class MovieRepositoryImpl @Inject constructor(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    trend = Trend.TopRated,
+                    movieType = MovieType.TopRated,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
         ).flow
 
     @WorkerThread
-    override fun getMoviesByTrending(timeWindow: String): Flow<PagingData<Movie>> =
+    override fun getMoviesByTrending(timeWindow: TimeWindow): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    trend = Trend.Trending(timeWindow = timeWindow),
+                    movieType = MovieType.Trending(timeWindow = timeWindow),
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
         ).flow
 
     @WorkerThread
-    override fun getMoviesByPopular(mediaType: String): Flow<PagingData<Movie>> =
+    override fun getMoviesByPopular(mediaType: MediaType): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    trend = Trend.Popular(mediaType = mediaType),
+                    movieType = MovieType.Popular(mediaType = mediaType),
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
@@ -80,7 +63,7 @@ class MovieRepositoryImpl @Inject constructor(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    trend = Trend.Upcoming,
+                    movieType = MovieType.Upcoming,
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }
@@ -91,7 +74,7 @@ class MovieRepositoryImpl @Inject constructor(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
                 MoviePagingSource(
-                    trend = Trend.Search(query),
+                    movieType = MovieType.Search(query),
                     movieRemoteDataSource = movieRemoteDataSource
                 )
             }

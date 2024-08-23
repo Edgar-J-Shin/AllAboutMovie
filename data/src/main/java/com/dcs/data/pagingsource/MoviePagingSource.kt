@@ -2,13 +2,13 @@ package com.dcs.data.pagingsource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.dcs.data.Trend
+import com.dcs.data.model.MovieType
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.Movie
 
 class MoviePagingSource(
-    private val trend: Trend,
+    private val movieType: MovieType,
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val language: String = "en-US",
 ) : PagingSource<Int, Movie>() {
@@ -24,28 +24,15 @@ class MoviePagingSource(
         val page = params.key ?: START_PAGE_INDEX
 
         return try {
-            val result = when (trend) {
-                is Trend.Trending -> {
-                    movieRemoteDataSource.getMoviesByTrending(trend.timeWindow, page, language)
+            val (movies, totalPages) = movieRemoteDataSource.getMovies(
+                movieType = movieType,
+                page = page,
+                language = language
+            )
+                .getOrThrow()
+                .let {
+                    it.results to it.totalPages
                 }
-
-                is Trend.Popular -> {
-                    movieRemoteDataSource.getMoviesByPopular(trend.mediaType, page, language)
-                }
-
-                Trend.TopRated -> {
-                    movieRemoteDataSource.getMoviesByTopRated(page, language)
-                }
-
-                Trend.Upcoming -> {
-                    movieRemoteDataSource.getMoviesByUpcoming(page, language)
-                }
-                is Trend.Search -> {
-                    movieRemoteDataSource.getSearchContents(trend.query, page, language)
-                }
-            }
-
-            val (movies, totalPages) = result.getOrThrow().let { it.results to it.totalPages }
 
             LoadResult.Page(
                 data = movies.map { it.toEntity() }.distinct(),

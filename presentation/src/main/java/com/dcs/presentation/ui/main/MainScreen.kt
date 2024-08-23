@@ -96,7 +96,9 @@ private fun MainNavHost(
         }
 
         composable(route = MainTab.Trend.route) {
-            TrendRoute()
+            TrendRoute(
+                showSnackBar = showSnackBar
+            )
         }
 
         composable(route = MainTab.People.route) {

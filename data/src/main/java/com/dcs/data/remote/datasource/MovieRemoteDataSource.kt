@@ -1,21 +1,9 @@
 package com.dcs.data.remote.datasource
 
+import com.dcs.data.model.MovieType
 import com.dcs.data.remote.model.MoviesResponse
-import com.dcs.data.remote.network.NetworkResponse
 
 interface MovieRemoteDataSource {
 
-    suspend fun fetchMoviesByTopRated(): NetworkResponse<MoviesResponse>
-
-    suspend fun getMoviesByTrending(timeWindow: String, page: Int, language: String): Result<MoviesResponse>
-
-    suspend fun getMoviesByNowPlaying(page: Int, language: String): Result<MoviesResponse>
-
-    suspend fun getMoviesByPopular(mediaType: String, page: Int, language: String): Result<MoviesResponse>
-
-    suspend fun getMoviesByTopRated(page: Int, language: String): Result<MoviesResponse>
-
-    suspend fun getMoviesByUpcoming(page: Int, language: String): Result<MoviesResponse>
-
-    suspend fun getSearchContents(query: String, page: Int, language: String): Result<MoviesResponse>
+    suspend fun getMovies(movieType: MovieType, page: Int, language: String): Result<MoviesResponse>
 }
