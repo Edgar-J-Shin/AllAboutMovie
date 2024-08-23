@@ -6,8 +6,9 @@ import com.dcs.domain.model.TimeWindow
 import com.dcs.presentation.core.model.MovieItemUiState
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.model.MovieUiState
 
-fun Movie.toUiState() = MovieItemUiState(
+fun Movie.toUiState() = MovieUiState(
     adult = adult,
     backdropPath = backdropPath,
     genreIds = genreIds,

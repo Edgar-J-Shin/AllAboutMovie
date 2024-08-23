@@ -35,8 +35,8 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.core.model.MovieItemUiState
-import com.dcs.presentation.core.model.MovieItemUiStateProvider
+import com.dcs.presentation.core.model.MovieUiState
+import com.dcs.presentation.core.model.MovieUiStateProvider
 import com.dcs.presentation.core.model.toMovieId
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.ui.Screen
@@ -72,7 +72,7 @@ fun SearchResultRoute(
 
 @Composable
 private fun SearchResultScreen(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     onSearchResultEvent: (SearchResultUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -155,7 +155,7 @@ fun SearchResultTopAppBar(
 
 @Composable
 fun VerticalGridMovie(
-    movieItems: LazyPagingItems<MovieItemUiState>,
+    movieItems: LazyPagingItems<MovieUiState>,
     onItemClick: (MovieId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -178,7 +178,7 @@ fun VerticalGridMovie(
                 MovieItem(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    movie = movie,
+                    movieUiState = movie,
                     onClick = {
                         onItemClick(movie.toMovieId())
                     }
@@ -191,7 +191,7 @@ fun VerticalGridMovie(
 @Preview(showBackground = true)
 @Composable
 fun SearchResultScreenPreview(
-    @PreviewParameter(MovieItemUiStateProvider::class) items: PagingData<MovieItemUiState>,
+    @PreviewParameter(MovieUiStateProvider::class) items: PagingData<MovieUiState>,
 ) {
     AllAboutMovieTheme {
         val pagingItems = flowOf(items).collectAsLazyPagingItems()

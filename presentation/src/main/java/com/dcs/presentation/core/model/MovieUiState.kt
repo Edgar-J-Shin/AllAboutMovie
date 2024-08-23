@@ -6,9 +6,11 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import com.dcs.domain.model.MovieId
+import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.core.extensions.ImageType
 
 @Stable
-data class MovieItemUiState(
+data class MovieUiState(
     val adult: Boolean,
     val backdropPath: String,
     val genreIds: List<Int>,
@@ -30,11 +32,21 @@ data class MovieItemUiState(
     val firstAirDate: String,
 )
 
-fun MovieItemUiState.toMovieId() = MovieId(this.id)
+fun MovieUiState.getPosterPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$posterPath"
 
-class MovieItemUiStateProvider : PreviewParameterProvider<PagingData<MovieItemUiState>> {
+fun MovieUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$backdropPath"
 
-    override val values: Sequence<PagingData<MovieItemUiState>>
+fun MovieUiState.toMovieId() = MovieId(id)
+
+fun MovieUiState.getVotePercentage() = (voteAverage * 10).toInt()
+
+fun MovieUiState.getTitleOrName() = title.ifEmpty { name }
+
+fun MovieUiState.getReleaseDateOrFirstAirDate() = releaseDate.ifEmpty { firstAirDate }
+
+class MovieUiStateProvider : PreviewParameterProvider<PagingData<MovieUiState>> {
+
+    override val values: Sequence<PagingData<MovieUiState>>
         /**
          * 1. Loading
          * 2. Error
@@ -68,7 +80,7 @@ class MovieItemUiStateProvider : PreviewParameterProvider<PagingData<MovieItemUi
             ),
             PagingData.from(
                 data = (0 until 10).map {
-                    MovieItemUiState(
+                    MovieUiState(
                         adult = false,
                         backdropPath = "https://image.tmdb.org/t/p/w500/jZXvRmQTAFmNaHSyN8DQqS5IIaM.jpg",
                         genreIds = listOf(27),

@@ -23,15 +23,18 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
-import com.dcs.presentation.core.extensions.toImageUrl
-import com.dcs.presentation.core.model.MovieItemUiState
+import com.dcs.presentation.core.model.MovieUiState
+import com.dcs.presentation.core.model.getPosterPathUrl
+import com.dcs.presentation.core.model.getReleaseDateOrFirstAirDate
+import com.dcs.presentation.core.model.getTitleOrName
+import com.dcs.presentation.core.model.getVotePercentage
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MovieItem(
     modifier: Modifier = Modifier,
-    movie: MovieItemUiState,
-    onClick: () -> Unit = {}
+    movieUiState: MovieUiState,
+    onClick: () -> Unit = {},
 ) {
     Column(modifier = modifier
         .fillMaxWidth()
@@ -44,7 +47,7 @@ fun MovieItem(
                 .aspectRatio(0.75f)
         ) {
             GlideImage(
-                model = movie.posterPath.toImageUrl(),
+                model = movieUiState.getPosterPathUrl(),
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxSize()
@@ -58,7 +61,7 @@ fun MovieItem(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 10.dp),
-                percentage = (movie.voteAverage * 10).toInt(),
+                percentage = movieUiState.getVotePercentage(),
                 viewSize = 40.dp
             )
         }
@@ -67,7 +70,7 @@ fun MovieItem(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            text = movie.title.ifEmpty { movie.name },
+            text = movieUiState.getTitleOrName(),
             textAlign = TextAlign.Left,
             maxLines = 1,
             fontSize = 12.sp,
@@ -80,7 +83,7 @@ fun MovieItem(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            text = movie.releaseDate.ifEmpty { movie.firstAirDate },
+            text = movieUiState.getReleaseDateOrFirstAirDate(),
             textAlign = TextAlign.Left,
             maxLines = 1,
             fontSize = 12.sp,
