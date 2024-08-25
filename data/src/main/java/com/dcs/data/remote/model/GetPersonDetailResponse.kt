@@ -108,16 +108,24 @@ data class RemoteCrew(
     val creditId: String,
     @SerialName("department")
     val department: String,
+    @SerialName("episode_count")
+    val episodeCount: Int = 0,
+    @SerialName("first_air_date")
+    val firstAirDate: String = "",
     @SerialName("genre_ids")
     val genreIds: List<Int>,
     @SerialName("job")
     val job: String,
     @SerialName("media_type")
     val mediaType: String,
+    @SerialName("origin_country")
+    val originCountry: List<String> = emptyList(),
     @SerialName("original_language")
     val originalLanguage: String,
     @SerialName("original_title")
-    val originalTitle: String,
+    val originalTitle: String = "",
+    @SerialName("original_name")
+    val originalName: String = "",
     @SerialName("overview")
     val overview: String,
     @SerialName("popularity")
@@ -125,11 +133,11 @@ data class RemoteCrew(
     @SerialName("poster_path")
     val posterPath: String = "",
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String = "",
     @SerialName("title")
-    val title: String,
+    val title: String = "",
     @SerialName("video")
-    val video: Boolean,
+    val video: Boolean = false,
     @SerialName("vote_average")
     val voteAverage: Double,
     @SerialName("vote_count")

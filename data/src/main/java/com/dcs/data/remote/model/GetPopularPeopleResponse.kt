@@ -34,7 +34,7 @@ data class RemotePerson(
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("profile_path")
-    val profilePath: String,
+    val profilePath: String = "",
 )
 
 @Serializable
