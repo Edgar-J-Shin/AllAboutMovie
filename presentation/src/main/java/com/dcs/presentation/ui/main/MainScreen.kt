@@ -97,6 +97,7 @@ private fun MainNavHost(
 
         composable(route = MainTab.Trend.route) {
             TrendRoute(
+                navController = appNavHostController,
                 showSnackBar = showSnackBar
             )
         }
