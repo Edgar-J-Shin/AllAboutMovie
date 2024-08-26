@@ -1,6 +1,14 @@
 package com.dcs.presentation.ui.persondetail
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.KnownForUiState
+import java.time.LocalDate
 
 data class PersonDetailUiState(
     val id: Long,
@@ -68,3 +76,48 @@ data class CrewUiState(
     val voteAverage: Double,
     val voteCount: Int,
 )
+
+val PersonDetailUiState.profileUrl: String
+    @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
+
+val CastUiState.actingTitle: String
+    @Composable get() = releaseDate.ifBlank { firstAirDate }
+        .let { date ->
+            if (date.isBlank()) {
+                ""
+            } else {
+                LocalDate.parse(date).year.toString() + " "
+            }
+        } + name.ifBlank { title }
+
+val CastUiState.characterTitle: AnnotatedString
+    @Composable get() = buildAnnotatedString {
+        withStyle(
+            SpanStyle(
+                fontWeight = FontWeight.Light
+            )
+        ) {
+            append("As ")
+        }
+        append(character)
+    }
+
+val CrewUiState.productionTitle: String
+    @Composable get() = if (releaseDate.isBlank()) {
+        title.ifBlank { originalTitle }
+    } else {
+        LocalDate.parse(releaseDate).year.toString() +
+                " " + title.ifBlank { originalTitle }
+    }
+
+val CrewUiState.jobTitle: AnnotatedString
+    @Composable get() = buildAnnotatedString {
+        withStyle(
+            SpanStyle(
+                fontWeight = FontWeight.Light
+            )
+        ) {
+            append("As ")
+        }
+        append(job)
+    }

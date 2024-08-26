@@ -53,6 +53,10 @@ fun List<KnownForUiState>.toTitle(): String {
     }
 }
 
+val KnownForUiState.posterUrl: String
+    @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$posterPath"
+
+
 @Composable
 fun PersonUiState.toProfileUrl(): String {
     return "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
