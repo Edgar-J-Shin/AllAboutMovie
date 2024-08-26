@@ -58,9 +58,8 @@ val GenderUiState.originalName: String
         GenderUiState.NON_BINARY -> R.string.gender_non_binary
     }.let { stringResource(id = it) }
 
-@Composable
-fun List<KnownForUiState>.toTitle(): String {
-    return if (isEmpty()) {
+val List<KnownForUiState>.title: String
+    @Composable get() = if (isEmpty()) {
         ""
     } else {
         this
@@ -68,16 +67,12 @@ fun List<KnownForUiState>.toTitle(): String {
             .take(3)
             .joinToString { it.title.ifBlank { it.originalTitle } }
     }
-}
 
 val KnownForUiState.posterUrl: String
     @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$posterPath"
 
-
-@Composable
-fun PersonUiState.toProfileUrl(): String {
-    return "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
-}
+val PersonUiState.profileUrl: String
+    @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
 
 class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>> {
     override val values: Sequence<PagingData<PersonUiState>>

@@ -40,8 +40,8 @@ import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.PersonUiStateProvider
-import com.dcs.presentation.core.model.toProfileUrl
-import com.dcs.presentation.core.model.toTitle
+import com.dcs.presentation.core.model.profileUrl
+import com.dcs.presentation.core.model.title
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
 import kotlinx.coroutines.flow.flowOf
@@ -158,12 +158,12 @@ private fun PersonCard(
             .clickable(onClick = onClick),
     ) {
         GlideImage(
-            model = state.toProfileUrl(),
-            contentDescription = "profile image",
+            model = state.profileUrl,
+            contentDescription = stringResource(id = R.string.content_description_profile),
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
         )
-        val knownForTitle = state.knownFor.toTitle()
+        val knownForTitle = state.knownFor.title
         if (knownForTitle.isNotEmpty()) {
             Text(
                 text = knownForTitle,
