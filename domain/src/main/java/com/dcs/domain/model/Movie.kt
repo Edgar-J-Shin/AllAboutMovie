@@ -19,5 +19,5 @@ data class Movie(
     val name: String,
     val originalName: String,
     val firstAirDate: String,
-    val originalCountry: List<String>
+    val originalCountry: List<String>,
 )

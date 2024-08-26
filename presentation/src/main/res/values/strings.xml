@@ -21,6 +21,11 @@
 
     # SearchResult
     <string name="route_search_result_name">Search Result</string>
+    <string name="route_movie_detail_name">Movie Detail</string>
+
+    # Movie Detail
+    <string name="movie_image_content_description">Movie Image</string>
+    <string name="movie_detail_overview_title">Overview</string>
 
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>

@@ -2,20 +2,23 @@ package com.dcs.presentation.ui.moviedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.MovieId
 import com.dcs.domain.usecase.GetMovieByIdUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
+import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.state.asUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,15 +42,14 @@ class MovieDetailViewModel @Inject constructor(
                 }
         }
         .asUiState()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = UiState.Loading,
+        )
 
     private val _effect = MutableSharedFlow<MovieDetailEffect>()
     val effect = _effect.asSharedFlow()
-
-    init {
-        launch {
-            movie.collect()
-        }
-    }
 
     private fun navigateBack() {
         launch {

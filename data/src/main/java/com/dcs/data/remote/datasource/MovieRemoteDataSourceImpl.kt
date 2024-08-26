@@ -1,8 +1,8 @@
 package com.dcs.data.remote.datasource
 
 import com.dcs.data.model.MovieType
-import com.dcs.data.remote.model.MoviesResponse
-import com.dcs.data.remote.model.RemoteMovie
+import com.dcs.data.remote.model.GetMovieDetailResponse
+import com.dcs.data.remote.model.GetMoviesResponse
 import com.dcs.data.remote.network.NetworkResponse
 import com.dcs.data.remote.service.MovieService
 import com.dcs.domain.model.MediaType
@@ -18,7 +18,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         movieType: MovieType,
         page: Int,
         language: String,
-    ): Result<MoviesResponse> {
+    ): Result<GetMoviesResponse> {
         return when (movieType) {
             is MovieType.Trending -> {
                 getMoviesByTrending(movieType.timeWindow, page, language)
@@ -40,7 +40,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
                 getSearchContents(movieType.query, page, language)
             }
         }.asResult {
-            it.data as MoviesResponse
+            it.data as GetMoviesResponse
         }
     }
 
@@ -48,7 +48,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         timeWindow: TimeWindow,
         page: Int,
         language: String,
-    ): NetworkResponse<MoviesResponse> =
+    ): NetworkResponse<GetMoviesResponse> =
         movieService.fetchMoviesByTrending(
             timeWindow = timeWindow.value,
             page = page,
@@ -59,7 +59,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         mediaType: MediaType,
         page: Int,
         language: String,
-    ): NetworkResponse<MoviesResponse> =
+    ): NetworkResponse<GetMoviesResponse> =
         movieService.fetchMoviesByPopular(
             mediaType = mediaType.value,
             page = page,
@@ -69,7 +69,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     private suspend fun getMoviesByTopRated(
         page: Int,
         language: String,
-    ): NetworkResponse<MoviesResponse> =
+    ): NetworkResponse<GetMoviesResponse> =
         movieService.fetchMoviesByTopRated(
             page = page,
             language = language
@@ -78,7 +78,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     private suspend fun getMoviesByNowPlaying(
         page: Int,
         language: String,
-    ): NetworkResponse<MoviesResponse> =
+    ): NetworkResponse<GetMoviesResponse> =
         movieService.fetchMoviesByNowPlaying(
             page = page,
             language = language
@@ -87,7 +87,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     private suspend fun getMoviesByUpcoming(
         page: Int,
         language: String,
-    ): NetworkResponse<MoviesResponse> =
+    ): NetworkResponse<GetMoviesResponse> =
         movieService.fetchMoviesByUpcoming(
             page = page,
             language = language
@@ -97,21 +97,23 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         query: String,
         page: Int,
         language: String,
-    ): NetworkResponse<MoviesResponse> =
+    ): NetworkResponse<GetMoviesResponse> =
         movieService.fetchSearchMovieByQuery(
             query = query,
             page = page,
             language = language
         )
 
-    override suspend fun getMovieById(
+    override suspend fun getMovieDetailById(
         movieId: MovieId,
+        appendToResponse: String,
         language: String,
-    ): Result<RemoteMovie> =
-        movieService.fetchMovieDetails(
+    ): Result<GetMovieDetailResponse> =
+        movieService.fetchMovieDetailById(
             movieId = movieId.value,
+            appendToResponse = appendToResponse,
             language = language
         ).asResult {
-            it.data as RemoteMovie
+            it.data as GetMovieDetailResponse
         }
 }

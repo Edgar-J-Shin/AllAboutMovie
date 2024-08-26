@@ -1,8 +1,8 @@
 package com.dcs.data.remote.datasource
 
 import com.dcs.data.model.MovieType
-import com.dcs.data.remote.model.MoviesResponse
-import com.dcs.data.remote.model.RemoteMovie
+import com.dcs.data.remote.model.GetMovieDetailResponse
+import com.dcs.data.remote.model.GetMoviesResponse
 import com.dcs.domain.model.MovieId
 
 interface MovieRemoteDataSource {
@@ -11,10 +11,11 @@ interface MovieRemoteDataSource {
         movieType: MovieType,
         page: Int,
         language: String,
-    ): Result<MoviesResponse>
+    ): Result<GetMoviesResponse>
 
-    suspend fun getMovieById(
+    suspend fun getMovieDetailById(
         movieId: MovieId,
-        language: String = "en-US",
-    ): Result<RemoteMovie>
+        appendToResponse: String,
+        language: String,
+    ): Result<GetMovieDetailResponse>
 }

@@ -3,6 +3,7 @@ package com.dcs.domain.repository
 import androidx.paging.PagingData
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.Movie
+import com.dcs.domain.model.MovieDetail
 import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.TimeWindow
 import kotlinx.coroutines.flow.Flow
@@ -19,5 +20,5 @@ interface MovieRepository {
 
     fun getSearchContents(query: String): Flow<PagingData<Movie>>
 
-    fun getMovieById(movieId: MovieId): Flow<Movie>
+    fun getMovieById(movieId: MovieId): Flow<MovieDetail>
 }

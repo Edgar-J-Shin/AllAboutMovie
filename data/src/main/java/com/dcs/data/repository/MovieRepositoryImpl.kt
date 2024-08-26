@@ -13,6 +13,7 @@ import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.Keyword
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.Movie
+import com.dcs.domain.model.MovieDetail
 import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.TimeWindow
 import com.dcs.domain.repository.MovieRepository
@@ -93,10 +94,12 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun getMovieById(
         movieId: MovieId,
-    ): Flow<Movie> = flow {
+    ): Flow<MovieDetail> = flow {
         val result = movieRemoteDataSource
-            .getMovieById(
-                movieId = movieId
+            .getMovieDetailById(
+                movieId = movieId,
+                appendToResponse = "credits",
+                language = "en-US"
             )
             .getOrThrow()
             .toEntity()
