@@ -4,8 +4,10 @@ import androidx.annotation.WorkerThread
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.dcs.data.di.IoDispatcher
 import com.dcs.data.local.datasource.KeywordLocalDataSource
 import com.dcs.data.model.MovieType
+import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.pagingsource.MoviePagingSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.Keyword
@@ -14,13 +16,17 @@ import com.dcs.domain.model.Movie
 import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.TimeWindow
 import com.dcs.domain.repository.MovieRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val keywordLocalDataSource: KeywordLocalDataSource,
+    @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : MovieRepository {
 
     @WorkerThread

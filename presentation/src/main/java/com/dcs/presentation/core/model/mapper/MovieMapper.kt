@@ -3,10 +3,9 @@ package com.dcs.presentation.core.model.mapper
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.Movie
 import com.dcs.domain.model.TimeWindow
-import com.dcs.presentation.core.model.MovieItemUiState
+import com.dcs.presentation.core.model.MovieUiState
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
-import com.dcs.presentation.core.model.MovieUiState
 
 fun Movie.toUiState() = MovieUiState(
     adult = adult,

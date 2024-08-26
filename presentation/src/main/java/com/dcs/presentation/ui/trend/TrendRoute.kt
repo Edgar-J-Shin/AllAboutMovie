@@ -44,8 +44,8 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.core.model.MovieItemUiState
-import com.dcs.presentation.core.model.MovieItemUiStateProvider
+import com.dcs.presentation.core.model.MovieUiState
+import com.dcs.presentation.core.model.MovieUiStateProvider
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
@@ -94,9 +94,9 @@ fun TrendRoute(
 
 @Composable
 fun TrendScreen(
-    trendingMovies: LazyPagingItems<MovieItemUiState>,
-    popularMovies: LazyPagingItems<MovieItemUiState>,
-    upcomingMovies: LazyPagingItems<MovieItemUiState>,
+    trendingMovies: LazyPagingItems<MovieUiState>,
+    popularMovies: LazyPagingItems<MovieUiState>,
+    upcomingMovies: LazyPagingItems<MovieUiState>,
     modifier: Modifier = Modifier,
     onMovieTrendTypeChange: (MovieTrendUiType) -> Unit = {},
     onMoviePopularTypeChange: (MoviePopularUiType) -> Unit = {},
@@ -126,7 +126,7 @@ fun TrendScreen(
 
 @Composable
 fun TrendMovieSector(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     onTabClick: (Int) -> Unit = {},
 ) {
     MovieSector(
@@ -139,7 +139,7 @@ fun TrendMovieSector(
 
 @Composable
 fun PopularMovieSector(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     onTabClick: (Int) -> Unit = {},
 ) {
     MovieSector(
@@ -152,7 +152,7 @@ fun PopularMovieSector(
 
 @Composable
 fun UpcomingMovieSector(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
 ) {
     MovieSector(
         title = stringResource(id = R.string.movie_trend_title_upcoming),
@@ -163,7 +163,7 @@ fun UpcomingMovieSector(
 @Composable
 fun MovieSector(
     title: String,
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     modifier: Modifier = Modifier,
     tabs: List<String> = listOf(),
     onTabClick: (Int) -> Unit = {},
@@ -239,7 +239,7 @@ fun CustomScrollableTabRow(
 
 @Composable
 fun MovieContents(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -275,7 +275,7 @@ fun MovieContents(
 
 @Composable
 fun MovieItems(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
@@ -295,7 +295,7 @@ fun MovieItems(
         ) { index ->
             pagingItems[index]?.let { movie ->
                 MovieItem(
-                    movie = movie,
+                    movieUiState = movie,
                     onClick = { },
                     modifier = Modifier
                         .width(dimensionResource(id = R.dimen.trend_item_width))
@@ -308,7 +308,7 @@ fun MovieItems(
 @Preview(showBackground = true)
 @Composable
 fun TrendScreenPreview(
-    @PreviewParameter(MovieItemUiStateProvider::class) items: PagingData<MovieItemUiState>,
+    @PreviewParameter(MovieUiStateProvider::class) items: PagingData<MovieUiState>,
 ) {
     val pagingItems1 = flowOf(items).collectAsLazyPagingItems()
     val pagingItems2 = flowOf(items).collectAsLazyPagingItems()

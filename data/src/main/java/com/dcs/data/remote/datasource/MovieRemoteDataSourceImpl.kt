@@ -5,8 +5,8 @@ import com.dcs.data.remote.model.MoviesResponse
 import com.dcs.data.remote.model.RemoteMovie
 import com.dcs.data.remote.network.NetworkResponse
 import com.dcs.data.remote.service.MovieService
-import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.MediaType
+import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.TimeWindow
 import javax.inject.Inject
 
@@ -98,7 +98,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         page: Int,
         language: String,
     ): NetworkResponse<MoviesResponse> =
-        movieService.fetchSearchMultiByQuery(
+        movieService.fetchSearchMovieByQuery(
             query = query,
             page = page,
             language = language
