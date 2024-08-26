@@ -92,33 +92,45 @@ val CastUiState.actingTitle: String
         } + name.ifBlank { title }
 
 val CastUiState.characterTitle: AnnotatedString
-    @Composable get() = buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                fontWeight = FontWeight.Light
-            )
-        ) {
-            append("As ")
-        }
-        append(character)
-    }
+    @Composable get() =
+        character
+            .takeIf { it.isNotBlank() }
+            ?.let {
+                buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            fontWeight = FontWeight.Light
+                        )
+                    ) {
+                        append("As ")
+                    }
+                    append(character)
+                }
+            } ?: AnnotatedString("")
 
 val CrewUiState.productionTitle: String
-    @Composable get() = if (releaseDate.isBlank()) {
-        title.ifBlank { originalTitle }
-    } else {
-        LocalDate.parse(releaseDate).year.toString() +
-                " " + title.ifBlank { originalTitle }
-    }
+    @Composable get() =
+        releaseDate.takeIf { it.isNotBlank() }
+            ?.let {
+                LocalDate.parse(releaseDate).year.toString() +
+                        " " + title.ifBlank { originalTitle }
+            } ?: title.ifBlank { originalTitle }
+
 
 val CrewUiState.jobTitle: AnnotatedString
-    @Composable get() = buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                fontWeight = FontWeight.Light
-            )
-        ) {
-            append("As ")
-        }
-        append(job)
-    }
+    @Composable get() =
+        job
+            .takeIf { it.isNotBlank() }
+            ?.let {
+                buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            fontWeight = FontWeight.Light
+                        )
+                    ) {
+                        append("As ")
+                    }
+                    append(job)
+                }
+            } ?: AnnotatedString("")
+
