@@ -1,7 +1,9 @@
 package com.dcs.data.model.mapper
 
+import com.dcs.data.remote.model.RemoteGender
 import com.dcs.data.remote.model.RemoteKnownFor
 import com.dcs.data.remote.model.RemotePerson
+import com.dcs.domain.model.Gender
 import com.dcs.domain.model.KnownFor
 import com.dcs.domain.model.Person
 
@@ -10,7 +12,7 @@ fun RemotePerson.toEntity() = Person(
     name = name,
     originalName = originalName,
     adult = adult,
-    gender = gender,
+    gender = gender.toEntity(),
     knownFor = knownFor.map { it.toEntity() },
     knownForDepartment = knownForDepartment,
     popularity = popularity,
@@ -38,3 +40,10 @@ fun RemoteKnownFor.toEntity() = KnownFor(
     voteAverage = voteAverage,
     voteCount = voteCount,
 )
+
+fun RemoteGender.toEntity() = when (this) {
+    RemoteGender.NOT_SPECIFIED -> Gender.NOT_SPECIFIED
+    RemoteGender.FEMALE -> Gender.FEMALE
+    RemoteGender.MALE -> Gender.MALE
+    RemoteGender.NON_BINARY -> Gender.NON_BINARY
+}

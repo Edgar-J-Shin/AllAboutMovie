@@ -1,5 +1,6 @@
 package com.dcs.data.remote.model
 
+import com.dcs.data.remote.network.serializer.GenderSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -22,7 +23,8 @@ data class RemotePerson(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")
-    val gender: Int,
+    @Serializable(with = GenderSerializer::class)
+    val gender: RemoteGender,
     @SerialName("known_for")
     val knownFor: List<RemoteKnownFor>,
     @SerialName("known_for_department")

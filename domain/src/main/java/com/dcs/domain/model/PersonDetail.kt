@@ -7,7 +7,7 @@ data class PersonDetail(
     val biography: String,
     val birthday: String,
     val deathday: String,
-    val gender: Int,
+    val gender: Gender,
     val homepage: String,
     val imdbId: String,
     val knownForDepartment: String,

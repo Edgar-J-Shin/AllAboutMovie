@@ -12,13 +12,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
+import com.dcs.presentation.core.model.GenderUiState
+import com.dcs.presentation.core.model.originalName
 
 @Composable
 internal fun PersonalInfo(
     knownForDepartment: String,
     birthday: String,
     placeOfBirth: String,
-    gender: Int,
+    gender: GenderUiState,
     credits: Int,
     modifier: Modifier = Modifier,
 ) {
@@ -92,7 +94,7 @@ private fun KnownCredits(
 
 @Composable
 private fun Gender(
-    gender: Int,
+    gender: GenderUiState,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -102,12 +104,7 @@ private fun Gender(
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = when (gender) {
-                1 -> "Male"
-                2 -> "Female"
-                3 -> "Non-Binary"
-                else -> "Not Specified"
-            },
+            text = gender.originalName,
             style = MaterialTheme.typography.labelMedium
         )
     }

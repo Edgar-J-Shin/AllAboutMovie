@@ -1,18 +1,20 @@
 package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.R
 
 data class PersonUiState(
     val id: Long,
     val name: String,
     val originalName: String,
     val adult: Boolean,
-    val gender: Int,
+    val gender: GenderUiState,
     val knownFor: List<KnownForUiState>,
     val knownForDepartment: String,
     val popularity: Double,
@@ -40,6 +42,21 @@ data class KnownForUiState(
     val voteAverage: Double,
     val voteCount: Int,
 )
+
+enum class GenderUiState {
+    NOT_SPECIFIED,
+    FEMALE,
+    MALE,
+    NON_BINARY,
+}
+
+val GenderUiState.originalName: String
+    @Composable get() = when (this) {
+        GenderUiState.NOT_SPECIFIED -> R.string.gender_not_specified
+        GenderUiState.FEMALE -> R.string.gender_female
+        GenderUiState.MALE -> R.string.gender_male
+        GenderUiState.NON_BINARY -> R.string.gender_non_binary
+    }.let { stringResource(id = it) }
 
 @Composable
 fun List<KnownForUiState>.toTitle(): String {
@@ -88,7 +105,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
                         name = "Person $it",
                         originalName = "Original Person $it",
                         adult = false,
-                        gender = 1,
+                        gender = GenderUiState.MALE,
                         popularity = 1.0,
                         profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
                         knownFor = emptyList(),
@@ -108,7 +125,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
                         name = "Person $it",
                         originalName = "Original Person $it",
                         adult = false,
-                        gender = 1,
+                        gender = GenderUiState.FEMALE,
                         popularity = 1.0,
                         profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
                         knownFor = (0 until 5).map { idx ->

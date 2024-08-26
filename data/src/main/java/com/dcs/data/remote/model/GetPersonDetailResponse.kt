@@ -1,5 +1,6 @@
 package com.dcs.data.remote.model
 
+import com.dcs.data.remote.network.serializer.GenderSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,7 +22,8 @@ data class GetPersonDetailResponse(
     @SerialName("deathday")
     val deathday: String = "",
     @SerialName("gender")
-    val gender: Int,
+    @Serializable(with = GenderSerializer::class)
+    val gender: RemoteGender,
     @SerialName("homepage")
     val homepage: String = "",
     @SerialName("imdb_id")

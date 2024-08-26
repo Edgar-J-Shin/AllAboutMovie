@@ -7,6 +7,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.core.model.GenderUiState
 import com.dcs.presentation.core.model.KnownForUiState
 import java.time.LocalDate
 
@@ -17,7 +18,7 @@ data class PersonDetailUiState(
     val biography: String,
     val birthday: String,
     val deathday: String,
-    val gender: Int,
+    val gender: GenderUiState,
     val homepage: String,
     val imdbId: String,
     val knownForDepartment: String,

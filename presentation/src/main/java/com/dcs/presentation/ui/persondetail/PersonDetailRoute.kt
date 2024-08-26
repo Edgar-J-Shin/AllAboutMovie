@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingDialog
+import com.dcs.presentation.core.model.GenderUiState
 import com.dcs.presentation.core.model.KnownForUiState
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
@@ -111,7 +112,7 @@ private fun PersonDetailScreenPreview() {
             biography = "biography",
             birthday = "2021-01-01",
             deathday = "",
-            gender = 1,
+            gender = GenderUiState.MALE,
             homepage = "https://google.com",
             imdbId = 123456.toString(),
             knownForDepartment = "Acting",

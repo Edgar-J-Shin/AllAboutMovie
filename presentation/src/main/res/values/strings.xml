@@ -58,5 +58,9 @@
     <string name="title_gender">Gender</string>
     <string name="title_credits">Credits</string>
     <string name="title_known_for_department">Known For</string>
+    <string name="gender_not_specified">Not Specified</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_non_binary">Non Binary</string>
 
 </resources>
