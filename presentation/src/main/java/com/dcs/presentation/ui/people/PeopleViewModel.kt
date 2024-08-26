@@ -38,12 +38,12 @@ class PeopleViewModel @Inject constructor(
     fun dispatchEvent(event: PeopleUiEvent) {
         when (event) {
             is PeopleUiEvent.NavigateToDetail -> {
-                saveAndNavigateToDetail(event.state)
+                navigateToDetail(event.state)
             }
         }
     }
 
-    private fun saveAndNavigateToDetail(state: PersonUiState) {
+    private fun navigateToDetail(state: PersonUiState) {
         launch {
             _effect.emit(PeopleEffect.NavigateToDetail(state.id))
         }
