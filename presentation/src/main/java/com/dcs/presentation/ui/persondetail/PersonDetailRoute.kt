@@ -22,8 +22,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingDialog
+import com.dcs.presentation.core.model.CastUiState
+import com.dcs.presentation.core.model.CrewUiState
 import com.dcs.presentation.core.model.GenderUiState
 import com.dcs.presentation.core.model.KnownForUiState
+import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.state.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 

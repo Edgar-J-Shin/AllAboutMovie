@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
+import com.dcs.presentation.core.model.PersonDetailUiState
+import com.dcs.presentation.core.model.profileUrl
 import com.dcs.presentation.ui.persondetail.component.Biography
 import com.dcs.presentation.ui.persondetail.component.KnownFor
 import com.dcs.presentation.ui.persondetail.component.PersonalInfo

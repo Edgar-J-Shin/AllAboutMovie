@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.persondetail
+package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
@@ -7,8 +7,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.dcs.presentation.BuildConfig
-import com.dcs.presentation.core.model.GenderUiState
-import com.dcs.presentation.core.model.KnownForUiState
 import java.time.LocalDate
 
 data class PersonDetailUiState(

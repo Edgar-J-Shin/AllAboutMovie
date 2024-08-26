@@ -3,9 +3,9 @@ package com.dcs.presentation.core.model.mapper
 import com.dcs.domain.model.Cast
 import com.dcs.domain.model.Crew
 import com.dcs.domain.model.PersonDetail
-import com.dcs.presentation.ui.persondetail.CastUiState
-import com.dcs.presentation.ui.persondetail.CrewUiState
-import com.dcs.presentation.ui.persondetail.PersonDetailUiState
+import com.dcs.presentation.core.model.CastUiState
+import com.dcs.presentation.core.model.CrewUiState
+import com.dcs.presentation.core.model.PersonDetailUiState
 
 fun PersonDetail.toUiState() = PersonDetailUiState(
     id = id,

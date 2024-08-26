@@ -16,12 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
-import com.dcs.presentation.ui.persondetail.CastUiState
-import com.dcs.presentation.ui.persondetail.CrewUiState
-import com.dcs.presentation.ui.persondetail.actingTitle
-import com.dcs.presentation.ui.persondetail.characterTitle
-import com.dcs.presentation.ui.persondetail.jobTitle
-import com.dcs.presentation.ui.persondetail.productionTitle
+import com.dcs.presentation.core.model.CastUiState
+import com.dcs.presentation.core.model.CrewUiState
+import com.dcs.presentation.core.model.actingTitle
+import com.dcs.presentation.core.model.characterTitle
+import com.dcs.presentation.core.model.jobTitle
+import com.dcs.presentation.core.model.productionTitle
 import com.dcs.presentation.ui.persondetail.spacer
 
 internal fun LazyListScope.credits(
