@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
@@ -51,6 +52,7 @@ internal fun KnownFor(
                 key = { it.id }
             ) {
                 Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.width(100.dp)
                 ) {
                     GlideImage(
@@ -65,6 +67,7 @@ internal fun KnownFor(
                     Text(
                         text = it.title.ifBlank { it.name },
                         style = MaterialTheme.typography.bodySmall,
+                        fontSize = 13.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
