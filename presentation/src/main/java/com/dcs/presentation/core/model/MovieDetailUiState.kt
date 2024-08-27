@@ -1,9 +1,11 @@
 package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.domain.model.MovieId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.extensions.ImageType
+import com.dcs.presentation.core.state.UiState
 import java.time.LocalDate
 
 @Stable
@@ -126,3 +128,109 @@ fun MovieDetailUiState.getCrew() = credits.crew
     .take(4)
 
 fun CastUiState.getProfilePathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$profilePath"
+
+
+class MovieDetailUiStateProvider : PreviewParameterProvider<UiState<MovieDetailUiState>> {
+
+    private val movieDetailUiState = MovieDetailUiState(
+        adult = false,
+        backdropPath = "https://image.tmdb.org/t/p/w500/jZXvRmQTAFmNaHSyN8DQqS5IIaM.jpg",
+        belongsToCollection = BelongsToCollectionUiState(
+            backdropPath = "",
+            posterPath = "",
+            id = 0,
+            name = ""
+        ),
+        budget = 1000,
+        credits = CreditsUiState(
+            cast = emptyList(),
+            crew = emptyList()
+        ),
+        genres = emptyList(),
+        homepage = "",
+        id = 123,
+        imdbId = "456",
+        originCountry = emptyList(),
+        originalLanguage = "en",
+        originalTitle = "The Accursed",
+        overview = "Hana spends twenty years suppressing a maleficent curse that was placed upon her bloodline, only to have a family member knowingly release it forcing her to kill or to be killed.",
+        popularity = 36.204,
+        posterPath = "https://image.tmdb.org/t/p/w500/jZXvRmQTAFmNaHSyN8DQqS5IIaM.jpg",
+        productionCompanies = emptyList(),
+        productionCountries = emptyList(),
+        releaseDate = "2021-11-12",
+        revenue = 0,
+        runtime = 169,
+        spokenLanguages = listOf(
+            SpokenLanguageUiState(
+                name = "english",
+                iso6391 = "",
+                englishName = ""
+            )
+        ),
+        status = "status",
+        tagline = "tagline",
+        title = "The Accursed",
+        video = false,
+        voteAverage = 6.072,
+        voteCount = 97,
+    )
+
+    private val crew = CrewUiState(
+        adult = false,
+        gender = 1,
+        id = 1683343,
+        knownForDepartment = "Acting",
+        name = "Cailee Spaeny",
+        originalName = "Cailee Spaeny",
+        popularity = 90.073,
+        profilePath = "/nquUc6o2dK4Pg4zjvl2HmZOfiRS.jpg",
+        creditId = "4",
+        department = "Directing",
+        job = "Director",
+    )
+
+    private val cast = CastUiState(
+        adult = false,
+        gender = 1,
+        id = 1683343,
+        knownForDepartment = "Acting",
+        name = "Cailee Spaeny",
+        originalName = "Cailee Spaeny",
+        popularity = 90.073,
+        profilePath = "/nquUc6o2dK4Pg4zjvl2HmZOfiRS.jpg",
+        castId = 4,
+        character = "Rain",
+        creditId = "63904e44bc8abc13d787a6aa",
+        order = 0
+    )
+
+    override val values: Sequence<UiState<MovieDetailUiState>>
+        /**
+         * 1. Loading
+         * 2. Error
+         * 3. Success
+         * 4. Success with crew, cast
+         */
+        get() = sequenceOf(
+            UiState.Loading,
+            UiState.Error(Exception()),
+            UiState.Success(movieDetailUiState),
+            UiState.Success(
+                movieDetailUiState.copy(
+                    credits = CreditsUiState(
+                        crew = listOf(
+                            crew,
+                            crew.copy(name = "Cailee Spaeny", job = "Screenplay"),
+                            crew.copy(name = "Fede Álvarez", job = "Writer"),
+                            crew.copy(name = "Ronald Shusett", job = "Characters"),
+                            crew.copy(name = "Rodo Sayagues", job = "Writer")
+                        ),
+                        cast = listOf(
+                            cast, cast, cast, cast, cast
+                        )
+                    )
+                )
+            )
+        )
+}

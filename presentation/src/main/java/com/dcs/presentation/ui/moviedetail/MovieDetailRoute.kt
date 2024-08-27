@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,7 +29,9 @@ import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieDetailUiState
+import com.dcs.presentation.core.model.MovieDetailUiStateProvider
 import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.theme.AllAboutMovieTheme
 
 @Composable
 fun MovieDetailRoute(
@@ -138,4 +142,20 @@ fun MovieDetailContents(
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun MovieDetailScreenPreview(
+    @PreviewParameter(MovieDetailUiStateProvider::class) item: UiState<MovieDetailUiState>,
+) {
+    AllAboutMovieTheme {
+        MovieDetailScreen(
+            movie = item,
+            onMovieDetailEvent = {},
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+
 
