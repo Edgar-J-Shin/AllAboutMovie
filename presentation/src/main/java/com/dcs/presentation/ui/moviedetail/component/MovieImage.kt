@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.ImageLoader
-import com.dcs.presentation.core.designsystem.widget.ImageLoaderData
+import com.dcs.presentation.core.designsystem.widget.BasicImage
+import com.dcs.presentation.core.designsystem.widget.BasicImageState
 
 @Composable
 fun MovieImage(
@@ -24,9 +24,9 @@ fun MovieImage(
     Box(
         modifier = modifier
     ) {
-        ImageLoader(
-            imageLoaderData = ImageLoaderData(
-                imageUrl = backdropPathUrl,
+        BasicImage(
+            imageUrl = backdropPathUrl,
+            basicImageState = BasicImageState(
                 contentDescResId = R.string.movie_image_content_description
             ),
             modifier = Modifier
@@ -34,9 +34,9 @@ fun MovieImage(
                 .align(Alignment.TopCenter)
         )
 
-        ImageLoader(
-            imageLoaderData = ImageLoaderData(
-                imageUrl = posterPathUrl,
+        BasicImage(
+            imageUrl = posterPathUrl,
+            basicImageState = BasicImageState(
                 loadingResId = null,
                 failureResId = null,
                 contentDescResId = R.string.movie_image_content_description

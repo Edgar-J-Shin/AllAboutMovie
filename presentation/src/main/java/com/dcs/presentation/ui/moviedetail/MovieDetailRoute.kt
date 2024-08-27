@@ -113,7 +113,7 @@ private fun MovieDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailTopAppBar(
+private fun MovieDetailTopAppBar(
     title: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,

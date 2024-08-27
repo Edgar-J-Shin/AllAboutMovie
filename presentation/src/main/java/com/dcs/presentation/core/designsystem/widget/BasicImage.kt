@@ -15,15 +15,16 @@ import com.dcs.presentation.R
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ImageLoader(
-    imageLoaderData: ImageLoaderData,
+fun BasicImage(
+    imageUrl: String,
     modifier: Modifier = Modifier,
+    basicImageState: BasicImageState = BasicImageState(),
 ) {
     GlideImage(
-        model = imageLoaderData.imageUrl,
-        loading = imageLoaderData.loadingResId?.let { placeholder(it) },
-        failure = imageLoaderData.failureResId?.let { placeholder(it) },
-        contentDescription = stringResource(id = imageLoaderData.contentDescResId),
+        model = imageUrl,
+        loading = basicImageState.loadingResId?.let { placeholder(it) },
+        failure = basicImageState.failureResId?.let { placeholder(it) },
+        contentDescription = stringResource(id = basicImageState.contentDescResId),
         contentScale = ContentScale.Crop,
         modifier = modifier
             .fillMaxSize()
@@ -31,13 +32,16 @@ fun ImageLoader(
 }
 
 @Immutable
-data class ImageLoaderData(
-    val imageUrl: String,
-    @DrawableRes val loadingResId: Int? = R.drawable.image_placeholder,
-    @DrawableRes val failureResId: Int? = R.drawable.image_placeholder,
-    @StringRes val contentDescResId: Int = R.string.image_content_description,
-) {
-    init {
-        require(imageUrl.isNotEmpty())
-    }
+data class BasicImageState(
+    @DrawableRes val loadingResId: Int? = BasicImageDefaults.placeholderResId(),
+    @DrawableRes val failureResId: Int? = BasicImageDefaults.placeholderResId(),
+    @StringRes val contentDescResId: Int = BasicImageDefaults.contentDescriptionResId(),
+)
+
+object BasicImageDefaults {
+    @DrawableRes
+    fun placeholderResId(): Int = R.drawable.image_placeholder
+
+    @StringRes
+    fun contentDescriptionResId(): Int = R.drawable.image_placeholder
 }

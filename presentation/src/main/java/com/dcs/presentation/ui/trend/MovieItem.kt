@@ -20,9 +20,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.widget.BasicImage
+import com.dcs.presentation.core.designsystem.widget.BasicImageState
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
-import com.dcs.presentation.core.designsystem.widget.ImageLoader
-import com.dcs.presentation.core.designsystem.widget.ImageLoaderData
 import com.dcs.presentation.core.model.MovieUiState
 import com.dcs.presentation.core.model.getPosterPathUrl
 import com.dcs.presentation.core.model.getReleaseDateOrFirstAirDate
@@ -45,9 +45,9 @@ fun MovieItem(
                 .fillMaxWidth()
                 .aspectRatio(0.75f)
         ) {
-            ImageLoader(
-                imageLoaderData = ImageLoaderData(
-                    imageUrl = movieUiState.getPosterPathUrl(),
+            BasicImage(
+                imageUrl = movieUiState.getPosterPathUrl(),
+                basicImageState = BasicImageState(
                     contentDescResId = R.string.movie_image_content_description
                 ),
                 modifier = Modifier

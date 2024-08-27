@@ -21,9 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.widget.BasicImage
+import com.dcs.presentation.core.designsystem.widget.BasicImageState
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.designsystem.widget.ImageLoader
-import com.dcs.presentation.core.designsystem.widget.ImageLoaderData
 import com.dcs.presentation.core.model.CastUiState
 import com.dcs.presentation.core.model.getProfilePathUrl
 
@@ -95,9 +95,9 @@ internal fun CastItem(
             .fillMaxWidth()
             .clickable { onClick.invoke() }
     ) {
-        ImageLoader(
-            imageLoaderData = ImageLoaderData(
-                imageUrl = cast.getProfilePathUrl(),
+        BasicImage(
+            imageUrl = cast.getProfilePathUrl(),
+            basicImageState = BasicImageState(
                 contentDescResId = R.string.cast_image_content_description
             ),
             modifier = Modifier

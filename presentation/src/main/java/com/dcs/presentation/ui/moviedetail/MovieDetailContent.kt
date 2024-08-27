@@ -12,6 +12,7 @@ import com.dcs.presentation.core.model.MovieDetailUiState
 import com.dcs.presentation.core.model.getBackdropPathUrl
 import com.dcs.presentation.core.model.getCrew
 import com.dcs.presentation.core.model.getGenres
+import com.dcs.presentation.core.model.getOriginCountry
 import com.dcs.presentation.core.model.getPosterPathUrl
 import com.dcs.presentation.core.model.getRuntime
 import com.dcs.presentation.core.model.getSpokenLanguage
@@ -45,7 +46,7 @@ internal fun LazyListScope.movieDetailContent(
             title = movieDetailUiState.getTitleWithReleaseYear(),
             score = movieDetailUiState.getVotePercentage(),
             releaseDate = movieDetailUiState.releaseDate,
-            country = movieDetailUiState.originCountry[0],
+            country = movieDetailUiState.getOriginCountry(),
             runtime = movieDetailUiState.getRuntime(),
             genres = movieDetailUiState.getGenres(),
             tagline = movieDetailUiState.tagline,

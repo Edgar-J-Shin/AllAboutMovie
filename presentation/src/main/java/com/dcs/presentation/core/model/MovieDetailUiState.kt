@@ -118,6 +118,8 @@ fun MovieDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.n
 
 fun MovieDetailUiState.getRuntime() = "${runtime / 60}h ${runtime % 60}m"
 
+fun MovieDetailUiState.getOriginCountry() = originCountry.getOrNull(0) ?: ""
+
 fun MovieDetailUiState.getSpokenLanguage(): String = spokenLanguages.firstOrNull()?.name ?: ""
 
 fun MovieDetailUiState.getCrew() = credits.crew
