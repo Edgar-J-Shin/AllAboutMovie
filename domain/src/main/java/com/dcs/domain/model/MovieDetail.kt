@@ -38,11 +38,11 @@ data class BelongsToCollection(
 )
 
 data class Credits(
-    val cast: List<Cast>,
-    val crew: List<Crew>,
+    val cast: List<CreditsCast>,
+    val crew: List<CreditsCrew>,
 )
 
-data class Cast(
+data class CreditsCast(
     val adult: Boolean,
     val castId: Int,
     val character: String,
@@ -57,7 +57,7 @@ data class Cast(
     val profilePath: String,
 )
 
-data class Crew(
+data class CreditsCrew(
     val adult: Boolean,
     val creditId: String,
     val department: String,

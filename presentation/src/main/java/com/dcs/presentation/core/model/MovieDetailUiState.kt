@@ -47,11 +47,11 @@ data class BelongsToCollectionUiState(
 )
 
 data class CreditsUiState(
-    val cast: List<CastUiState>,
-    val crew: List<CrewUiState>,
+    val cast: List<CreditsCastUiState>,
+    val crew: List<CreditsCrewUiState>,
 )
 
-data class CastUiState(
+data class CreditsCastUiState(
     val adult: Boolean,
     val castId: Int,
     val character: String,
@@ -66,7 +66,7 @@ data class CastUiState(
     val profilePath: String,
 )
 
-data class CrewUiState(
+data class CreditsCrewUiState(
     val adult: Boolean,
     val creditId: String,
     val department: String,
@@ -129,7 +129,7 @@ fun MovieDetailUiState.getCrew() = credits.crew
     }
     .take(4)
 
-fun CastUiState.getProfilePathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$profilePath"
+fun CreditsCastUiState.getProfilePathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$profilePath"
 
 
 class MovieDetailUiStateProvider : PreviewParameterProvider<UiState<MovieDetailUiState>> {
@@ -178,7 +178,7 @@ class MovieDetailUiStateProvider : PreviewParameterProvider<UiState<MovieDetailU
         voteCount = 97,
     )
 
-    private val crew = CrewUiState(
+    private val crew = CreditsCrewUiState(
         adult = false,
         gender = 1,
         id = 1683343,
@@ -192,7 +192,7 @@ class MovieDetailUiStateProvider : PreviewParameterProvider<UiState<MovieDetailU
         job = "Director",
     )
 
-    private val cast = CastUiState(
+    private val cast = CreditsCastUiState(
         adult = false,
         gender = 1,
         id = 1683343,

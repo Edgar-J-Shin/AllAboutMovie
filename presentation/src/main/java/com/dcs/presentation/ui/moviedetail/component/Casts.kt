@@ -24,12 +24,12 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
 import com.dcs.presentation.core.designsystem.widget.BasicImageState
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.model.CastUiState
+import com.dcs.presentation.core.model.CreditsCastUiState
 import com.dcs.presentation.core.model.getProfilePathUrl
 
 @Composable
 internal fun Casts(
-    casts: List<CastUiState>,
+    casts: List<CreditsCastUiState>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -80,7 +80,7 @@ internal fun Casts(
 
 @Composable
 internal fun CastItem(
-    cast: CastUiState,
+    cast: CreditsCastUiState,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {

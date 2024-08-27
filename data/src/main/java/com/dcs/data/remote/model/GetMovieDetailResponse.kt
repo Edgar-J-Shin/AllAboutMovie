@@ -76,13 +76,13 @@ data class RemoteBelongsToCollection(
 @Serializable
 data class RemoteCredits(
     @SerialName("cast")
-    val cast: List<RemoteCast> = emptyList(),
+    val cast: List<RemoteCreditsCast> = emptyList(),
     @SerialName("crew")
-    val crew: List<RemoteCrew> = emptyList(),
+    val crew: List<RemoteCreditsCrew> = emptyList(),
 )
 
 @Serializable
-data class RemoteCast(
+data class RemoteCreditsCast(
     @SerialName("adult")
     val adult: Boolean = false,
     @SerialName("cast_id")
@@ -110,7 +110,7 @@ data class RemoteCast(
 )
 
 @Serializable
-data class RemoteCrew(
+data class RemoteCreditsCrew(
     @SerialName("adult")
     val adult: Boolean = false,
     @SerialName("credit_id")

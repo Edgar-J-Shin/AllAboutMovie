@@ -2,17 +2,17 @@ package com.dcs.data.model.mapper
 
 import com.dcs.data.remote.model.GetMovieDetailResponse
 import com.dcs.data.remote.model.RemoteBelongsToCollection
-import com.dcs.data.remote.model.RemoteCast
 import com.dcs.data.remote.model.RemoteCredits
-import com.dcs.data.remote.model.RemoteCrew
+import com.dcs.data.remote.model.RemoteCreditsCast
+import com.dcs.data.remote.model.RemoteCreditsCrew
 import com.dcs.data.remote.model.RemoteGenre
 import com.dcs.data.remote.model.RemoteProductionCompany
 import com.dcs.data.remote.model.RemoteProductionCountry
 import com.dcs.data.remote.model.RemoteSpokenLanguage
 import com.dcs.domain.model.BelongsToCollection
-import com.dcs.domain.model.Cast
 import com.dcs.domain.model.Credits
-import com.dcs.domain.model.Crew
+import com.dcs.domain.model.CreditsCast
+import com.dcs.domain.model.CreditsCrew
 import com.dcs.domain.model.Genre
 import com.dcs.domain.model.MovieDetail
 import com.dcs.domain.model.ProductionCompany
@@ -61,7 +61,7 @@ fun RemoteCredits.toEntity() = Credits(
     crew = crew.map { it.toEntity() },
 )
 
-fun RemoteCast.toEntity() = Cast(
+fun RemoteCreditsCast.toEntity() = CreditsCast(
     adult = adult,
     castId = castId,
     character = character,
@@ -76,7 +76,7 @@ fun RemoteCast.toEntity() = Cast(
     profilePath = profilePath,
 )
 
-fun RemoteCrew.toEntity() = Crew(
+fun RemoteCreditsCrew.toEntity() = CreditsCrew(
     adult = adult,
     creditId = creditId,
     department = department,

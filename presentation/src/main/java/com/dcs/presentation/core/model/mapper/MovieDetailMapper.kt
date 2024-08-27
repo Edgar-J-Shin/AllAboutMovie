@@ -2,18 +2,18 @@ package com.dcs.presentation.core.model.mapper
 
 
 import com.dcs.domain.model.BelongsToCollection
-import com.dcs.domain.model.Cast
+import com.dcs.domain.model.CreditsCast
 import com.dcs.domain.model.Credits
-import com.dcs.domain.model.Crew
+import com.dcs.domain.model.CreditsCrew
 import com.dcs.domain.model.Genre
 import com.dcs.domain.model.MovieDetail
 import com.dcs.domain.model.ProductionCompany
 import com.dcs.domain.model.ProductionCountry
 import com.dcs.domain.model.SpokenLanguage
 import com.dcs.presentation.core.model.BelongsToCollectionUiState
-import com.dcs.presentation.core.model.CastUiState
+import com.dcs.presentation.core.model.CreditsCastUiState
 import com.dcs.presentation.core.model.CreditsUiState
-import com.dcs.presentation.core.model.CrewUiState
+import com.dcs.presentation.core.model.CreditsCrewUiState
 import com.dcs.presentation.core.model.GenreUiState
 import com.dcs.presentation.core.model.MovieDetailUiState
 import com.dcs.presentation.core.model.ProductionCompanyUiState
@@ -62,7 +62,7 @@ fun Credits.toUiState() = CreditsUiState(
     crew = crew.map { it.toUiState() },
 )
 
-fun Cast.toUiState() = CastUiState(
+fun CreditsCast.toUiState() = CreditsCastUiState(
     adult = adult,
     castId = castId,
     character = character,
@@ -77,7 +77,7 @@ fun Cast.toUiState() = CastUiState(
     profilePath = profilePath,
 )
 
-fun Crew.toUiState() = CrewUiState(
+fun CreditsCrew.toUiState() = CreditsCrewUiState(
     adult = adult,
     creditId = creditId,
     department = department,
