@@ -62,14 +62,21 @@ fun AllAboutMovieApp(
             route = SearchResult.route,
             arguments = SearchResult.navArguments
         ) {
-            SearchResultRoute(navController = navController)
+            SearchResultRoute(
+                navigateUp = { navController.popBackStack() },
+                navigateToDetails = { id ->
+                    navController.navigate(Screen.MovieDetail.createRoute(id))
+                },
+            )
         }
 
         composable(
             route = Screen.MovieDetail.route,
             arguments = Screen.MovieDetail.navArguments
         ) {
-            MovieDetailRoute(navController = navController)
+            MovieDetailRoute(
+                navigateUp = { navController.popBackStack() }
+            )
         }
     }
 }

@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -39,13 +38,13 @@ import com.dcs.presentation.core.model.MovieUiState
 import com.dcs.presentation.core.model.MovieUiStateProvider
 import com.dcs.presentation.core.model.toMovieId
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
-import com.dcs.presentation.ui.Screen
 import com.dcs.presentation.ui.trend.MovieItem
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SearchResultRoute(
-    navController: NavHostController,
+    navigateUp: () -> Boolean,
+    navigateToDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
@@ -54,11 +53,11 @@ fun SearchResultRoute(
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             SearchResultEffect.NavigateBack -> {
-                navController.popBackStack()
+                navigateUp()
             }
 
             is SearchResultEffect.NavigateToMovieDetails -> {
-                navController.navigate(Screen.MovieDetail.createRoute(effect.movieId.value))
+                navigateToDetails(effect.movieId.value)
             }
         }
     }

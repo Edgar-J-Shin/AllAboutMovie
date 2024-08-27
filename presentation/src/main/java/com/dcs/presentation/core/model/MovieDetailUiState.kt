@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import com.dcs.domain.model.MovieId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.extensions.ImageType
-import java.util.Locale
+import java.time.LocalDate
 
 @Stable
 data class MovieDetailUiState(
@@ -110,7 +110,7 @@ fun MovieDetailUiState.toMovieId() = MovieId(id)
 
 fun MovieDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 
-fun MovieDetailUiState.getTitleOrNameWithReleaseYear() = "$title (${releaseDate.substring(0, 4)})"
+fun MovieDetailUiState.getTitleWithReleaseYear() = "$title (${LocalDate.parse(releaseDate).year})"
 
 fun MovieDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.name }
 

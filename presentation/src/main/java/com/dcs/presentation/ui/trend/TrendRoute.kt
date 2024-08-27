@@ -36,7 +36,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -52,12 +51,11 @@ import com.dcs.presentation.core.model.toMovieId
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
-import com.dcs.presentation.ui.Screen
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun TrendRoute(
-    navController: NavHostController,
+    navigateToDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TrendViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
@@ -76,7 +74,7 @@ fun TrendRoute(
             }
 
             is TrendEffect.NavigateToMovieDetails -> {
-                navController.navigate(Screen.MovieDetail.createRoute(effect.movieId.value))
+                navigateToDetails(effect.movieId.value)
             }
         }
     }

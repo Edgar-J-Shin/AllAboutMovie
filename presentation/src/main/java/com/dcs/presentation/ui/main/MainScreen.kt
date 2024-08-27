@@ -17,6 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dcs.presentation.ui.Screen
 import com.dcs.presentation.ui.Screen.Main.MainTab
 import com.dcs.presentation.ui.home.HomeRoute
 import com.dcs.presentation.ui.people.PeopleRoute
@@ -88,7 +89,9 @@ private fun MainNavHost(
     ) {
         composable(route = MainTab.Home.route) {
             HomeRoute(
-                navController = appNavHostController,
+                navigateToSearchResult = { keyword ->
+                    appNavHostController.navigate(Screen.SearchResult.createRoute(keyword))
+                },
                 searchActive = searchActive,
                 onSearchActiveChange = onSearchActiveChange,
                 showSnackBar = showSnackBar
@@ -97,7 +100,9 @@ private fun MainNavHost(
 
         composable(route = MainTab.Trend.route) {
             TrendRoute(
-                navController = appNavHostController,
+                navigateToDetails = { id ->
+                    appNavHostController.navigate(Screen.MovieDetail.createRoute(id))
+                },
                 showSnackBar = showSnackBar
             )
         }

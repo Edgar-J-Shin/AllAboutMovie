@@ -44,7 +44,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
@@ -61,14 +60,14 @@ import com.dcs.presentation.core.model.getPosterPathUrl
 import com.dcs.presentation.core.model.getProfilePathUrl
 import com.dcs.presentation.core.model.getRuntime
 import com.dcs.presentation.core.model.getSpokenLanguage
-import com.dcs.presentation.core.model.getTitleOrNameWithReleaseYear
+import com.dcs.presentation.core.model.getTitleWithReleaseYear
 import com.dcs.presentation.core.model.getVotePercentage
 import com.dcs.presentation.core.state.UiState
 import java.util.Locale
 
 @Composable
 fun MovieDetailRoute(
-    navController: NavHostController,
+    navigateUp: () -> Boolean,
     viewModel: MovieDetailViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
@@ -77,7 +76,7 @@ fun MovieDetailRoute(
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             is MovieDetailEffect.NavigateBack -> {
-                navController.popBackStack()
+                navigateUp()
             }
 
             is MovieDetailEffect.ShowSnackbar -> {
@@ -183,7 +182,7 @@ fun MovieDetailContents(
         }
         item {
             MovieDetailTitle(
-                movie.getTitleOrNameWithReleaseYear(),
+                movie.getTitleWithReleaseYear(),
                 modifier = innerModifier
                     .fillMaxWidth()
                     .padding(vertical = 6.dp)
