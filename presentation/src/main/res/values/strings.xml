@@ -46,5 +46,21 @@
     <string name="close">닫기</string>
     <string name="setting_to_sign_out_error">일시적인 오류로 로그아웃 할 수 없습니다. 잠시 후 다시 시작해주세요.</string>
     <string name="title_poplular_people">인기 인물</string>
+    <string name="title_personal_info">Personal Info</string>
+    <string name="title_production">Production</string>
+    <string name="title_biography">Biography</string>
+    <string name="content_description_poster">Known For Poster</string>
+    <string name="title_known_for">Known For</string>
+    <string name="title_acting">Acting</string>
+    <string name="content_description_profile">Profile Image</string>
+    <string name="title_place_of_birth">Place of Birth</string>
+    <string name="title_birthday">Birthday</string>
+    <string name="title_gender">Gender</string>
+    <string name="title_credits">Credits</string>
+    <string name="title_known_for_department">Known For</string>
+    <string name="gender_not_specified">Not Specified</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_non_binary">Non Binary</string>
 
 </resources>

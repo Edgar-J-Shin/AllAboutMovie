@@ -1,7 +1,8 @@
 package com.dcs.data.remote.datasource
 
+import com.dcs.data.remote.model.GetPersonDetailResponse
 import com.dcs.data.remote.model.GetPopularPeopleResponse
-import com.dcs.data.remote.network.NetworkResponse
+import com.dcs.data.remote.model.GetSearchPersonResponse
 
 interface PersonRemoteDataSource {
 
@@ -9,4 +10,8 @@ interface PersonRemoteDataSource {
         page: Int,
         language: String,
     ): Result<GetPopularPeopleResponse>
+
+    suspend fun getPersonDetail(personId: Long): Result<GetPersonDetailResponse>
+
+    suspend fun getSearchPerson(personName: String): Result<GetSearchPersonResponse>
 }

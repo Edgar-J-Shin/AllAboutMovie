@@ -4,22 +4,22 @@ import com.dcs.data.remote.model.CreateRequestTokenResponse
 import com.dcs.data.remote.model.CreateSessionIdRequest
 import com.dcs.data.remote.model.CreateSessionIdResponse
 import com.dcs.data.remote.model.GetUserResponse
-import com.dcs.data.remote.service.AuthApiService
+import com.dcs.data.remote.service.AuthService
 import com.dcs.domain.model.SessionId
 import javax.inject.Inject
 
 class AuthRemoteDataSourceImpl @Inject constructor(
-    private val api: AuthApiService,
+    private val authService: AuthService,
 ) : AuthRemoteDataSource {
     override suspend fun createRequestToken(): Result<CreateRequestTokenResponse> {
-        return api.createRequestToken()
+        return authService.createRequestToken()
             .asResult {
                 it.data as CreateRequestTokenResponse
             }
     }
 
     override suspend fun createSessionId(requestToken: String): Result<CreateSessionIdResponse> {
-        return api.createSessionId(
+        return authService.createSessionId(
             createSessionIdRequest = CreateSessionIdRequest(
                 requestToken = requestToken
             )
@@ -30,7 +30,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun deleteSession(sessionId: SessionId): Result<Unit> {
-        return api.deleteSession(
+        return authService.deleteSession(
             sessionId = sessionId.value
         )
             .asResult {
@@ -39,7 +39,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getUser(sessionId: SessionId): Result<GetUserResponse> {
-        return api.getAccountDetails(
+        return authService.getAccountDetails(
             sessionId = sessionId.value
         )
             .asResult {

@@ -79,6 +79,15 @@ sealed class Screen(
         fun createRoute(requestToken: String) = "$ROUTE_SIGN_IN/${requestToken}"
     }
 
+    data object PersonDetail : Screen(
+        route = "$ROUTE_PERSON_DETAIL/{$PERSON_DETAIL_ID_KEY}",
+        navArguments = persistentListOf(navArgument(PERSON_DETAIL_ID_KEY) {
+            type = NavType.LongType
+        })
+    ) {
+        fun createRoute(personId: Int) = "$ROUTE_PERSON_DETAIL/${personId}"
+    }
+
     companion object {
         const val ROUTE_MAIN = "main"
         const val ROUTE_HOME = "home"
@@ -88,9 +97,11 @@ sealed class Screen(
         const val ROUTE_DETAIL = "detail"
         const val ROUTE_SIGN_IN = "signIn"
         const val ROUTE_SEARCH_RESULT = "searchResult"
+        const val ROUTE_PERSON_DETAIL = "personDetail"
 
         const val ID_SAVED_STATE_KEY = "IdStateKey"
         const val SIGN_IN_REQUEST_TOKEN_KEY = "SignInRequestTokenKey"
         const val SEARCH_RESULT_KEYWORD = "SearchResultKeyword"
+        const val PERSON_DETAIL_ID_KEY = "PersonDetailIdKey"
     }
 }
