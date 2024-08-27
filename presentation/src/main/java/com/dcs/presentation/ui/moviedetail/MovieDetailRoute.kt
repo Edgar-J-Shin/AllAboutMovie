@@ -1,6 +1,5 @@
 package com.dcs.presentation.ui.moviedetail
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -8,13 +7,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +58,7 @@ fun MovieDetailRoute(
     val movie = viewModel.movie.collectAsStateWithLifecycle()
 
     MovieDetailScreen(
-        movie = movie.value,
+        uiState = movie.value,
         onMovieDetailEvent = viewModel::dispatchEvent,
         modifier = Modifier.fillMaxSize()
     )
@@ -67,38 +66,46 @@ fun MovieDetailRoute(
 
 @Composable
 private fun MovieDetailScreen(
-    movie: UiState<MovieDetailUiState>,
+    uiState: UiState<MovieDetailUiState>,
     onMovieDetailEvent: (MovieDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        topBar = {
-            MovieDetailTopAppBar(onBackClick = { onMovieDetailEvent(MovieDetailUiEvent.NavigateBack) })
-        },
-        modifier = modifier,
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            when (movie) {
-                is UiState.Loading -> {
+    LazyColumn(
+        state = rememberLazyListState(),
+        modifier = modifier
+    ) {
+        item {
+            MovieDetailTopAppBar(
+                title = if (uiState is UiState.Success) {
+                    uiState.data.title
+                } else {
+                    stringResource(id = R.string.route_movie_detail_name)
+                },
+                onBackClick = { onMovieDetailEvent(MovieDetailUiEvent.NavigateBack) }
+            )
+        }
+
+        when (uiState) {
+            is UiState.Loading -> {
+                item {
                     LoadingScreen()
                 }
+            }
 
-                is UiState.Error -> {
+            is UiState.Error -> {
+                item {
                     ErrorScreen(
                         message = stringResource(id = R.string.api_response_error_message),
                     )
                 }
+            }
 
-                is UiState.Success -> {
-                    MovieDetailContents(
-                        movieDetailUiState = movie.data,
-                        modifier = Modifier
-                    )
-                }
+            is UiState.Success -> {
+                movieDetailContent(
+                    movieDetailUiState = uiState.data,
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                )
             }
         }
     }
@@ -107,40 +114,27 @@ private fun MovieDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailTopAppBar(
+    title: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TopAppBar(
+    CenterAlignedTopAppBar(
         title = {
-            Text(stringResource(id = R.string.route_movie_detail_name))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+            )
         },
-        modifier = modifier.statusBarsPadding(),
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(id = R.string.app_bar_back_content_description)
                 )
             }
         },
+        modifier = modifier.statusBarsPadding(),
     )
-}
-
-@Composable
-fun MovieDetailContents(
-    movieDetailUiState: MovieDetailUiState,
-    modifier: Modifier = Modifier,
-) {
-    LazyColumn(
-        state = rememberLazyListState(),
-        modifier = modifier
-    ) {
-        movieDetailContent(
-            movieDetailUiState = movieDetailUiState,
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-        )
-    }
 }
 
 @Preview(showBackground = true)
@@ -150,7 +144,7 @@ fun MovieDetailScreenPreview(
 ) {
     AllAboutMovieTheme {
         MovieDetailScreen(
-            movie = item,
+            uiState = item,
             onMovieDetailEvent = {},
             modifier = Modifier.fillMaxSize()
         )
