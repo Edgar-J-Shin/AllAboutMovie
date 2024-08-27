@@ -108,12 +108,18 @@ private fun MainNavHost(
         }
 
         composable(route = MainTab.People.route) {
-            PeopleRoute()
+            PeopleRoute(
+                navigateToDetail = { personId ->
+                    appNavHostController.navigate(Screen.PersonDetail.createRoute(personId))
+                }
+            )
         }
 
         composable(route = MainTab.Setting.route) {
             SettingRoute(
-                navController = appNavHostController,
+                navigateToSignIn = { requestToken ->
+                    appNavHostController.navigate(Screen.SignIn.createRoute(requestToken))
+                },
                 showSnackBar = showSnackBar
             )
         }

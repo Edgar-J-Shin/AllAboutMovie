@@ -1,11 +1,12 @@
 package com.dcs.domain.model
 
+
 data class Person(
     val id: Int,
     val name: String,
     val originalName: String,
     val adult: Boolean,
-    val gender: Int,
+    val gender: Gender,
     val knownFor: List<KnownFor>,
     val knownForDepartment: String,
     val popularity: Double,
@@ -33,3 +34,10 @@ data class KnownFor(
     val voteAverage: Double,
     val voteCount: Int,
 )
+
+enum class Gender {
+    NOT_SPECIFIED,
+    FEMALE,
+    MALE,
+    NON_BINARY
+}

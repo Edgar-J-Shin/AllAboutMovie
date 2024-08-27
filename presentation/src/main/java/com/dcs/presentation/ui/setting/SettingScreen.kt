@@ -47,7 +47,7 @@ import com.dcs.presentation.ui.Screen
 
 @Composable
 fun SettingRoute(
-    navController: NavHostController,
+    navigateToSignIn: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SettingViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
@@ -59,7 +59,7 @@ fun SettingRoute(
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             is SettingEffect.SignIn -> {
-                navController.navigate(Screen.SignIn.createRoute(effect.requestToken.value))
+               navigateToSignIn(effect.requestToken.value)
             }
 
             is SettingEffect.ShowSnackbar -> {

@@ -1,6 +1,7 @@
 package com.dcs.presentation.ui.people
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,25 +37,35 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
+import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.PersonUiStateProvider
-import com.dcs.presentation.core.model.toProfileUrl
-import com.dcs.presentation.core.model.toTitle
+import com.dcs.presentation.core.model.getKnownForTitle
+import com.dcs.presentation.core.model.getProfileUrl
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun PeopleRoute(
+    navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PeopleViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
 
     val popularPeople = viewModel.popularPeople.collectAsLazyPagingItems()
+    viewModel.effect.collectAsEffect {
+        when (it) {
+            is PeopleEffect.NavigateToDetail -> {
+                navigateToDetail(it.personId)
+            }
+        }
+    }
 
     PeopleScreen(
         items = popularPeople,
+        onPeopleUiEvent = viewModel::dispatchEvent,
         modifier = modifier
             .fillMaxSize()
             .padding(20.dp)
@@ -64,6 +75,7 @@ fun PeopleRoute(
 @Composable
 private fun PeopleScreen(
     items: LazyPagingItems<PersonUiState>,
+    onPeopleUiEvent: (PeopleUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -93,6 +105,7 @@ private fun PeopleScreen(
             is LoadState.NotLoading -> {
                 PopularPeople(
                     items = items,
+                    onPeopleUiEvent = onPeopleUiEvent,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -103,6 +116,7 @@ private fun PeopleScreen(
 @Composable
 private fun PopularPeople(
     items: LazyPagingItems<PersonUiState>,
+    onPeopleUiEvent: (PeopleUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalStaggeredGrid(
@@ -117,6 +131,7 @@ private fun PopularPeople(
 
             PersonCard(
                 state = person,
+                onClick = { onPeopleUiEvent(PeopleUiEvent.NavigateToDetail(person)) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -129,24 +144,26 @@ private fun PopularPeople(
 @Composable
 private fun PersonCard(
     state: PersonUiState,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier,
         shape = RoundedCornerShape(
             topStart = 16.dp,
             topEnd = 16.dp,
             bottomStart = 0.dp,
             bottomEnd = 0.dp
-        )
+        ),
+        modifier = modifier
+            .clickable(onClick = onClick),
     ) {
         GlideImage(
-            model = state.toProfileUrl(),
-            contentDescription = "profile image",
+            model = state.getProfileUrl(),
+            contentDescription = stringResource(id = R.string.content_description_profile),
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
         )
-        val knownForTitle = state.knownFor.toTitle()
+        val knownForTitle = state.getKnownForTitle()
         if (knownForTitle.isNotEmpty()) {
             Text(
                 text = knownForTitle,
@@ -215,6 +232,7 @@ fun PeopleScreenPreview(
 
         PeopleScreen(
             items = people,
+            onPeopleUiEvent = {},
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)
