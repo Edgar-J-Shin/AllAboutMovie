@@ -76,59 +76,56 @@ data class CrewUiState(
     val voteCount: Int,
 )
 
-val PersonDetailUiState.profileUrl: String
-    @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
+@Composable
+fun PersonDetailUiState.getProfileUrl(): String =
+    "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
 
-val CastUiState.actingTitle: String
-    @Composable get() = releaseDate.ifBlank { firstAirDate }
-        .let { date ->
-            if (date.isBlank()) {
-                ""
-            } else {
-                LocalDate.parse(date).year.toString() + " "
-            }
-        } + name.ifBlank { title }
+@Composable
+fun CastUiState.getActingTitle(): String {
+    val name = name.ifBlank { title }
+    return if (releaseDate.isBlank()) {
+        name
+    } else {
+        "{${LocalDate.parse(releaseDate).year} $name}"
+    }
+}
 
-val CastUiState.characterTitle: AnnotatedString
-    @Composable get() =
-        character
-            .takeIf { it.isNotBlank() }
-            ?.let {
-                buildAnnotatedString {
-                    withStyle(
-                        SpanStyle(
-                            fontWeight = FontWeight.Light
-                        )
-                    ) {
-                        append("As ")
-                    }
-                    append(character)
-                }
-            } ?: AnnotatedString("")
+@Composable
+fun CastUiState.getCharacterTitle(): AnnotatedString {
+    if (character.isBlank()) return AnnotatedString("")
+    return buildAnnotatedString {
+        withStyle(
+            SpanStyle(
+                fontWeight = FontWeight.Light
+            )
+        ) {
+            append("As ")
+        }
+        append(character)
+    }
+}
 
-val CrewUiState.productionTitle: String
-    @Composable get() =
-        releaseDate.takeIf { it.isNotBlank() }
-            ?.let {
-                LocalDate.parse(releaseDate).year.toString() +
-                        " " + title.ifBlank { originalTitle }
-            } ?: title.ifBlank { originalTitle }
+@Composable
+fun CrewUiState.getProductionTitle(): String {
+    val title = title.ifBlank { originalTitle }
+    return if (releaseDate.isBlank()) {
+        title
+    } else {
+        "{${LocalDate.parse(releaseDate).year} $title}"
+    }
+}
 
-
-val CrewUiState.jobTitle: AnnotatedString
-    @Composable get() =
-        job
-            .takeIf { it.isNotBlank() }
-            ?.let {
-                buildAnnotatedString {
-                    withStyle(
-                        SpanStyle(
-                            fontWeight = FontWeight.Light
-                        )
-                    ) {
-                        append("As ")
-                    }
-                    append(job)
-                }
-            } ?: AnnotatedString("")
-
+@Composable
+fun CrewUiState.getJobTitle(): AnnotatedString {
+    if (job.isBlank()) return AnnotatedString("")
+    return buildAnnotatedString {
+        withStyle(
+            SpanStyle(
+                fontWeight = FontWeight.Light
+            )
+        ) {
+            append("As ")
+        }
+        append(job)
+    }
+}

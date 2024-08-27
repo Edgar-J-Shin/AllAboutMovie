@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -106,13 +108,15 @@ private fun PersonDetailScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun PersonDetailScreenPreview() {
+private fun PersonDetailScreenPreview(
+    @PreviewParameter(LoremIpsum::class) text: String,
+) {
     AllAboutMovieTheme {
         val uiState = PersonDetailUiState(
             id = 1,
             adult = false,
             alsoKnownAs = listOf("alsoKnownAs"),
-            biography = "biography",
+            biography = LoremIpsum(100).values.first(),
             birthday = "2021-01-01",
             deathday = "",
             gender = GenderUiState.MALE,

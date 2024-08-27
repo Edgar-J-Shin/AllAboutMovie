@@ -50,29 +50,34 @@ enum class GenderUiState {
     NON_BINARY,
 }
 
-val GenderUiState.originalName: String
-    @Composable get() = when (this) {
-        GenderUiState.NOT_SPECIFIED -> R.string.gender_not_specified
-        GenderUiState.FEMALE -> R.string.gender_female
-        GenderUiState.MALE -> R.string.gender_male
-        GenderUiState.NON_BINARY -> R.string.gender_non_binary
-    }.let { stringResource(id = it) }
+@Composable
+fun GenderUiState.toGenderString(): String = when (this) {
+    GenderUiState.NOT_SPECIFIED -> R.string.gender_not_specified
+    GenderUiState.FEMALE -> R.string.gender_female
+    GenderUiState.MALE -> R.string.gender_male
+    GenderUiState.NON_BINARY -> R.string.gender_non_binary
+}.let {
+    stringResource(id = it)
+}
 
-val List<KnownForUiState>.title: String
-    @Composable get() = if (isEmpty()) {
-        ""
-    } else {
-        this
-            .filterNot { it.title.isBlank() && it.originalTitle.isBlank() }
-            .take(3)
-            .joinToString { it.title.ifBlank { it.originalTitle } }
+@Composable
+fun PersonUiState.getKnownForTitle(): String {
+    if (knownFor.isEmpty()) {
+        return ""
     }
+    return knownFor
+        .filterNot { it.title.isBlank() && it.originalTitle.isBlank() }
+        .take(3)
+        .joinToString { it.title.ifBlank { it.originalTitle } }
+}
 
-val KnownForUiState.posterUrl: String
-    @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$posterPath"
+@Composable
+fun KnownForUiState.getPosterUrl(): String =
+    "${BuildConfig.TMDB_IMAGE_URL}original$posterPath"
 
-val PersonUiState.profileUrl: String
-    @Composable get() = "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
+@Composable
+fun PersonUiState.getProfileUrl(): String =
+    "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
 
 class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>> {
     override val values: Sequence<PagingData<PersonUiState>>

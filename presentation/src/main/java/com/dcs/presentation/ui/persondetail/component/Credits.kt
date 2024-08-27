@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.model.CastUiState
 import com.dcs.presentation.core.model.CrewUiState
-import com.dcs.presentation.core.model.actingTitle
-import com.dcs.presentation.core.model.characterTitle
-import com.dcs.presentation.core.model.jobTitle
-import com.dcs.presentation.core.model.productionTitle
+import com.dcs.presentation.core.model.getActingTitle
+import com.dcs.presentation.core.model.getCharacterTitle
+import com.dcs.presentation.core.model.getJobTitle
+import com.dcs.presentation.core.model.getProductionTitle
 import com.dcs.presentation.ui.persondetail.spacer
 
 internal fun LazyListScope.credits(
@@ -87,11 +87,11 @@ private fun ActingCard(
             .padding(vertical = 12.dp)
     ) {
         Text(
-            text = cast.actingTitle,
+            text = cast.getActingTitle(),
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = cast.characterTitle,
+            text = cast.getCharacterTitle(),
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(start = 20.dp)
         )
@@ -120,11 +120,11 @@ private fun ProductionCard(
             .padding(vertical = 12.dp)
     ) {
         Text(
-            text = crew.productionTitle,
+            text = crew.getProductionTitle(),
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = crew.jobTitle,
+            text = crew.getJobTitle(),
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(start = 20.dp)
         )

@@ -17,7 +17,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
 import com.dcs.presentation.core.model.PersonDetailUiState
-import com.dcs.presentation.core.model.profileUrl
+import com.dcs.presentation.core.model.getProfileUrl
 import com.dcs.presentation.ui.persondetail.component.Biography
 import com.dcs.presentation.ui.persondetail.component.KnownFor
 import com.dcs.presentation.ui.persondetail.component.PersonalInfo
@@ -29,7 +29,7 @@ internal fun LazyListScope.personDetailContent(
 ) {
     item {
         GlideImage(
-            model = personDetailUiState.profileUrl,
+            model = personDetailUiState.getProfileUrl(),
             contentDescription = stringResource(id = R.string.content_description_profile),
             contentScale = ContentScale.Crop,
             modifier = Modifier

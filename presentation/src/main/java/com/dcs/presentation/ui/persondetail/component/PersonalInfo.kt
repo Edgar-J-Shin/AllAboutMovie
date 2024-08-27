@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.model.GenderUiState
-import com.dcs.presentation.core.model.originalName
+import com.dcs.presentation.core.model.toGenderString
 
 @Composable
 internal fun PersonalInfo(
@@ -104,7 +104,7 @@ private fun Gender(
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = gender.originalName,
+            text = gender.toGenderString(),
             style = MaterialTheme.typography.labelMedium
         )
     }

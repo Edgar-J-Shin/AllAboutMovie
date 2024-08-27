@@ -24,7 +24,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
 import com.dcs.presentation.core.model.KnownForUiState
-import com.dcs.presentation.core.model.posterUrl
+import com.dcs.presentation.core.model.getPosterUrl
 
 @Composable
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -56,7 +56,7 @@ internal fun KnownFor(
                     modifier = Modifier.width(100.dp)
                 ) {
                     GlideImage(
-                        model = it.posterUrl,
+                        model = it.getPosterUrl(),
                         contentDescription = stringResource(id = R.string.content_description_poster),
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
