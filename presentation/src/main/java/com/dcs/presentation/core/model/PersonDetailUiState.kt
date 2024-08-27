@@ -10,7 +10,7 @@ import com.dcs.presentation.BuildConfig
 import java.time.LocalDate
 
 data class PersonDetailUiState(
-    val id: Long,
+    val id: Int,
     val adult: Boolean,
     val alsoKnownAs: List<String>,
     val biography: String,
@@ -30,7 +30,7 @@ data class PersonDetailUiState(
 )
 
 data class CastUiState(
-    val id: Long,
+    val id: Int,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -56,7 +56,7 @@ data class CastUiState(
 )
 
 data class CrewUiState(
-    val id: Long,
+    val id: Int,
     val adult: Boolean,
     val backdropPath: String,
     val creditId: String,

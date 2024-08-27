@@ -19,7 +19,7 @@ data class GetPopularPeopleResponse(
 @Serializable
 data class RemotePerson(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")
@@ -42,7 +42,7 @@ data class RemotePerson(
 @Serializable
 data class RemoteKnownFor(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")

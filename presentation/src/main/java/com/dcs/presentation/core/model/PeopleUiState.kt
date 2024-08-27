@@ -10,7 +10,7 @@ import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 
 data class PersonUiState(
-    val id: Long,
+    val id: Int,
     val name: String,
     val originalName: String,
     val adult: Boolean,
@@ -22,7 +22,7 @@ data class PersonUiState(
 )
 
 data class KnownForUiState(
-    val id: Long,
+    val id: Int,
     val name: String,
     val originalName: String,
     val adult: Boolean,
@@ -101,7 +101,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
             PagingData.from(
                 data = (0 until 10).map {
                     PersonUiState(
-                        id = it.toLong(),
+                        id = it,
                         name = "Person $it",
                         originalName = "Original Person $it",
                         adult = false,
@@ -121,7 +121,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
             PagingData.from(
                 data = (0 until 10).map {
                     PersonUiState(
-                        id = it.toLong(),
+                        id = it,
                         name = "Person $it",
                         originalName = "Original Person $it",
                         adult = false,
@@ -130,7 +130,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
                         profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
                         knownFor = (0 until 5).map { idx ->
                             KnownForUiState(
-                                id = idx.toLong(),
+                                id = idx,
                                 originalName = "Original Name $idx",
                                 name = "Name $idx",
                                 adult = false,

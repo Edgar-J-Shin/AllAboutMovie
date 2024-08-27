@@ -2,7 +2,7 @@ package com.dcs.domain.model
 
 
 data class Person(
-    val id: Long,
+    val id: Int,
     val name: String,
     val originalName: String,
     val adult: Boolean,
@@ -14,7 +14,7 @@ data class Person(
 )
 
 data class KnownFor(
-    val id: Long,
+    val id: Int,
     val name: String,
     val originalName: String,
     val adult: Boolean,

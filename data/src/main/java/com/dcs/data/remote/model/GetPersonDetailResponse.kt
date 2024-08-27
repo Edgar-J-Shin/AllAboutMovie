@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetPersonDetailResponse(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("also_known_as")
@@ -51,7 +51,7 @@ data class CombinedCredits(
 @Serializable
 data class RemoteCast(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
@@ -101,7 +101,7 @@ data class RemoteCast(
 @Serializable
 data class RemoteCrew(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")

@@ -1,7 +1,7 @@
 package com.dcs.domain.model
 
 data class PersonDetail(
-    val id: Long,
+    val id: Int,
     val adult: Boolean,
     val alsoKnownAs: List<String>,
     val biography: String,
@@ -21,7 +21,7 @@ data class PersonDetail(
 )
 
 data class Cast(
-    val id: Long,
+    val id: Int,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -47,7 +47,7 @@ data class Cast(
 )
 
 data class Crew(
-    val id: Long,
+    val id: Int,
     val adult: Boolean,
     val backdropPath: String,
     val creditId: String,

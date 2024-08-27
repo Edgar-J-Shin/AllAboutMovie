@@ -85,7 +85,7 @@ sealed class Screen(
             type = NavType.LongType
         })
     ) {
-        fun createRoute(personId: Long) = "$ROUTE_PERSON_DETAIL/${personId}"
+        fun createRoute(personId: Int) = "$ROUTE_PERSON_DETAIL/${personId}"
     }
 
     companion object {
