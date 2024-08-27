@@ -19,21 +19,19 @@ class GetPersonDetailUseCase @Inject constructor(
     }
 
     private fun List<Cast>.sortedByDate(): List<Cast> {
-        return withIndex()  // 인덱스를 보관하기 위해 withIndex 사용
+        return withIndex()
             .sortedWith(compareBy<IndexedValue<Cast>> {
-                // 1. releaseDate 또는 firstAirDate가 하나라도 있으면 우선순위를 낮게 설정
-                it.value.releaseDate.isNotBlank() || it.value.firstAirDate.isNotBlank()
-            }.thenByDescending {
-                // 2. releaseDate가 있으면 최신 날짜 순으로 정렬
-                parseDateOrNull(it.value.releaseDate)
-            }.thenByDescending {
-                // 3. releaseDate가 없으면 firstAirDate 기준으로 최신 날짜 순으로 정렬
-                parseDateOrNull(it.value.firstAirDate)
-            }.thenByDescending {
-                // 4. releaseDate와 firstAirDate가 모두 빈 값인 경우 인덱스 내림차순으로 정렬
-                if (it.value.releaseDate.isBlank() && it.value.firstAirDate.isBlank()) it.index else -1
-            })
-            .map { it.value }  // 다시 원래 리스트 형태로 변환
+                // 1. 둘 다 빈 값이면 인덱스 내림차순으로 정렬
+                if (it.value.releaseDate.isBlank() && it.value.firstAirDate.isBlank()) -it.index else 0
+            }
+                .thenByDescending {
+                    // 2. releaseDate가 있으면 releaseDate로 정렬, 없으면 firstAirDate로 정렬
+                    val releaseDate = parseDateOrNull(it.value.releaseDate)
+                    val firstAirDate = parseDateOrNull(it.value.firstAirDate)
+                    releaseDate ?: firstAirDate  // releaseDate가 없으면 firstAirDate를 사용
+                }
+            )
+            .map { it.value }
     }
 
     private fun List<Crew>.sortByReleaseDate(): List<Crew> {
