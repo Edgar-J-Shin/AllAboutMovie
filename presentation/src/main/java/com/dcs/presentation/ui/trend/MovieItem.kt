@@ -14,22 +14,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
+import com.dcs.presentation.core.designsystem.widget.ImageLoader
+import com.dcs.presentation.core.designsystem.widget.ImageLoaderData
 import com.dcs.presentation.core.model.MovieUiState
 import com.dcs.presentation.core.model.getPosterPathUrl
 import com.dcs.presentation.core.model.getReleaseDateOrFirstAirDate
 import com.dcs.presentation.core.model.getTitleOrName
 import com.dcs.presentation.core.model.getVotePercentage
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MovieItem(
     modifier: Modifier = Modifier,
@@ -46,15 +45,21 @@ fun MovieItem(
                 .fillMaxWidth()
                 .aspectRatio(0.75f)
         ) {
-            GlideImage(
-                model = movieUiState.getPosterPathUrl(),
-                contentDescription = "",
+            ImageLoader(
+                imageLoaderData = ImageLoaderData(
+                    imageUrl = movieUiState.getPosterPathUrl(),
+                    contentDescResId = R.string.movie_image_content_description
+                ),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 4.dp, end = 4.dp, top = 4.dp, bottom = 20.dp)
+                    .padding(
+                        start = 4.dp,
+                        end = 4.dp,
+                        top = 4.dp,
+                        bottom = 20.dp
+                    )
                     .align(Alignment.TopCenter)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
+                    .clip(RoundedCornerShape(8.dp))
             )
 
             CircularProgressBarWithPercentage(

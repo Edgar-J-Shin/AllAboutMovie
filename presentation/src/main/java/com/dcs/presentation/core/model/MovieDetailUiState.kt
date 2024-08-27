@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import com.dcs.domain.model.MovieId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.extensions.ImageType
+import java.util.Locale
 
 @Stable
 data class MovieDetailUiState(
@@ -110,3 +111,18 @@ fun MovieDetailUiState.toMovieId() = MovieId(id)
 fun MovieDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 
 fun MovieDetailUiState.getTitleOrNameWithReleaseYear() = "$title (${releaseDate.substring(0, 4)})"
+
+fun MovieDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.name }
+
+fun MovieDetailUiState.getRuntime() = "${runtime / 60}h ${runtime % 60}m"
+
+fun MovieDetailUiState.getSpokenLanguage(): String = spokenLanguages.firstOrNull()?.name ?: ""
+
+fun MovieDetailUiState.getCrew() = credits.crew
+    .groupBy { it.name }
+    .map { crewMap ->
+        crewMap.key to crewMap.value.joinToString(",") { it.job }
+    }
+    .take(4)
+
+fun CastUiState.getProfilePathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$profilePath"
