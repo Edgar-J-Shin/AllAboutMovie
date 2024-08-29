@@ -48,13 +48,13 @@ sealed class Screen(
         }
     }
 
-    data object DetailItem : Screen(
-        route = "$ROUTE_DETAIL/{$ID_SAVED_STATE_KEY}",
-        navArguments = persistentListOf(navArgument(ID_SAVED_STATE_KEY) {
-            type = NavType.StringType
+    data object MovieDetail : Screen(
+        route = "$ROUTE_DETAIL/{$MOVIE_ID_SAVED_STATE_KEY}",
+        navArguments = persistentListOf(navArgument(MOVIE_ID_SAVED_STATE_KEY) {
+            type = NavType.IntType
         })
     ) {
-        fun createRoute(itemId: String) = "$ROUTE_DETAIL/${itemId}"
+        fun createRoute(movieId: Int) = "$ROUTE_DETAIL/${movieId}"
 
     }
 
@@ -99,7 +99,7 @@ sealed class Screen(
         const val ROUTE_SEARCH_RESULT = "searchResult"
         const val ROUTE_PERSON_DETAIL = "personDetail"
 
-        const val ID_SAVED_STATE_KEY = "IdStateKey"
+        const val MOVIE_ID_SAVED_STATE_KEY = "MovieIdSavedStateKey"
         const val SIGN_IN_REQUEST_TOKEN_KEY = "SignInRequestTokenKey"
         const val SEARCH_RESULT_KEYWORD = "SearchResultKeyword"
         const val PERSON_DETAIL_ID_KEY = "PersonDetailIdKey"

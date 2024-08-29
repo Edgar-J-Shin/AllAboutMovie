@@ -13,6 +13,8 @@
     <string name="desc_search">search</string>
     <string name="desc_clear">clear</string>
     <string name="desc_history">history</string>
+    <string name="image_content_description">Image</string>
+    <string name="app_bar_back_content_description">Back</string>
 
     # Search > Searchbar
     <string name="searchbar_hint">Enter query text.</string>
@@ -21,6 +23,18 @@
 
     # SearchResult
     <string name="route_search_result_name">Search Result</string>
+    <string name="route_movie_detail_name">Movie Detail</string>
+
+    # Movie Detail
+    <string name="movie_image_content_description">Movie Image</string>
+    <string name="cast_image_content_description">Cast Image</string>
+    <string name="movie_detail_overview_title">Overview</string>
+    <string name="movie_detail_original_language_title">Original Language</string>
+    <string name="movie_detail_budget_title">Budget</string>
+    <string name="movie_detail_revenue_title">Revenue</string>
+    <string name="user_score">User Score</string>
+    <string name="top_billed_cast">Top Billed Cast</string>
+    <string name="top_billed_cast_empty_message">We don\'t have any cast added to this movie. You can help by adding some!</string>
 
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>

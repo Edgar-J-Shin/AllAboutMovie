@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.dcs.domain.model.MovieId
 import com.dcs.domain.usecase.GetContentsByPopularUseCase
 import com.dcs.domain.usecase.GetMoviesByTrendingUseCase
 import com.dcs.domain.usecase.GetMoviesByUpcomingUseCase
@@ -88,6 +89,27 @@ class TrendViewModel @Inject constructor(
     fun updateMoviePopularType(moviePopularUiType: MoviePopularUiType) {
         launch {
             _moviePopularUiType.emit(moviePopularUiType)
+        }
+    }
+
+    private fun navigateToMovieDetails(movieId: MovieId) {
+        launch {
+            _effect.emit(
+                TrendEffect.NavigateToMovieDetails(
+                    movieId = movieId
+                )
+            )
+        }
+    }
+
+    fun dispatchEvent(event: TrendUiEvent) {
+        when (event) {
+
+            is TrendUiEvent.NavigateToMovieDetails -> {
+                navigateToMovieDetails(
+                    movieId = event.movieId
+                )
+            }
         }
     }
 }

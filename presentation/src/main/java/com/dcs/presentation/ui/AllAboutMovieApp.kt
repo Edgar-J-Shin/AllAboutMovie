@@ -13,6 +13,7 @@ import com.dcs.presentation.ui.Screen.SearchResult
 import com.dcs.presentation.ui.Screen.SignIn
 import com.dcs.presentation.ui.main.MainRoute
 import com.dcs.presentation.ui.persondetail.PersonDetailRoute
+import com.dcs.presentation.ui.moviedetail.MovieDetailRoute
 import com.dcs.presentation.ui.searchresult.SearchResultRoute
 import com.dcs.presentation.ui.signin.SignInRoute
 
@@ -65,7 +66,12 @@ fun AllAboutMovieApp(
             route = SearchResult.route,
             arguments = SearchResult.navArguments
         ) {
-            SearchResultRoute(navController = navController)
+            SearchResultRoute(
+                navigateUp = { navController.popBackStack() },
+                navigateToDetails = { id ->
+                    navController.navigate(Screen.MovieDetail.createRoute(id))
+                },
+            )
         }
 
         composable(
@@ -74,6 +80,14 @@ fun AllAboutMovieApp(
         ) {
             PersonDetailRoute(
                 navigateUp = { navController.popBackStack() },
+            )
+        }
+        composable(
+            route = Screen.MovieDetail.route,
+            arguments = Screen.MovieDetail.navArguments
+        ) {
+            MovieDetailRoute(
+                navigateUp = { navController.popBackStack() }
             )
         }
     }

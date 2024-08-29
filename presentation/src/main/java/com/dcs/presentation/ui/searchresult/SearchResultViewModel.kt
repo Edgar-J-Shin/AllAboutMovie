@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.dcs.domain.model.MovieId
 import com.dcs.domain.usecase.GetSearchContentsUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
@@ -37,10 +38,26 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
+    private fun navigateToMovieDetails(movieId: MovieId) {
+        launch {
+            _effect.emit(
+                SearchResultEffect.NavigateToMovieDetails(
+                    movieId = movieId
+                )
+            )
+        }
+    }
+
     fun dispatchEvent(event: SearchResultUiEvent) {
         when (event) {
             is SearchResultUiEvent.NavigateBack -> {
                 navigateBack()
+            }
+
+            is SearchResultUiEvent.NavigateToMovieDetails -> {
+                navigateToMovieDetails(
+                    movieId = event.movieId
+                )
             }
         }
     }

@@ -4,11 +4,9 @@ import com.dcs.presentation.BuildConfig
 import java.util.Locale
 
 enum class ImageType {
-    ORIGINAL, W500;
+    ORIGINAL, W500, W200;
 
     override fun toString(): String {
         return super.toString().lowercase(Locale.getDefault())
     }
 }
-
-fun String.toImageUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$this"

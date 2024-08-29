@@ -8,7 +8,7 @@ import java.lang.reflect.Type
 
 class Network2CallAdapterFactory : CallAdapter.Factory() {
     override fun get(returnType: Type, annotations: Array<out Annotation>, retrofit: Retrofit): CallAdapter<*, *>? {
-        
+
         if (Call::class.java != getRawType(returnType)) {
             return null
         }
@@ -24,8 +24,8 @@ class Network2CallAdapterFactory : CallAdapter.Factory() {
             "Response must be parameterized as NetworkResponse<Foo> or NetworkResponse<out Foo>"
         }
 
-        val bodyType = getParameterUpperBound(0, responseType) //6
+        val bodyType = getParameterUpperBound(0, responseType)
 
-        return CustomCallAdapter<Any>(bodyType)
+        return CustomCallAdapter<Any>(bodyType, retrofit)
     }
 }

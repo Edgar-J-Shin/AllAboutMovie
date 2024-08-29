@@ -25,24 +25,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.dcs.domain.model.MovieId
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.core.model.MovieItemUiState
-import com.dcs.presentation.core.model.MovieItemUiStateProvider
+import com.dcs.presentation.core.model.MovieUiState
+import com.dcs.presentation.core.model.MovieUiStateProvider
+import com.dcs.presentation.core.model.toMovieId
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.ui.trend.MovieItem
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SearchResultRoute(
-    navController: NavHostController,
+    navigateUp: () -> Boolean,
+    navigateToDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
@@ -51,7 +53,11 @@ fun SearchResultRoute(
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             SearchResultEffect.NavigateBack -> {
-                navController.popBackStack()
+                navigateUp()
+            }
+
+            is SearchResultEffect.NavigateToMovieDetails -> {
+                navigateToDetails(effect.movieId.value)
             }
         }
     }
@@ -65,7 +71,7 @@ fun SearchResultRoute(
 
 @Composable
 private fun SearchResultScreen(
-    pagingItems: LazyPagingItems<MovieItemUiState>,
+    pagingItems: LazyPagingItems<MovieUiState>,
     onSearchResultEvent: (SearchResultUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,7 +115,14 @@ private fun SearchResultScreen(
 
                 isNotLoading -> {
                     VerticalGridMovie(
-                        movieItems = pagingItems
+                        movieItems = pagingItems,
+                        onItemClick = { movieId ->
+                            onSearchResultEvent(
+                                SearchResultUiEvent.NavigateToMovieDetails(
+                                    movieId = movieId
+                                )
+                            )
+                        },
                     )
                 }
             }
@@ -141,7 +154,8 @@ fun SearchResultTopAppBar(
 
 @Composable
 fun VerticalGridMovie(
-    movieItems: LazyPagingItems<MovieItemUiState>,
+    movieItems: LazyPagingItems<MovieUiState>,
+    onItemClick: (MovieId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val gridState = rememberLazyGridState()
@@ -163,8 +177,10 @@ fun VerticalGridMovie(
                 MovieItem(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    movie = movie,
-                    onClick = { }
+                    movieUiState = movie,
+                    onClick = {
+                        onItemClick(movie.toMovieId())
+                    }
                 )
             }
         }
@@ -174,7 +190,7 @@ fun VerticalGridMovie(
 @Preview(showBackground = true)
 @Composable
 fun SearchResultScreenPreview(
-    @PreviewParameter(MovieItemUiStateProvider::class) items: PagingData<MovieItemUiState>,
+    @PreviewParameter(MovieUiStateProvider::class) items: PagingData<MovieUiState>,
 ) {
     AllAboutMovieTheme {
         val pagingItems = flowOf(items).collectAsLazyPagingItems()

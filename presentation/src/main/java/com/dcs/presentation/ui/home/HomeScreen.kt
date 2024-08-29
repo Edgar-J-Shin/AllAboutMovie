@@ -38,18 +38,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.dcs.presentation.R
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.SearchUiState
 import com.dcs.presentation.core.model.SearchUiStateProvider
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
-import com.dcs.presentation.ui.Screen
 
 @Composable
 fun HomeRoute(
-    navigateToSearchDetail: (String) -> Unit,
     searchActive: Boolean,
+    navigateToSearchResult: (String) -> Unit,
     onSearchActiveChange: (Boolean) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
@@ -59,7 +57,7 @@ fun HomeRoute(
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
             is HomeEffect.NavigateToSearchResult -> {
-                navigateToSearchDetail(effect.keyword)
+                navigateToSearchResult(effect.keyword)
             }
 
             is HomeEffect.ShowSnackbar -> {

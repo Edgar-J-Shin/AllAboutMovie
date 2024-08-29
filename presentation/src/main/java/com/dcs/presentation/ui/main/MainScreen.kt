@@ -89,7 +89,7 @@ private fun MainNavHost(
     ) {
         composable(route = MainTab.Home.route) {
             HomeRoute(
-                navigateToSearchDetail = { keyword ->
+                navigateToSearchResult = { keyword ->
                     appNavHostController.navigate(Screen.SearchResult.createRoute(keyword))
                 },
                 searchActive = searchActive,
@@ -100,6 +100,9 @@ private fun MainNavHost(
 
         composable(route = MainTab.Trend.route) {
             TrendRoute(
+                navigateToDetails = { id ->
+                    appNavHostController.navigate(Screen.MovieDetail.createRoute(id))
+                },
                 showSnackBar = showSnackBar
             )
         }
