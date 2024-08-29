@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.domain.model.RequestToken
+import com.dcs.presentation.core.ui.common.UiState
 
 @Stable
 data class SignInUiState(

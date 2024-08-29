@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.MovieId
 import com.dcs.domain.usecase.GetMovieByIdUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.model.UiState
-import com.dcs.presentation.core.model.asUiState
+import com.dcs.presentation.core.ui.common.UiState
+import com.dcs.presentation.core.ui.common.asUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
