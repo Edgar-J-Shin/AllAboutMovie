@@ -40,7 +40,7 @@ import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.SettingUiStateProvider
 import com.dcs.presentation.core.model.UserProfile
 import com.dcs.presentation.core.model.toDisplayName
-import com.dcs.presentation.core.ui.common.UiState
+import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.theme.Gray1
 
 @Composable
