@@ -5,7 +5,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.domain.model.MovieId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.extensions.ImageType
-import com.dcs.presentation.core.state.UiState
 import java.time.LocalDate
 
 @Stable

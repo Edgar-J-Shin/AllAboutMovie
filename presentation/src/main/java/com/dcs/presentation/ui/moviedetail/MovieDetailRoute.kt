@@ -29,7 +29,7 @@ import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieDetailUiState
 import com.dcs.presentation.core.model.MovieDetailUiStateProvider
-import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.model.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 
 @Composable

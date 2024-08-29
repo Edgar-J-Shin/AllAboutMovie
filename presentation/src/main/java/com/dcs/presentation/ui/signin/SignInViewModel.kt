@@ -7,7 +7,7 @@ import com.dcs.domain.model.RequestToken
 import com.dcs.domain.usecase.SignInUseCase
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
-import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.model.UiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel

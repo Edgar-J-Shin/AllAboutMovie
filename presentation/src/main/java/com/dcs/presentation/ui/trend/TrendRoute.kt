@@ -48,8 +48,8 @@ import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieUiState
 import com.dcs.presentation.core.model.MovieUiStateProvider
 import com.dcs.presentation.core.model.toMovieId
-import com.dcs.presentation.core.state.MoviePopularUiType
-import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.model.MoviePopularUiType
+import com.dcs.presentation.core.model.MovieTrendUiType
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import kotlinx.coroutines.flow.flowOf
 

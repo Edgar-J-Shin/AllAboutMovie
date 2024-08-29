@@ -29,7 +29,7 @@ import com.dcs.presentation.core.model.CrewUiState
 import com.dcs.presentation.core.model.GenderUiState
 import com.dcs.presentation.core.model.KnownForUiState
 import com.dcs.presentation.core.model.PersonDetailUiState
-import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.model.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 
 @Composable

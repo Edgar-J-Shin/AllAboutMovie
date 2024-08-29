@@ -7,8 +7,8 @@ import com.dcs.domain.usecase.SignOutUseCase
 import com.dcs.presentation.core.designsystem.state.SnackbarState
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.UserProfile
-import com.dcs.presentation.core.state.UiState
-import com.dcs.presentation.core.state.asUiState
+import com.dcs.presentation.core.model.UiState
+import com.dcs.presentation.core.model.asUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

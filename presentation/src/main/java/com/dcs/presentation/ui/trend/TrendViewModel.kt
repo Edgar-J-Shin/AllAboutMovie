@@ -12,8 +12,8 @@ import com.dcs.domain.usecase.GetMoviesByUpcomingUseCase
 import com.dcs.presentation.core.model.mapper.toMediaType
 import com.dcs.presentation.core.model.mapper.toTimeWindow
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.state.MoviePopularUiType
-import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.model.MoviePopularUiType
+import com.dcs.presentation.core.model.MovieTrendUiType
 import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
