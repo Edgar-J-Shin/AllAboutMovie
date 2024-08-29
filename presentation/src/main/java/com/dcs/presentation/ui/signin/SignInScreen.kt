@@ -28,7 +28,7 @@ import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingDialog
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.model.SignInUiStateProvider
-import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.White3
 

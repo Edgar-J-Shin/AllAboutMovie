@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.state
+package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

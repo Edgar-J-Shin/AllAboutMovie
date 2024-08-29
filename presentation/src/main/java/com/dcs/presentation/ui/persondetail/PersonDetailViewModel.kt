@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dcs.domain.usecase.GetPersonDetailUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.state.UiState
-import com.dcs.presentation.core.state.asUiState
+import com.dcs.presentation.core.ui.state.UiState
+import com.dcs.presentation.core.ui.state.asUiState
 import com.dcs.presentation.ui.Screen.Companion.PERSON_DETAIL_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
