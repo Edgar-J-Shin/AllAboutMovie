@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
-    fun getMediaContentsByTrending(mediaType: MediaType, timeWindow: TimeWindow): Flow<PagingData<MediaPolymorphic>>
+    fun getTrendingMediaContents(mediaType: MediaType, timeWindow: TimeWindow): Flow<PagingData<MediaPolymorphic>>
 
-    fun getMoviesByPopular(): Flow<PagingData<MediaPolymorphic.Movie>>
+    fun getPopularMovies(): Flow<PagingData<MediaPolymorphic.Movie>>
 
-    fun getMoviesByTopRated(): Flow<PagingData<MediaPolymorphic.Movie>>
+    fun getTopRatedMovies(): Flow<PagingData<MediaPolymorphic.Movie>>
 
-    fun getMoviesByUpcoming(): Flow<PagingData<MediaPolymorphic.Movie>>
+    fun getUpcomingMovies(): Flow<PagingData<MediaPolymorphic.Movie>>
 
     fun getSearchContents(query: String): Flow<PagingData<MediaPolymorphic.Movie>>
 

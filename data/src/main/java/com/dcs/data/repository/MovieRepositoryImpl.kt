@@ -37,7 +37,7 @@ class MovieRepositoryImpl @Inject constructor(
 ) : MovieRepository {
 
     @WorkerThread
-    override fun getMediaContentsByTrending(
+    override fun getTrendingMediaContents(
         mediaType: MediaType,
         timeWindow: TimeWindow,
     ): Flow<PagingData<MediaPolymorphic>> =
@@ -52,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow
 
     @WorkerThread
-    override fun getMoviesByPopular(): Flow<PagingData<MediaPolymorphic.Movie>> =
+    override fun getPopularMovies(): Flow<PagingData<MediaPolymorphic.Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -64,7 +64,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow
 
     @WorkerThread
-    override fun getMoviesByTopRated(): Flow<PagingData<MediaPolymorphic.Movie>> =
+    override fun getTopRatedMovies(): Flow<PagingData<MediaPolymorphic.Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -75,7 +75,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
-    override fun getMoviesByUpcoming(): Flow<PagingData<MediaPolymorphic.Movie>> =
+    override fun getUpcomingMovies(): Flow<PagingData<MediaPolymorphic.Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {

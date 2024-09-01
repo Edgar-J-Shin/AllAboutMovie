@@ -3,7 +3,7 @@ package com.dcs.presentation.core.model.mapper
 import com.dcs.domain.model.MediaPolymorphic
 import com.dcs.domain.model.TimeWindow
 import com.dcs.presentation.core.model.MediaContentUiState
-import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.state.TrendingMovieUiType
 
 fun MediaPolymorphic.Movie.toUiState() = MediaContentUiState(
     id = id,
@@ -29,4 +29,4 @@ fun MediaPolymorphic.toUiState() = when (this) {
     is MediaPolymorphic.TvShow -> toUiState()
 }
 
-fun MovieTrendUiType.toTimeWindow() = TimeWindow.timeWindow(this.toString())
+fun TrendingMovieUiType.toTimeWindow() = TimeWindow.timeWindow(this.toString())

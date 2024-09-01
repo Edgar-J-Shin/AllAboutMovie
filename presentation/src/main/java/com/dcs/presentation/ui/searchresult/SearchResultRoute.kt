@@ -38,7 +38,7 @@ import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.MediaContentUiStateProvider
 import com.dcs.presentation.core.model.toMediaContentId
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
-import com.dcs.presentation.ui.trend.MediaItem
+import com.dcs.presentation.ui.trend.component.MediaItem
 import kotlinx.coroutines.flow.flowOf
 
 @Composable

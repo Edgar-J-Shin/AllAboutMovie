@@ -48,9 +48,10 @@ import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.MediaContentUiStateProvider
 import com.dcs.presentation.core.model.toMediaContentId
-import com.dcs.presentation.core.state.MoviePopularUiType
-import com.dcs.presentation.core.state.MovieTrendUiType
+import com.dcs.presentation.core.state.PopularMovieUiType
+import com.dcs.presentation.core.state.TrendingMovieUiType
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
+import com.dcs.presentation.ui.trend.component.MediaItem
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -80,8 +81,8 @@ fun TrendRoute(
     }
 
     val scrollState = rememberScrollState()
-    val trendingMovies = viewModel.moviesByTrending.collectAsLazyPagingItems()
-    val popularMovies = viewModel.moviesByPopular.collectAsLazyPagingItems()
+    val trendingMovies = viewModel.trendingMovies.collectAsLazyPagingItems()
+    val popularMovies = viewModel.popularMovies.collectAsLazyPagingItems()
     val upcomingMovies = viewModel.moviesByUpcoming.collectAsLazyPagingItems()
 
     TrendScreen(
@@ -102,8 +103,8 @@ fun TrendScreen(
     popularMovies: LazyPagingItems<MediaContentUiState>,
     upcomingMovies: LazyPagingItems<MediaContentUiState>,
     modifier: Modifier = Modifier,
-    onMovieTrendTypeChange: (MovieTrendUiType) -> Unit = {},
-    onMoviePopularTypeChange: (MoviePopularUiType) -> Unit = {},
+    onMovieTrendTypeChange: (TrendingMovieUiType) -> Unit = {},
+    onMoviePopularTypeChange: (PopularMovieUiType) -> Unit = {},
     onTrendUiEvent: (TrendUiEvent) -> Unit = {},
     scrollState: ScrollState = rememberScrollState(),
 ) {
@@ -113,15 +114,15 @@ fun TrendScreen(
             .verticalScroll(scrollState)
     ) {
 
-        TrendMovieSector(
+        TrendingMovieSector(
             pagingItems = trendingMovies,
-            onTabClick = { tabIndex -> onMovieTrendTypeChange(MovieTrendUiType.entries[tabIndex]) },
+            onTabClick = { tabIndex -> onMovieTrendTypeChange(TrendingMovieUiType.entries[tabIndex]) },
             onItemClick = { onTrendUiEvent(TrendUiEvent.NavigateToMovieDetails(it)) }
         )
 
         PopularMovieSector(
             pagingItems = popularMovies,
-            onTabClick = { tabIndex -> onMoviePopularTypeChange(MoviePopularUiType.entries[tabIndex]) },
+            onTabClick = { tabIndex -> onMoviePopularTypeChange(PopularMovieUiType.entries[tabIndex]) },
             onItemClick = { onTrendUiEvent(TrendUiEvent.NavigateToMovieDetails(it)) }
         )
 
@@ -133,7 +134,7 @@ fun TrendScreen(
 }
 
 @Composable
-fun TrendMovieSector(
+fun TrendingMovieSector(
     pagingItems: LazyPagingItems<MediaContentUiState>,
     onTabClick: (Int) -> Unit = {},
     onItemClick: (MediaContentId) -> Unit = {},
@@ -141,7 +142,7 @@ fun TrendMovieSector(
     MediaContentSector(
         title = stringResource(id = R.string.movie_trend_title_trend),
         pagingItems = pagingItems,
-        tabs = MovieTrendUiType.entries.map { it.toUiString() },
+        tabs = TrendingMovieUiType.entries.map { it.toUiString() },
         onTabClick = onTabClick,
         onItemClick = onItemClick
     )
@@ -156,7 +157,7 @@ fun PopularMovieSector(
     MediaContentSector(
         title = stringResource(id = R.string.movie_trend_title_popular),
         pagingItems = pagingItems,
-        tabs = MoviePopularUiType.entries.map { it.toUiString() },
+        tabs = PopularMovieUiType.entries.map { it.toUiString() },
         onTabClick = onTabClick,
         onItemClick = onItemClick
     )

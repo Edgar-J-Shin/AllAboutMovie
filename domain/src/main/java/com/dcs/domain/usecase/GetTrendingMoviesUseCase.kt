@@ -8,14 +8,14 @@ import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMoviesByTrendingUseCase @Inject constructor(
+class GetTrendingMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
 ) {
     operator fun invoke(
         mediaType: MediaType,
         timeWindow: TimeWindow,
     ): Flow<PagingData<MediaPolymorphic>> {
-        return movieRepository.getMediaContentsByTrending(
+        return movieRepository.getTrendingMediaContents(
             mediaType = mediaType,
             timeWindow = timeWindow
         )
