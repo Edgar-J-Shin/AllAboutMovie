@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
@@ -41,9 +40,8 @@ import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.SettingUiStateProvider
 import com.dcs.presentation.core.model.UserProfile
 import com.dcs.presentation.core.model.toDisplayName
-import com.dcs.presentation.core.state.UiState
+import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.theme.Gray1
-import com.dcs.presentation.ui.Screen
 
 @Composable
 fun SettingRoute(
@@ -102,18 +100,16 @@ fun SettingScreen(
 
             is UiState.Success -> {
                 val settingUiState = state.data
-                if (settingUiState != null) {
-                    SettingContents(
-                        uiState = settingUiState,
-                        onSettingEvent = onSettingEvent,
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 20.dp)
-                            .fillMaxSize(),
-                    )
+                SettingContents(
+                    uiState = settingUiState,
+                    onSettingEvent = onSettingEvent,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 20.dp)
+                        .fillMaxSize(),
+                )
 
-                    if (isLoading) {
-                        LoadingDialog()
-                    }
+                if (isLoading) {
+                    LoadingDialog()
                 }
             }
 

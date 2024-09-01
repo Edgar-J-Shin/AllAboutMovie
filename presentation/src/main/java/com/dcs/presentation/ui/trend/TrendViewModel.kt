@@ -8,13 +8,13 @@ import androidx.paging.map
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.usecase.GetPopularMoviesUseCase
+import com.dcs.domain.usecase.GetPopularTvShowsUseCase
 import com.dcs.domain.usecase.GetTrendingMoviesUseCase
 import com.dcs.domain.usecase.GetUpcomingMoviesUseCase
-import com.dcs.domain.usecase.GetPopularTvShowsUseCase
-import com.dcs.presentation.core.model.mapper.toUiState
+import com.dcs.presentation.core.model.PopularMovieUiType
+import com.dcs.presentation.core.model.TrendingMovieUiType
 import com.dcs.presentation.core.model.mapper.toTimeWindow
-import com.dcs.presentation.core.state.PopularMovieUiType
-import com.dcs.presentation.core.state.TrendingMovieUiType
+import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

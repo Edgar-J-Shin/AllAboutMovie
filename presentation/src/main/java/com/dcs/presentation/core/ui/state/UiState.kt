@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.state
+package com.dcs.presentation.core.ui.state
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

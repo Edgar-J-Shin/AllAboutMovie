@@ -47,9 +47,9 @@ import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.MediaContentUiStateProvider
+import com.dcs.presentation.core.model.PopularMovieUiType
+import com.dcs.presentation.core.model.TrendingMovieUiType
 import com.dcs.presentation.core.model.toMediaContentId
-import com.dcs.presentation.core.state.PopularMovieUiType
-import com.dcs.presentation.core.state.TrendingMovieUiType
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.ui.trend.component.MediaItem
 import kotlinx.coroutines.flow.flowOf

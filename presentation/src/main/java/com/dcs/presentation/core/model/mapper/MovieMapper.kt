@@ -3,7 +3,7 @@ package com.dcs.presentation.core.model.mapper
 import com.dcs.domain.model.MediaPolymorphic
 import com.dcs.domain.model.TimeWindow
 import com.dcs.presentation.core.model.MediaContentUiState
-import com.dcs.presentation.core.state.TrendingMovieUiType
+import com.dcs.presentation.core.model.TrendingMovieUiType
 
 fun MediaPolymorphic.Movie.toUiState() = MediaContentUiState(
     id = id,
