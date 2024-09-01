@@ -95,13 +95,13 @@ class TrendViewModel @Inject constructor(
             initialValue = PagingData.empty(),
         )
 
-    fun updateMovieTrendType(trendingMovieUiType: TrendingMovieUiType) {
+    fun updateTrendingMovieUiType(trendingMovieUiType: TrendingMovieUiType) {
         launch {
             _trendingMovieUiType.emit(trendingMovieUiType)
         }
     }
 
-    fun updateMoviePopularType(popularMovieUiType: PopularMovieUiType) {
+    fun updatePopularMovieUiType(popularMovieUiType: PopularMovieUiType) {
         launch {
             _popularMovieUiType.emit(popularMovieUiType)
         }

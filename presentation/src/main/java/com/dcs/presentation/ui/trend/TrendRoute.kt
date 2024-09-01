@@ -89,8 +89,8 @@ fun TrendRoute(
         trendingMovies = trendingMovies,
         popularMovies = popularMovies,
         upcomingMovies = upcomingMovies,
-        onMovieTrendTypeChange = viewModel::updateMovieTrendType,
-        onMoviePopularTypeChange = viewModel::updateMoviePopularType,
+        onTrendingMovieUiTypeChange = viewModel::updateTrendingMovieUiType,
+        onPopularMovieUiTypeChange = viewModel::updatePopularMovieUiType,
         onTrendUiEvent = viewModel::dispatchEvent,
         scrollState = scrollState,
         modifier = modifier
@@ -103,8 +103,8 @@ fun TrendScreen(
     popularMovies: LazyPagingItems<MediaContentUiState>,
     upcomingMovies: LazyPagingItems<MediaContentUiState>,
     modifier: Modifier = Modifier,
-    onMovieTrendTypeChange: (TrendingMovieUiType) -> Unit = {},
-    onMoviePopularTypeChange: (PopularMovieUiType) -> Unit = {},
+    onTrendingMovieUiTypeChange: (TrendingMovieUiType) -> Unit = {},
+    onPopularMovieUiTypeChange: (PopularMovieUiType) -> Unit = {},
     onTrendUiEvent: (TrendUiEvent) -> Unit = {},
     scrollState: ScrollState = rememberScrollState(),
 ) {
@@ -116,13 +116,13 @@ fun TrendScreen(
 
         TrendingMovieSector(
             pagingItems = trendingMovies,
-            onTabClick = { tabIndex -> onMovieTrendTypeChange(TrendingMovieUiType.entries[tabIndex]) },
+            onTabClick = { tabIndex -> onTrendingMovieUiTypeChange(TrendingMovieUiType.entries[tabIndex]) },
             onItemClick = { onTrendUiEvent(TrendUiEvent.NavigateToMovieDetails(it)) }
         )
 
         PopularMovieSector(
             pagingItems = popularMovies,
-            onTabClick = { tabIndex -> onMoviePopularTypeChange(PopularMovieUiType.entries[tabIndex]) },
+            onTabClick = { tabIndex -> onPopularMovieUiTypeChange(PopularMovieUiType.entries[tabIndex]) },
             onItemClick = { onTrendUiEvent(TrendUiEvent.NavigateToMovieDetails(it)) }
         )
 
