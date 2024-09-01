@@ -1,6 +1,6 @@
 package com.dcs.domain.model
 
 @JvmInline
-value class MovieId(
+value class MediaContentId(
     val value: Int,
 )

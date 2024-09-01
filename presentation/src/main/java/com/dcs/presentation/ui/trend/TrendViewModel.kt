@@ -5,13 +5,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.dcs.domain.model.MovieId
-import com.dcs.domain.usecase.GetContentsByPopularUseCase
+import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.MediaType
+import com.dcs.domain.usecase.GetMoviesByPopularUseCase
 import com.dcs.domain.usecase.GetMoviesByTrendingUseCase
 import com.dcs.domain.usecase.GetMoviesByUpcomingUseCase
-import com.dcs.presentation.core.model.mapper.toMediaType
-import com.dcs.presentation.core.model.mapper.toTimeWindow
+import com.dcs.domain.usecase.GetPopularTvShowsUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
+import com.dcs.presentation.core.model.mapper.toTimeWindow
 import com.dcs.presentation.core.state.MoviePopularUiType
 import com.dcs.presentation.core.state.MovieTrendUiType
 import com.dcs.presentation.core.ui.lifecycle.launch
@@ -30,8 +31,9 @@ import javax.inject.Inject
 @HiltViewModel
 class TrendViewModel @Inject constructor(
     getMoviesByTrendingUseCase: GetMoviesByTrendingUseCase,
-    getContentsByPopularUseCase: GetContentsByPopularUseCase,
+    getMoviesByPopularUseCase: GetMoviesByPopularUseCase,
     getMoviesByUpcomingUseCase: GetMoviesByUpcomingUseCase,
+    getPopularTvShowsUseCase: GetPopularTvShowsUseCase,
 ) : ViewModel() {
 
     private var _movieTrendUiType = MutableStateFlow(MovieTrendUiType.DAY)
@@ -47,8 +49,8 @@ class TrendViewModel @Inject constructor(
     internal val moviesByTrending = movieTrendType
         .map { it.toTimeWindow() }
         .flatMapLatest { timeWindow ->
-            getMoviesByTrendingUseCase(timeWindow)
-                .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+            getMoviesByTrendingUseCase(MediaType.mediaType("movie"), timeWindow)
+                .map { pagingData -> pagingData.map { mediaPolymorphic -> mediaPolymorphic.toUiState() } }
                 .cachedIn(viewModelScope)
         }
         .stateIn(
@@ -59,11 +61,20 @@ class TrendViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     internal val moviesByPopular = moviePopularType
-        .map { it.toMediaType() }
-        .flatMapLatest { mediaType ->
-            getContentsByPopularUseCase(mediaType)
-                .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
-                .cachedIn(viewModelScope)
+        .flatMapLatest { popularType ->
+            when (popularType) {
+                MoviePopularUiType.TV -> {
+                    getPopularTvShowsUseCase()
+                        .map { pagingData -> pagingData.map { movie -> movie.toUiState() } }
+                        .cachedIn(viewModelScope)
+                }
+
+                MoviePopularUiType.MOVIE -> {
+                    getMoviesByPopularUseCase()
+                        .map { pagingData -> pagingData.map { movie -> movie.toUiState() } }
+                        .cachedIn(viewModelScope)
+                }
+            }
         }
         .stateIn(
             scope = viewModelScope,
@@ -72,7 +83,11 @@ class TrendViewModel @Inject constructor(
         )
 
     internal val moviesByUpcoming = getMoviesByUpcomingUseCase()
-        .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+        .map { pagingData ->
+            pagingData.map { movie ->
+                movie.toUiState()
+            }
+        }
         .cachedIn(viewModelScope)
         .stateIn(
             scope = viewModelScope,
@@ -92,11 +107,11 @@ class TrendViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToMovieDetails(movieId: MovieId) {
+    private fun navigateToMovieDetails(mediaContentId: MediaContentId) {
         launch {
             _effect.emit(
                 TrendEffect.NavigateToMovieDetails(
-                    movieId = movieId
+                    mediaContentId = mediaContentId
                 )
             )
         }
@@ -107,7 +122,7 @@ class TrendViewModel @Inject constructor(
 
             is TrendUiEvent.NavigateToMovieDetails -> {
                 navigateToMovieDetails(
-                    movieId = event.movieId
+                    mediaContentId = event.mediaContentId
                 )
             }
         }

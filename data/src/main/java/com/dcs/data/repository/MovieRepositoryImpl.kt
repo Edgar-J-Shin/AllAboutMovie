@@ -6,15 +6,20 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dcs.data.di.IoDispatcher
 import com.dcs.data.local.datasource.KeywordLocalDataSource
+import com.dcs.data.model.MediaContentType
 import com.dcs.data.model.MovieType
+import com.dcs.data.model.TvShowType
 import com.dcs.data.model.mapper.toEntity
+import com.dcs.data.pagingsource.MediaContentPagingSource
 import com.dcs.data.pagingsource.MoviePagingSource
+import com.dcs.data.pagingsource.TvShowPagingSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
+import com.dcs.data.remote.datasource.TvShowRemoteDataSource
 import com.dcs.domain.model.Keyword
+import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.MediaPolymorphic
 import com.dcs.domain.model.MediaType
-import com.dcs.domain.model.Movie
 import com.dcs.domain.model.MovieDetail
-import com.dcs.domain.model.MovieId
 import com.dcs.domain.model.TimeWindow
 import com.dcs.domain.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,12 +31,40 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource,
+    private val tvShowRemoteDataSource: TvShowRemoteDataSource,
     private val keywordLocalDataSource: KeywordLocalDataSource,
     @IoDispatcher val ioDispatcher: CoroutineDispatcher,
 ) : MovieRepository {
 
     @WorkerThread
-    override fun getMoviesByTopRated(): Flow<PagingData<Movie>> =
+    override fun getMediaContentsByTrending(
+        mediaType: MediaType,
+        timeWindow: TimeWindow,
+    ): Flow<PagingData<MediaPolymorphic>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MediaContentPagingSource(
+                    mediaContentType = MediaContentType.Trending(mediaType = mediaType, timeWindow = timeWindow),
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
+    @WorkerThread
+    override fun getMoviesByPopular(): Flow<PagingData<MediaPolymorphic.Movie>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    movieType = MovieType.Popular,
+                    movieRemoteDataSource = movieRemoteDataSource
+                )
+            }
+        ).flow
+
+    @WorkerThread
+    override fun getMoviesByTopRated(): Flow<PagingData<MediaPolymorphic.Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -42,31 +75,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
-    @WorkerThread
-    override fun getMoviesByTrending(timeWindow: TimeWindow): Flow<PagingData<Movie>> =
-        Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
-            pagingSourceFactory = {
-                MoviePagingSource(
-                    movieType = MovieType.Trending(timeWindow = timeWindow),
-                    movieRemoteDataSource = movieRemoteDataSource
-                )
-            }
-        ).flow
-
-    @WorkerThread
-    override fun getMoviesByPopular(mediaType: MediaType): Flow<PagingData<Movie>> =
-        Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
-            pagingSourceFactory = {
-                MoviePagingSource(
-                    movieType = MovieType.Popular(mediaType = mediaType),
-                    movieRemoteDataSource = movieRemoteDataSource
-                )
-            }
-        ).flow
-
-    override fun getMoviesByUpcoming(): Flow<PagingData<Movie>> =
+    override fun getMoviesByUpcoming(): Flow<PagingData<MediaPolymorphic.Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -77,7 +86,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         ).flow
 
-    override fun getSearchContents(query: String): Flow<PagingData<Movie>> =
+    override fun getSearchContents(query: String): Flow<PagingData<MediaPolymorphic.Movie>> =
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
@@ -93,11 +102,11 @@ class MovieRepositoryImpl @Inject constructor(
             }
 
     override fun getMovieById(
-        movieId: MovieId,
+        mediaContentId: MediaContentId,
     ): Flow<MovieDetail> = flow {
         val result = movieRemoteDataSource
             .getMovieDetailById(
-                movieId = movieId,
+                mediaContentId = mediaContentId,
                 appendToResponse = "credits",
                 language = "en-US"
             )
@@ -106,6 +115,17 @@ class MovieRepositoryImpl @Inject constructor(
 
         emit(result)
     }.flowOn(ioDispatcher)
+
+    override fun getPopularTvShows(): Flow<PagingData<MediaPolymorphic.TvShow>> =
+        Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = DEFAULT_PAGE_SIZE),
+            pagingSourceFactory = {
+                TvShowPagingSource(
+                    tvShowType = TvShowType.Popular,
+                    tvShowRemoteDataSource = tvShowRemoteDataSource,
+                )
+            }
+        ).flow
 
     companion object {
         const val DEFAULT_PAGE_SIZE: Int = 20

@@ -1,6 +1,6 @@
 package com.dcs.presentation.ui.trend
 
-import com.dcs.domain.model.MovieId
+import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.core.designsystem.state.SnackbarState
 
 sealed interface TrendEffect {
@@ -10,6 +10,6 @@ sealed interface TrendEffect {
     ) : TrendEffect
 
     data class NavigateToMovieDetails(
-        val movieId: MovieId,
+        val mediaContentId: MediaContentId,
     ) : TrendEffect
 }

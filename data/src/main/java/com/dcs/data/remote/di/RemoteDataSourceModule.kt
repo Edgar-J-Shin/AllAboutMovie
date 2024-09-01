@@ -6,6 +6,8 @@ import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.data.remote.datasource.MovieRemoteDataSourceImpl
 import com.dcs.data.remote.datasource.PersonRemoteDataSource
 import com.dcs.data.remote.datasource.PersonRemoteDataSourceImpl
+import com.dcs.data.remote.datasource.TvShowRemoteDataSource
+import com.dcs.data.remote.datasource.TvShowRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,10 +16,14 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class RemoteDataSourceModule() {
+internal abstract class RemoteDataSourceModule {
     @Binds
     @Singleton
     abstract fun bindMovieRemoteDataSource(movieRemoteDataSourceImpl: MovieRemoteDataSourceImpl): MovieRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTvShowRemoteDataSource(tvShowRemoteDataSourceImpl: TvShowRemoteDataSourceImpl): TvShowRemoteDataSource
 
     @Binds
     @Singleton
