@@ -1,14 +1,13 @@
 package com.dcs.presentation.ui.signin
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.dcs.domain.model.RequestToken
 import com.dcs.domain.usecase.SignInUseCase
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
-import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.lifecycle.launch
+import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,7 +77,7 @@ class SignInViewModel @Inject constructor(
                 }
                 .catch { throwable ->
                     // Handle failure
-                    Log.e(TAG, "signIn: ", throwable)
+                    Timber.tag(TAG).e(throwable, "signIn: ")
                     _state.update { UiState.Error(throwable) }
                 }
                 .collect {
