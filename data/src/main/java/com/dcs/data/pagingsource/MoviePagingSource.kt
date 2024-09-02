@@ -3,6 +3,7 @@ package com.dcs.data.pagingsource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.dcs.data.model.MovieType
+import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.MediaPolymorphic
 import timber.log.Timber
@@ -35,7 +36,7 @@ class MoviePagingSource(
                 }
 
             LoadResult.Page(
-                data = contents.map { it.toEntity() as MediaPolymorphic.Movie },
+                data = contents.map { it.toEntity() },
                 prevKey = if (page != START_PAGE_INDEX) page - 1 else null,
                 nextKey = if (page < totalPages) page + 1 else null
             )

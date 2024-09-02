@@ -3,6 +3,7 @@ package com.dcs.data.pagingsource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.dcs.data.model.MediaContentType
+import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.MovieRemoteDataSource
 import com.dcs.domain.model.MediaPolymorphic
 import timber.log.Timber

@@ -1,6 +1,5 @@
 package com.dcs.data.remote.model
 
-import com.dcs.domain.model.MediaPolymorphic
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
@@ -16,8 +15,6 @@ import kotlinx.serialization.json.jsonPrimitive
 
 @Serializable(with = RemoteMediaPolymorphic.Serializer::class)
 sealed interface RemoteMediaPolymorphic {
-
-    fun toEntity(): MediaPolymorphic
 
     @Serializable
     data class RemoteMovie(
@@ -51,25 +48,7 @@ sealed interface RemoteMediaPolymorphic {
         val voteAverage: Double = 0.0,
         @SerialName("vote_count")
         val voteCount: Int = 0,
-    ) : RemoteMediaPolymorphic {
-        override fun toEntity(): MediaPolymorphic = MediaPolymorphic.Movie(
-            adult = adult,
-            backdropPath = backdropPath,
-            genreIds = genreIds,
-            id = id,
-            mediaType = mediaType,
-            originalLanguage = originalLanguage,
-            originalTitle = originalTitle,
-            overview = overview,
-            popularity = popularity,
-            posterPath = posterPath,
-            releaseDate = releaseDate,
-            title = title,
-            video = video,
-            voteAverage = voteAverage,
-            voteCount = voteCount,
-        )
-    }
+    ) : RemoteMediaPolymorphic
 
     @Serializable
     data class RemoteTvShow(
@@ -103,25 +82,7 @@ sealed interface RemoteMediaPolymorphic {
         val voteCount: Int = 0,
         @SerialName("original_country")
         val originalCountry: List<String> = emptyList(),
-    ) : RemoteMediaPolymorphic {
-        override fun toEntity(): MediaPolymorphic = MediaPolymorphic.TvShow(
-            adult = adult,
-            backdropPath = backdropPath,
-            genreIds = genreIds,
-            id = id,
-            mediaType = mediaType,
-            originalLanguage = originalLanguage,
-            overview = overview,
-            popularity = popularity,
-            posterPath = posterPath,
-            voteAverage = voteAverage,
-            voteCount = voteCount,
-            name = name,
-            originalName = originalName,
-            firstAirDate = firstAirDate,
-            originalCountry = originalCountry
-        )
-    }
+    ) : RemoteMediaPolymorphic
 
     object Serializer : KSerializer<RemoteMediaPolymorphic> {
         private val json = Json {
