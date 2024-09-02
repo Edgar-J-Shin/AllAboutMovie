@@ -8,6 +8,7 @@ import com.dcs.data.remote.model.GetMoviesResponse
 import com.dcs.data.remote.network.NetworkResponse
 import com.dcs.data.remote.service.MovieService
 import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.TimeWindow
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     ): Result<GetMediaContentsResponse> {
         return when (mediaContentType) {
             is MediaContentType.Trending -> {
-                getTrendingMovies(mediaContentType.timeWindow, page, language)
+                getTrendingMediaContents(mediaContentType.mediaType, mediaContentType.timeWindow, page, language)
             }
         }.asResult {
             it.data as GetMediaContentsResponse
@@ -69,12 +70,14 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             it.data as GetMovieDetailResponse
         }
 
-    private suspend fun getTrendingMovies(
+    private suspend fun getTrendingMediaContents(
+        mediaType: MediaType,
         timeWindow: TimeWindow,
         page: Int,
         language: String,
     ): NetworkResponse<GetMediaContentsResponse> =
-        movieService.fetchTrendingMovies(
+        movieService.fetchTrendingMediaContents(
+            mediaType = mediaType.value,
             timeWindow = timeWindow.value,
             page = page,
             language = language

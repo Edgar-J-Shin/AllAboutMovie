@@ -20,9 +20,10 @@ interface MovieService {
      *
      * @return [GetMoviesResponse]
      */
-    @GET("trending/movie/{time_window}")
-    suspend fun fetchTrendingMovies(
-        @Path("time_window") timeWindow: String = "day",
+    @GET("trending/{media_type}/{time_window}")
+    suspend fun fetchTrendingMediaContents(
+        @Path("media_type") mediaType: String,
+        @Path("time_window") timeWindow: String,
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetMediaContentsResponse>

@@ -49,7 +49,7 @@ class TrendViewModel @Inject constructor(
     internal val trendingMovies = trendingMovieUiType
         .map { it.toTimeWindow() }
         .flatMapLatest { timeWindow ->
-            getTrendingMoviesUseCase(MediaType.mediaType("movie"), timeWindow)
+            getTrendingMoviesUseCase(MediaType.MOIVE, timeWindow)
                 .map { pagingData -> pagingData.map { mediaPolymorphic -> mediaPolymorphic.toUiState() } }
                 .cachedIn(viewModelScope)
         }
