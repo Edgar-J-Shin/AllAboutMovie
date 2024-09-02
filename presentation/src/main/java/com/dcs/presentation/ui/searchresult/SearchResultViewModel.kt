@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.dcs.domain.model.MovieId
+import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.usecase.GetSearchContentsUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
@@ -29,7 +29,7 @@ class SearchResultViewModel @Inject constructor(
         savedStateHandle[Screen.SEARCH_RESULT_KEYWORD] ?: error("Search result keyword not found")
 
     val searchResult = getSearchContentsUseCase(keyword)
-        .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+        .map { pagingData -> pagingData.map { movie -> movie.toUiState() } }
         .cachedIn(viewModelScope)
 
     private fun navigateBack() {
@@ -38,11 +38,11 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToMovieDetails(movieId: MovieId) {
+    private fun navigateToMovieDetails(mediaContentId: MediaContentId) {
         launch {
             _effect.emit(
                 SearchResultEffect.NavigateToMovieDetails(
-                    movieId = movieId
+                    mediaContentId = mediaContentId
                 )
             )
         }
@@ -56,7 +56,7 @@ class SearchResultViewModel @Inject constructor(
 
             is SearchResultUiEvent.NavigateToMovieDetails -> {
                 navigateToMovieDetails(
-                    movieId = event.movieId
+                    mediaContentId = event.mediaContentId
                 )
             }
         }

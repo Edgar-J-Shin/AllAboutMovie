@@ -1,10 +1,10 @@
 package com.dcs.presentation.ui.trend
 
-import com.dcs.domain.model.MovieId
+import com.dcs.domain.model.MediaContentId
 
 sealed interface TrendUiEvent {
 
     data class NavigateToMovieDetails(
-        val movieId: MovieId,
+        val mediaContentId: MediaContentId,
     ) : TrendUiEvent
 }

@@ -79,18 +79,16 @@ private fun SignInScreen(
 
             is UiState.Success -> {
                 val signInUiState = state.data
-                if (signInUiState != null) {
-                    SignInContents(
-                        signInUiState = signInUiState,
-                        onSignInEvent = onSignInEvent,
-                        modifier = Modifier
-                            .systemBarsPadding()
-                            .background(color = White3)
-                    )
+                SignInContents(
+                    signInUiState = signInUiState,
+                    onSignInEvent = onSignInEvent,
+                    modifier = Modifier
+                        .systemBarsPadding()
+                        .background(color = White3)
+                )
 
-                    if (isLoading) {
-                        LoadingDialog()
-                    }
+                if (isLoading) {
+                    LoadingDialog()
                 }
             }
 

@@ -1,24 +1,26 @@
 package com.dcs.domain.repository
 
 import androidx.paging.PagingData
+import com.dcs.domain.model.MediaPolymorphic
 import com.dcs.domain.model.MediaType
-import com.dcs.domain.model.Movie
 import com.dcs.domain.model.MovieDetail
-import com.dcs.domain.model.MovieId
+import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.TimeWindow
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
-    fun getMoviesByTopRated(): Flow<PagingData<Movie>>
+    fun getTrendingMediaContents(mediaType: MediaType, timeWindow: TimeWindow): Flow<PagingData<MediaPolymorphic>>
 
-    fun getMoviesByTrending(timeWindow: TimeWindow): Flow<PagingData<Movie>>
+    fun getPopularMovies(): Flow<PagingData<MediaPolymorphic.Movie>>
 
-    fun getMoviesByPopular(mediaType: MediaType): Flow<PagingData<Movie>>
+    fun getTopRatedMovies(): Flow<PagingData<MediaPolymorphic.Movie>>
 
-    fun getMoviesByUpcoming(): Flow<PagingData<Movie>>
+    fun getUpcomingMovies(): Flow<PagingData<MediaPolymorphic.Movie>>
 
-    fun getSearchContents(query: String): Flow<PagingData<Movie>>
+    fun getSearchContents(query: String): Flow<PagingData<MediaPolymorphic.Movie>>
 
-    fun getMovieById(movieId: MovieId): Flow<MovieDetail>
+    fun getMovieById(mediaContentId: MediaContentId): Flow<MovieDetail>
+
+    fun getPopularTvShows(): Flow<PagingData<MediaPolymorphic.TvShow>>
 }

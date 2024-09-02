@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.dcs.presentation.R
 
-enum class MoviePopularUiType {
+enum class PopularMovieUiType {
     TV,
     MOVIE;
 

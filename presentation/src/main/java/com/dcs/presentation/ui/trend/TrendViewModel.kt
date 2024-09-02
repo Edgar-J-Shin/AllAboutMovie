@@ -5,15 +5,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.dcs.domain.model.MovieId
-import com.dcs.domain.usecase.GetContentsByPopularUseCase
-import com.dcs.domain.usecase.GetMoviesByTrendingUseCase
-import com.dcs.domain.usecase.GetMoviesByUpcomingUseCase
-import com.dcs.presentation.core.model.mapper.toMediaType
+import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.MediaType
+import com.dcs.domain.usecase.GetPopularMoviesUseCase
+import com.dcs.domain.usecase.GetPopularTvShowsUseCase
+import com.dcs.domain.usecase.GetTrendingMoviesUseCase
+import com.dcs.domain.usecase.GetUpcomingMoviesUseCase
+import com.dcs.presentation.core.model.PopularMovieUiType
+import com.dcs.presentation.core.model.TrendingMovieUiType
 import com.dcs.presentation.core.model.mapper.toTimeWindow
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.model.MoviePopularUiType
-import com.dcs.presentation.core.model.MovieTrendUiType
 import com.dcs.presentation.core.ui.lifecycle.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,26 +30,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendViewModel @Inject constructor(
-    getMoviesByTrendingUseCase: GetMoviesByTrendingUseCase,
-    getContentsByPopularUseCase: GetContentsByPopularUseCase,
-    getMoviesByUpcomingUseCase: GetMoviesByUpcomingUseCase,
+    getTrendingMoviesUseCase: GetTrendingMoviesUseCase,
+    getPopularMoviesUseCase: GetPopularMoviesUseCase,
+    getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
+    getPopularTvShowsUseCase: GetPopularTvShowsUseCase,
 ) : ViewModel() {
 
-    private var _movieTrendUiType = MutableStateFlow(MovieTrendUiType.DAY)
-    private val movieTrendType = _movieTrendUiType.asStateFlow()
+    private var _trendingMovieUiType = MutableStateFlow(TrendingMovieUiType.DAY)
+    private val trendingMovieUiType = _trendingMovieUiType.asStateFlow()
 
-    private var _moviePopularUiType = MutableStateFlow(MoviePopularUiType.TV)
-    private val moviePopularType = _moviePopularUiType.asStateFlow()
+    private var _popularMovieUiType = MutableStateFlow(PopularMovieUiType.TV)
+    private val popularMovieUiType = _popularMovieUiType.asStateFlow()
 
     private val _effect = MutableSharedFlow<TrendEffect>()
     val effect = _effect.asSharedFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    internal val moviesByTrending = movieTrendType
+    internal val trendingMovies = trendingMovieUiType
         .map { it.toTimeWindow() }
         .flatMapLatest { timeWindow ->
-            getMoviesByTrendingUseCase(timeWindow)
-                .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+            getTrendingMoviesUseCase(MediaType.MOIVE, timeWindow)
+                .map { pagingData -> pagingData.map { mediaPolymorphic -> mediaPolymorphic.toUiState() } }
                 .cachedIn(viewModelScope)
         }
         .stateIn(
@@ -58,12 +60,21 @@ class TrendViewModel @Inject constructor(
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    internal val moviesByPopular = moviePopularType
-        .map { it.toMediaType() }
-        .flatMapLatest { mediaType ->
-            getContentsByPopularUseCase(mediaType)
-                .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
-                .cachedIn(viewModelScope)
+    internal val popularMovies = popularMovieUiType
+        .flatMapLatest { popularType ->
+            when (popularType) {
+                PopularMovieUiType.TV -> {
+                    getPopularTvShowsUseCase()
+                        .map { pagingData -> pagingData.map { tvShow -> tvShow.toUiState() } }
+                        .cachedIn(viewModelScope)
+                }
+
+                PopularMovieUiType.MOVIE -> {
+                    getPopularMoviesUseCase()
+                        .map { pagingData -> pagingData.map { movie -> movie.toUiState() } }
+                        .cachedIn(viewModelScope)
+                }
+            }
         }
         .stateIn(
             scope = viewModelScope,
@@ -71,8 +82,12 @@ class TrendViewModel @Inject constructor(
             initialValue = PagingData.empty(),
         )
 
-    internal val moviesByUpcoming = getMoviesByUpcomingUseCase()
-        .map { pagingData -> pagingData.map { movieEntity -> movieEntity.toUiState() } }
+    internal val moviesByUpcoming = getUpcomingMoviesUseCase()
+        .map { pagingData ->
+            pagingData.map { movie ->
+                movie.toUiState()
+            }
+        }
         .cachedIn(viewModelScope)
         .stateIn(
             scope = viewModelScope,
@@ -80,23 +95,23 @@ class TrendViewModel @Inject constructor(
             initialValue = PagingData.empty(),
         )
 
-    fun updateMovieTrendType(movieTrendUiType: MovieTrendUiType) {
+    fun updateTrendingMovieUiType(trendingMovieUiType: TrendingMovieUiType) {
         launch {
-            _movieTrendUiType.emit(movieTrendUiType)
+            _trendingMovieUiType.emit(trendingMovieUiType)
         }
     }
 
-    fun updateMoviePopularType(moviePopularUiType: MoviePopularUiType) {
+    fun updatePopularMovieUiType(popularMovieUiType: PopularMovieUiType) {
         launch {
-            _moviePopularUiType.emit(moviePopularUiType)
+            _popularMovieUiType.emit(popularMovieUiType)
         }
     }
 
-    private fun navigateToMovieDetails(movieId: MovieId) {
+    private fun navigateToMovieDetails(mediaContentId: MediaContentId) {
         launch {
             _effect.emit(
                 TrendEffect.NavigateToMovieDetails(
-                    movieId = movieId
+                    mediaContentId = mediaContentId
                 )
             )
         }
@@ -107,7 +122,7 @@ class TrendViewModel @Inject constructor(
 
             is TrendUiEvent.NavigateToMovieDetails -> {
                 navigateToMovieDetails(
-                    movieId = event.movieId
+                    mediaContentId = event.mediaContentId
                 )
             }
         }

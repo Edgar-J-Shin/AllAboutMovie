@@ -1,27 +1,15 @@
 package com.dcs.data.remote.service
 
+import com.dcs.data.remote.model.GetMediaContentsResponse
 import com.dcs.data.remote.model.GetMovieDetailResponse
 import com.dcs.data.remote.model.GetMoviesResponse
+import com.dcs.data.remote.model.GetTvShowsResponse
 import com.dcs.data.remote.network.NetworkResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieService {
-
-    /**
-     * Get a list of movies ordered by rating.
-     *
-     * @param page
-     * @param language
-     *
-     * @return [GetMoviesResponse]
-     */
-    @GET("movie/top_rated")
-    suspend fun fetchMoviesByTopRated(
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US",
-    ): NetworkResponse<GetMoviesResponse>
 
     /**
      * Get the trending movies on TMDB.
@@ -32,25 +20,52 @@ interface MovieService {
      *
      * @return [GetMoviesResponse]
      */
-    @GET("trending/movie/{time_window}")
-    suspend fun fetchMoviesByTrending(
-        @Path("time_window") timeWindow: String = "day",
+    @GET("trending/{media_type}/{time_window}")
+    suspend fun fetchTrendingMediaContents(
+        @Path("media_type") mediaType: String,
+        @Path("time_window") timeWindow: String,
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = "en-US",
+    ): NetworkResponse<GetMediaContentsResponse>
+
+    /**
+     * Get a list of movies ordered by popularity.
+     *
+     * @param page
+     * @param language
+     *
+     * @return [GetMediaContentsResponse]
+     */
+    @GET("movie/popular")
+    suspend fun fetchPopularMovies(
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetMoviesResponse>
 
     /**
-     * Get a list of movies or TV shows ordered by popularity.
+     * Get a list of TV shows ordered by popularity.
      *
-     * @param mediaType ["movie", "tv"]
+     * @param page
+     * @param language
+     *
+     * @return [GetMediaContentsResponse]
+     */
+    @GET("tv/popular")
+    suspend fun fetchPopularTvShows(
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = "en-US",
+    ): NetworkResponse<GetTvShowsResponse>
+
+    /**
+     * Get a list of movies ordered by rating.
+     *
      * @param page
      * @param language
      *
      * @return [GetMoviesResponse]
      */
-    @GET("{media_type}/popular")
-    suspend fun fetchMoviesByPopular(
-        @Path("media_type") mediaType: String = "movie",
+    @GET("movie/top_rated")
+    suspend fun fetchTopRatedMovies(
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetMoviesResponse>
@@ -64,7 +79,7 @@ interface MovieService {
      * @return [GetMoviesResponse]
      */
     @GET("movie/now_playing")
-    suspend fun fetchMoviesByNowPlaying(
+    suspend fun fetchNowPlayingMovies(
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetMoviesResponse>
@@ -78,7 +93,7 @@ interface MovieService {
      * @return [GetMoviesResponse]
      */
     @GET("movie/upcoming")
-    suspend fun fetchMoviesByUpcoming(
+    suspend fun fetchUpcomingMovies(
         @Query("page") page: Int = 1,
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetMoviesResponse>
@@ -93,7 +108,7 @@ interface MovieService {
      * @return [GetMoviesResponse]
      */
     @GET("search/movie")
-    suspend fun fetchSearchMovieByQuery(
+    suspend fun fetchSearchMoviesByQuery(
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean = false,
         @Query("page") page: Int = 1,

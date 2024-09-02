@@ -100,18 +100,16 @@ fun SettingScreen(
 
             is UiState.Success -> {
                 val settingUiState = state.data
-                if (settingUiState != null) {
-                    SettingContents(
-                        uiState = settingUiState,
-                        onSettingEvent = onSettingEvent,
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 20.dp)
-                            .fillMaxSize(),
-                    )
+                SettingContents(
+                    uiState = settingUiState,
+                    onSettingEvent = onSettingEvent,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 20.dp)
+                        .fillMaxSize(),
+                )
 
-                    if (isLoading) {
-                        LoadingDialog()
-                    }
+                if (isLoading) {
+                    LoadingDialog()
                 }
             }
 

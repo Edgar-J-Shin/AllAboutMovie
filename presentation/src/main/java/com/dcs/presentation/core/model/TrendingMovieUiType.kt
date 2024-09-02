@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.dcs.presentation.R
 
-enum class MovieTrendUiType {
+enum class TrendingMovieUiType {
     DAY,
     WEEK;
 

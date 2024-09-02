@@ -1,11 +1,11 @@
 package com.dcs.data.pagingsource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.dcs.data.model.mapper.toEntity
 import com.dcs.data.remote.datasource.PersonRemoteDataSource
 import com.dcs.domain.model.Person
+import timber.log.Timber
 
 class PopularPeoplePagingSource(
     private val remote: PersonRemoteDataSource,
@@ -36,12 +36,14 @@ class PopularPeoplePagingSource(
                 nextKey = nextKey,
             )
         } catch (e: Exception) {
-            Log.e("PopularPeoplePagingSource", "load error", e)
+            Timber.tag(TAG).e(e, "load error")
             LoadResult.Error(e)
         }
     }
 
     companion object {
+        private val TAG = PopularPeoplePagingSource::class.java.simpleName
+
         private const val START_PAGE_INDEX = 1
     }
 }

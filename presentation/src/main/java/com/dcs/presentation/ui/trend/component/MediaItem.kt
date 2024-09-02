@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.trend
+package com.dcs.presentation.ui.trend.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,16 +23,14 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
 import com.dcs.presentation.core.designsystem.widget.BasicImageState
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
-import com.dcs.presentation.core.model.MovieUiState
+import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.getPosterPathUrl
-import com.dcs.presentation.core.model.getReleaseDateOrFirstAirDate
-import com.dcs.presentation.core.model.getTitleOrName
 import com.dcs.presentation.core.model.getVotePercentage
 
 @Composable
-fun MovieItem(
+fun MediaItem(
     modifier: Modifier = Modifier,
-    movieUiState: MovieUiState,
+    mediaContentUiState: MediaContentUiState,
     onClick: () -> Unit = {},
 ) {
     Column(modifier = modifier
@@ -46,7 +44,7 @@ fun MovieItem(
                 .aspectRatio(0.75f)
         ) {
             BasicImage(
-                imageUrl = movieUiState.getPosterPathUrl(),
+                imageUrl = mediaContentUiState.getPosterPathUrl(),
                 basicImageState = BasicImageState(
                     contentDescResId = R.string.movie_image_content_description
                 ),
@@ -66,7 +64,7 @@ fun MovieItem(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 10.dp),
-                percentage = movieUiState.getVotePercentage(),
+                percentage = mediaContentUiState.getVotePercentage(),
                 viewSize = 40.dp
             )
         }
@@ -75,7 +73,7 @@ fun MovieItem(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            text = movieUiState.getTitleOrName(),
+            text = mediaContentUiState.title,
             textAlign = TextAlign.Left,
             maxLines = 1,
             fontSize = 12.sp,
@@ -88,7 +86,7 @@ fun MovieItem(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp),
-            text = movieUiState.getReleaseDateOrFirstAirDate(),
+            text = mediaContentUiState.releaseDate,
             textAlign = TextAlign.Left,
             maxLines = 1,
             fontSize = 12.sp,

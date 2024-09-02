@@ -2,7 +2,6 @@ package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.dcs.domain.model.MovieId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.extensions.ImageType
 import com.dcs.presentation.core.ui.state.UiState
@@ -107,8 +106,6 @@ data class SpokenLanguageUiState(
 fun MovieDetailUiState.getPosterPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$posterPath"
 
 fun MovieDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$backdropPath"
-
-fun MovieDetailUiState.toMovieId() = MovieId(id)
 
 fun MovieDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 

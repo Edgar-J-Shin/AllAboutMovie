@@ -3,7 +3,7 @@ package com.dcs.presentation.ui.moviedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dcs.domain.model.MovieId
+import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.usecase.GetMovieByIdUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.state.UiState
@@ -33,10 +33,10 @@ class MovieDetailViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val movie = flowOf(movieId)
         .map {
-            MovieId(it)
+            MediaContentId(it)
         }
-        .flatMapLatest { movieId ->
-            getMovieByIdUseCase(movieId = movieId)
+        .flatMapLatest { mediaContentId ->
+            getMovieByIdUseCase(mediaContentId = mediaContentId)
                 .map {
                     it.toUiState()
                 }
