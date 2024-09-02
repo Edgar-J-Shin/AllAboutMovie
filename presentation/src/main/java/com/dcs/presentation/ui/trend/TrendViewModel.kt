@@ -65,7 +65,7 @@ class TrendViewModel @Inject constructor(
             when (popularType) {
                 PopularMovieUiType.TV -> {
                     getPopularTvShowsUseCase()
-                        .map { pagingData -> pagingData.map { movie -> movie.toUiState() } }
+                        .map { pagingData -> pagingData.map { tvShow -> tvShow.toUiState() } }
                         .cachedIn(viewModelScope)
                 }
 
