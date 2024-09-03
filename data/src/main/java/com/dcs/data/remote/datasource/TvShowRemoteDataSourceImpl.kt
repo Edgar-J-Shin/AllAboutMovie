@@ -1,9 +1,11 @@
 package com.dcs.data.remote.datasource
 
 import com.dcs.data.model.TvShowType
+import com.dcs.data.remote.model.GetTvShowDetailResponse
 import com.dcs.data.remote.model.GetTvShowsResponse
 import com.dcs.data.remote.network.NetworkResponse
 import com.dcs.data.remote.service.MovieService
+import com.dcs.domain.model.MediaContentId
 import javax.inject.Inject
 
 class TvShowRemoteDataSourceImpl @Inject constructor(
@@ -22,6 +24,19 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
             it.data as GetTvShowsResponse
         }
     }
+
+    override suspend fun getTvShowDetailById(
+        mediaContentId: MediaContentId,
+        appendToResponse: String,
+        language: String,
+    ): Result<GetTvShowDetailResponse> =
+        movieService.fetchTvShowDetailById(
+            seriesId = mediaContentId.value,
+            appendToResponse = appendToResponse,
+            language = language
+        ).asResult {
+            it.data as GetTvShowDetailResponse
+        }
 
     private suspend fun getPopularTvShows(
         page: Int,

@@ -6,6 +6,7 @@ import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.MovieDetail
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.TimeWindow
+import com.dcs.domain.model.TvShowDetail
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
@@ -23,4 +24,6 @@ interface MovieRepository {
     fun getMovieById(mediaContentId: MediaContentId): Flow<MovieDetail>
 
     fun getPopularTvShows(): Flow<PagingData<MediaPolymorphic.TvShow>>
+
+    fun getTvShowById(mediaContentId: MediaContentId): Flow<TvShowDetail>
 }

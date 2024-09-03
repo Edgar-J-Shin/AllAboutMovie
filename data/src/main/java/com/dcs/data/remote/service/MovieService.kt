@@ -3,6 +3,7 @@ package com.dcs.data.remote.service
 import com.dcs.data.remote.model.GetMediaContentsResponse
 import com.dcs.data.remote.model.GetMovieDetailResponse
 import com.dcs.data.remote.model.GetMoviesResponse
+import com.dcs.data.remote.model.GetTvShowDetailResponse
 import com.dcs.data.remote.model.GetTvShowsResponse
 import com.dcs.data.remote.network.NetworkResponse
 import retrofit2.http.GET
@@ -129,5 +130,20 @@ interface MovieService {
         @Query("append_to_response") appendToResponse: String = "",
         @Query("language") language: String = "en-US",
     ): NetworkResponse<GetMovieDetailResponse>
+
+    /**
+     * Get the details of a TV show.
+     *
+     * @param series_id
+     * @param language
+     *
+     * @return [GetMovieDetailResponse]
+     */
+    @GET("tv/{series_id}")
+    suspend fun fetchTvShowDetailById(
+        @Path("series_id") seriesId: Int,
+        @Query("append_to_response") appendToResponse: String = "",
+        @Query("language") language: String = "en-US",
+    ): NetworkResponse<GetTvShowDetailResponse>
 }
 
