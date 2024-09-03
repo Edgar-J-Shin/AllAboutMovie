@@ -4,12 +4,12 @@ kotlin = "2.0.0"
 ksp = "2.0.0-1.0.21"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.2"
-activityCompose = "1.9.0"
-navigationCompose = "2.8.0-beta03"
-composeBom = "2024.06.00"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.4"
+activityCompose = "1.9.1"
+navigationCompose = "2.8.0-rc01"
+composeBom = "2024.08.00"
 hilt = "2.51.1"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
@@ -19,16 +19,17 @@ kotlinxCollection = "0.3.7"
 glide = "1.0.0-beta01"
 datastore = "1.1.1"
 room = "2.6.1"
-paging = "3.3.0"
+paging = "3.3.2"
 timber = "5.0.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 materialIconsExtended = "1.6.8"
 hiltNavigation = "1.2.0"
 startup = "1.1.1"
-firebaseCrashlytics = "19.0.1"
+firebaseCrashlytics = "19.0.3"
 googleGmsGoogleServices = "4.4.2"
-googleFirebaseCrashlytics = "3.0.1"
+googleFirebaseCrashlytics = "3.0.2"
+coil = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -103,6 +104,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 # Firebase
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
+# Coil
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
