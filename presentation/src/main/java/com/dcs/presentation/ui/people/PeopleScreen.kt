@@ -15,11 +15,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -119,12 +119,12 @@ private fun PopularPeople(
     onPeopleUiEvent: (PeopleUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(8.dp),
-        verticalItemSpacing = 12.dp,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier.fillMaxSize()
+        modifier = modifier,
     ) {
         items(items.itemCount) { index ->
             val person = items[index] ?: return@items
@@ -146,13 +146,8 @@ private fun PersonCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        shape = RoundedCornerShape(
-            topStart = 16.dp,
-            topEnd = 16.dp,
-            bottomStart = 0.dp,
-            bottomEnd = 0.dp
-        ),
+    ElevatedCard(
+        shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .clickable(onClick = onClick),
     ) {
@@ -161,15 +156,22 @@ private fun PersonCard(
             contentDescription = stringResource(id = R.string.content_description_profile),
             contentScale = ContentScale.Crop,
             modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
         )
-        val knownForTitle = state.getKnownForTitle()
-        if (knownForTitle.isNotEmpty()) {
-            Text(
-                text = knownForTitle,
-                modifier = Modifier
-                    .padding(12.dp),
-            )
-        }
+
+        Text(
+            text = state.name,
+            modifier = Modifier.padding(12.dp)
+        )
+
+        Text(
+            text = state.getKnownForTitle(),
+            maxLines = 2,
+            modifier = Modifier
+                .padding(12.dp)
+                .height(60.dp),
+        )
     }
 }
 

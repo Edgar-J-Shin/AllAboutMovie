@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.BasicImageState
+import com.dcs.presentation.core.designsystem.widget.BasicImageDefaults
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
 import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.getPosterPathUrl
@@ -46,9 +46,7 @@ fun MediaItem(
         ) {
             BasicImage(
                 imageUrl = mediaContentUiState.getPosterPathUrl(),
-                basicImageState = BasicImageState(
-                    contentDescResId = R.string.movie_image_content_description
-                ),
+                contentDescription = BasicImageDefaults.contentDescription(R.string.movie_image_content_description),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()

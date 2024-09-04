@@ -14,7 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.BasicImageState
+import com.dcs.presentation.core.designsystem.widget.BasicImageDefaults
 
 @Composable
 fun MovieImage(
@@ -27,9 +27,7 @@ fun MovieImage(
     ) {
         BasicImage(
             imageUrl = backdropPathUrl,
-            basicImageState = BasicImageState(
-                contentDescResId = R.string.movie_image_content_description
-            ),
+            contentDescription = BasicImageDefaults.contentDescription(R.string.movie_image_content_description),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
@@ -38,11 +36,7 @@ fun MovieImage(
 
         BasicImage(
             imageUrl = posterPathUrl,
-            basicImageState = BasicImageState(
-                loadingResId = null,
-                failureResId = null,
-                contentDescResId = R.string.movie_image_content_description
-            ),
+            contentDescription = BasicImageDefaults.contentDescription(R.string.movie_image_content_description),
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(0.75f)

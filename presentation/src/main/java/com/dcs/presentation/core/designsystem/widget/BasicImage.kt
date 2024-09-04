@@ -36,7 +36,9 @@ object BasicImageDefaults {
     fun placeHolder(): Painter = painterResource(id = R.drawable.image_placeholder)
 
     @Composable
-    fun contentDescription(): String = stringResource(id = R.string.image_content_description)
+    fun contentDescription(
+        id: Int = R.string.image_content_description,
+    ): String = stringResource(id = id)
 
     @Composable
     fun error(): Painter = painterResource(id = R.drawable.image_placeholder)
