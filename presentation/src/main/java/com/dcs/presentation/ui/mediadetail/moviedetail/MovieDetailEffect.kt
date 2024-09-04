@@ -5,7 +5,9 @@ import com.dcs.presentation.core.designsystem.state.SnackbarState
 sealed interface MovieDetailEffect {
     data object NavigateBack : MovieDetailEffect
 
-    data class NavigateToPersonDetail(val personId: Int) : MovieDetailEffect
+    data class NavigateToPersonDetail(
+        val personId: Int,
+    ) : MovieDetailEffect
 
     data class ShowSnackbar(
         val state: SnackbarState,

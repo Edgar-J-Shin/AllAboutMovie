@@ -4,5 +4,7 @@ sealed interface MovieDetailUiEvent {
 
     data object NavigateBack : MovieDetailUiEvent
 
-    data class NavigateToPersonDetail(val personId: Int) : MovieDetailUiEvent
+    data class NavigateToPersonDetail(
+        val personId: Int,
+    ) : MovieDetailUiEvent
 }

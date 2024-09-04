@@ -1,8 +1,10 @@
 package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.extensions.ImageType
+import com.dcs.presentation.core.ui.state.UiState
 import java.time.LocalDate
 
 @Stable
@@ -112,3 +114,119 @@ fun TvShowDetailUiState.getCrew() = credits.crew
         crewMap.key to crewMap.value.joinToString(",") { it.job }
     }
     .take(4)
+
+class TvShowDetailUiStateProvider : PreviewParameterProvider<UiState<TvShowDetailUiState>> {
+
+    private val episodeToAirUiState = EpisodeToAirUiState(
+        airDate = "",
+        episodeNumber = 1,
+        episodeType = "Scripted",
+        id = 1234,
+        name = "",
+        overview = "",
+        productionCode = "",
+        runtime = 31,
+        seasonNumber = 2,
+        showId = 1,
+        stillPath = "",
+        voteAverage = 5.332,
+        voteCount = 21,
+    )
+
+    private val tvShowDetailUiState = TvShowDetailUiState(
+        adult = false,
+        backdropPath = "https://image.tmdb.org/t/p/w500/jZXvRmQTAFmNaHSyN8DQqS5IIaM.jpg",
+        createdBy = emptyList(),
+        episodeRunTime = listOf(90, 31, 132),
+        firstAirDate = "2020-11-29",
+        genres = emptyList(),
+        homepage = "",
+        id = 123,
+        inProduction = true,
+        languages = listOf("af", "en"),
+        lastAirDate = "2024-08-28",
+        lastEpisodeToAir = episodeToAirUiState,
+        name = "The Accursed",
+        networks = emptyList(),
+        nextEpisodeToAir = episodeToAirUiState,
+        numberOfEpisodes = 2,
+        numberOfSeasons = 3,
+        originCountry = listOf("ZA"),
+        originalLanguage = "af",
+        originalName = "Binnelanders",
+        overview = "A South African Afrikaans soap opera. It is set in and around the fictional private hospital, Binneland Kliniek, in Pretoria, and the storyline follows the trials, trauma and tribulations of the staff and patients of the hospital.",
+        popularity = 3978.961,
+        posterPath = "/v9nGSRx5lFz6KEgfmgHJMSgaARC.jpg",
+        productionCompanies = emptyList(),
+        productionCountries = emptyList(),
+        seasons = emptyList(),
+        spokenLanguages = emptyList(),
+        status = "Returning Series",
+        tagline = "",
+        type = "Scripted",
+        voteAverage = 5.632,
+        voteCount = 73,
+        credits = CreditsUiState(
+            cast = emptyList(),
+            crew = emptyList()
+        )
+    )
+
+    private val crew = CreditsCrewUiState(
+        adult = false,
+        gender = 1,
+        id = 1683343,
+        knownForDepartment = "Acting",
+        name = "Cailee Spaeny",
+        originalName = "Cailee Spaeny",
+        popularity = 90.073,
+        profilePath = "/nquUc6o2dK4Pg4zjvl2HmZOfiRS.jpg",
+        creditId = "4",
+        department = "Directing",
+        job = "Director",
+    )
+
+    private val cast = CreditsCastUiState(
+        adult = false,
+        gender = 1,
+        id = 1683343,
+        knownForDepartment = "Acting",
+        name = "Cailee Spaeny",
+        originalName = "Cailee Spaeny",
+        popularity = 90.073,
+        profilePath = "/nquUc6o2dK4Pg4zjvl2HmZOfiRS.jpg",
+        castId = 4,
+        character = "Rain",
+        creditId = "63904e44bc8abc13d787a6aa",
+        order = 0
+    )
+
+    override val values: Sequence<UiState<TvShowDetailUiState>>
+        /**
+         * 1. Loading
+         * 2. Error
+         * 3. Success
+         * 4. Success with crew, cast
+         */
+        get() = sequenceOf(
+            UiState.Loading,
+            UiState.Error(Exception()),
+            UiState.Success(tvShowDetailUiState),
+            UiState.Success(
+                tvShowDetailUiState.copy(
+                    credits = CreditsUiState(
+                        crew = listOf(
+                            crew,
+                            crew.copy(name = "Cailee Spaeny", job = "Screenplay"),
+                            crew.copy(name = "Fede Álvarez", job = "Writer"),
+                            crew.copy(name = "Ronald Shusett", job = "Characters"),
+                            crew.copy(name = "Rodo Sayagues", job = "Writer")
+                        ),
+                        cast = listOf(
+                            cast, cast, cast, cast, cast
+                        )
+                    )
+                )
+            )
+        )
+}

@@ -4,5 +4,7 @@ sealed interface TvShowDetailUiEvent {
 
     data object NavigateBack : TvShowDetailUiEvent
 
-    data class NavigateToPersonDetail(val personId: Int) : TvShowDetailUiEvent
+    data class NavigateToPersonDetail(
+        val personId: Int,
+    ) : TvShowDetailUiEvent
 }
