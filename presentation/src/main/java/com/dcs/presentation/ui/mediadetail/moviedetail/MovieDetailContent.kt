@@ -27,6 +27,7 @@ import com.dcs.presentation.ui.mediadetail.component.Status
 
 internal fun LazyListScope.movieDetailContent(
     uiState: MovieDetailUiState,
+    onPersonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     item {
@@ -77,6 +78,7 @@ internal fun LazyListScope.movieDetailContent(
     item {
         Casts(
             casts = uiState.credits.cast,
+            onPersonClick = onPersonClick,
             modifier = Modifier.fillMaxWidth()
         )
     }

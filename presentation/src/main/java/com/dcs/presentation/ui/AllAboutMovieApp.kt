@@ -89,7 +89,10 @@ fun AllAboutMovieApp(
             arguments = Screen.MovieDetail.navArguments
         ) {
             MovieDetailRoute(
-                navigateUp = { navController.popBackStack() }
+                navigateUp = { navController.popBackStack() },
+                navigateToPersonDetail = { personId ->
+                    navController.navigate(Screen.PersonDetail.createRoute(personId))
+                }
             )
         }
 
@@ -98,7 +101,10 @@ fun AllAboutMovieApp(
             arguments = Screen.TvShowDetail.navArguments
         ) {
             TvShowDetailRoute(
-                navigateUp = { navController.popBackStack() }
+                navigateUp = { navController.popBackStack() },
+                navigateToPersonDetail = { personId ->
+                    navController.navigate(Screen.PersonDetail.createRoute(personId))
+                }
             )
         }
     }

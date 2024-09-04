@@ -57,10 +57,24 @@ class TvShowDetailViewModel @Inject constructor(
         }
     }
 
+    private fun navigateToPersonDetail(personId: Int) {
+        launch {
+            _effect.emit(
+                TvShowDetailEffect.NavigateToPersonDetail(
+                    personId = personId
+                )
+            )
+        }
+    }
+
     fun dispatchEvent(event: TvShowDetailUiEvent) {
         when (event) {
             is TvShowDetailUiEvent.NavigateBack -> {
                 navigateBack()
+            }
+
+            is TvShowDetailUiEvent.NavigateToPersonDetail -> {
+                navigateToPersonDetail(event.personId)
             }
         }
     }

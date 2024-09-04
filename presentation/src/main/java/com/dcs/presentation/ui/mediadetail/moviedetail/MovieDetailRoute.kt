@@ -29,12 +29,13 @@ import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieDetailUiState
 import com.dcs.presentation.core.model.MovieDetailUiStateProvider
-import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
+import com.dcs.presentation.core.ui.state.UiState
 
 @Composable
 fun MovieDetailRoute(
     navigateUp: () -> Boolean,
+    navigateToPersonDetail: (Int) -> Unit,
     viewModel: MovieDetailViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
@@ -44,6 +45,10 @@ fun MovieDetailRoute(
         when (effect) {
             is MovieDetailEffect.NavigateBack -> {
                 navigateUp()
+            }
+
+            is MovieDetailEffect.NavigateToPersonDetail -> {
+                navigateToPersonDetail(effect.personId)
             }
 
             is MovieDetailEffect.ShowSnackbar -> {
@@ -103,6 +108,13 @@ private fun MovieDetailScreen(
             is UiState.Success -> {
                 movieDetailContent(
                     uiState = uiState.data,
+                    onPersonClick = { personId ->
+                        onMovieDetailEvent(
+                            MovieDetailUiEvent.NavigateToPersonDetail(
+                                personId = personId
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                 )

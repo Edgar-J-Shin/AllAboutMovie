@@ -30,6 +30,7 @@ import com.dcs.presentation.core.model.getProfilePathUrl
 @Composable
 internal fun Casts(
     casts: List<CreditsCastUiState>,
+    onPersonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -71,6 +72,9 @@ internal fun Casts(
                             .width(140.dp)
                             .aspectRatio(0.6f)
                             .padding(horizontal = 6.dp)
+                            .clickable {
+                                onPersonClick(casts[index].id)
+                            }
                     )
                 }
             }
@@ -82,7 +86,6 @@ internal fun Casts(
 internal fun CastItem(
     cast: CreditsCastUiState,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -93,7 +96,6 @@ internal fun CastItem(
         ),
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick.invoke() }
     ) {
         BasicImage(
             imageUrl = cast.getProfilePathUrl(),
