@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail
+package com.dcs.presentation.ui.mediadetail.moviedetail
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -102,7 +102,7 @@ private fun MovieDetailScreen(
 
             is UiState.Success -> {
                 movieDetailContent(
-                    movieDetailUiState = uiState.data,
+                    uiState = uiState.data,
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                 )

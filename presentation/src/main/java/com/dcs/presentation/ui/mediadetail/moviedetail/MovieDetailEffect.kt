@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail
+package com.dcs.presentation.ui.mediadetail.moviedetail
 
 import com.dcs.presentation.core.designsystem.state.SnackbarState
 

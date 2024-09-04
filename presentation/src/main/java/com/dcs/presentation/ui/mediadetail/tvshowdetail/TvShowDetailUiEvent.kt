@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.tvshowdetail
+package com.dcs.presentation.ui.mediadetail.tvshowdetail
 
 sealed interface TvShowDetailUiEvent {
 

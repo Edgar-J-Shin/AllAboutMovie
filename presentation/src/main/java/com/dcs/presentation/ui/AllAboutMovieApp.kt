@@ -12,11 +12,11 @@ import com.dcs.presentation.ui.Screen.Main
 import com.dcs.presentation.ui.Screen.SearchResult
 import com.dcs.presentation.ui.Screen.SignIn
 import com.dcs.presentation.ui.main.MainRoute
-import com.dcs.presentation.ui.moviedetail.MovieDetailRoute
+import com.dcs.presentation.ui.mediadetail.moviedetail.MovieDetailRoute
 import com.dcs.presentation.ui.persondetail.PersonDetailRoute
 import com.dcs.presentation.ui.searchresult.SearchResultRoute
 import com.dcs.presentation.ui.signin.SignInRoute
-import com.dcs.presentation.ui.tvshowdetail.TvShowDetailRoute
+import com.dcs.presentation.ui.mediadetail.tvshowdetail.TvShowDetailRoute
 
 @Composable
 fun AllAboutMovieApp(

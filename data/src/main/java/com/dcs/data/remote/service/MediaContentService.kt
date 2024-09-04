@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MovieService {
+interface MediaContentService {
 
     /**
      * Get the trending movies on TMDB.

@@ -9,7 +9,7 @@ import com.dcs.domain.model.TimeWindow
 import com.dcs.domain.model.TvShowDetail
 import kotlinx.coroutines.flow.Flow
 
-interface MovieRepository {
+interface MediaContentRepository {
 
     fun getTrendingMediaContents(mediaType: MediaType, timeWindow: TimeWindow): Flow<PagingData<MediaPolymorphic>>
 

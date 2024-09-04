@@ -1,14 +1,14 @@
-package com.dcs.presentation.ui.tvshowdetail
+package com.dcs.presentation.ui.mediadetail.moviedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.MediaContentId
-import com.dcs.domain.usecase.GetTvShowByIdUseCase
+import com.dcs.domain.usecase.GetMovieByIdUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
-import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.state.asUiState
+import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,21 +22,21 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class TvShowDetailViewModel @Inject constructor(
+class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getTvShowByIdUseCase: GetTvShowByIdUseCase,
+    getMovieByIdUseCase: GetMovieByIdUseCase,
 ) : ViewModel() {
 
-    private val tvShowId: Int =
-        savedStateHandle[Screen.TV_SHOW_ID_SAVED_STATE_KEY] ?: error("Movie Id not found")
+    private val movieId: Int =
+        savedStateHandle[Screen.MOVIE_ID_SAVED_STATE_KEY] ?: error("Movie Id not found")
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val tvShow = flowOf(tvShowId)
+    val movie = flowOf(movieId)
         .map {
             MediaContentId(it)
         }
         .flatMapLatest { mediaContentId ->
-            getTvShowByIdUseCase(mediaContentId = mediaContentId)
+            getMovieByIdUseCase(mediaContentId = mediaContentId)
                 .map {
                     it.toUiState()
                 }
@@ -48,18 +48,18 @@ class TvShowDetailViewModel @Inject constructor(
             initialValue = UiState.Loading,
         )
 
-    private val _effect = MutableSharedFlow<TvShowDetailEffect>()
+    private val _effect = MutableSharedFlow<MovieDetailEffect>()
     val effect = _effect.asSharedFlow()
 
     private fun navigateBack() {
         launch {
-            _effect.emit(TvShowDetailEffect.NavigateBack)
+            _effect.emit(MovieDetailEffect.NavigateBack)
         }
     }
 
-    fun dispatchEvent(event: TvShowDetailUiEvent) {
+    fun dispatchEvent(event: MovieDetailUiEvent) {
         when (event) {
-            is TvShowDetailUiEvent.NavigateBack -> {
+            is MovieDetailUiEvent.NavigateBack -> {
                 navigateBack()
             }
         }

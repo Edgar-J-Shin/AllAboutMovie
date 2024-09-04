@@ -103,6 +103,9 @@ fun TvShowDetailUiState.getOriginCountry() = originCountry.getOrNull(0) ?: ""
 
 fun TvShowDetailUiState.getSpokenLanguage(): String = spokenLanguages.firstOrNull()?.name ?: ""
 
+fun TvShowDetailUiState.getRuntime(): String = episodeRunTime.firstOrNull()
+    ?.let { runtime -> "${runtime / 60}h ${runtime % 60}m" } ?: ""
+
 fun TvShowDetailUiState.getCrew() = credits.crew
     .groupBy { it.name }
     .map { crewMap ->

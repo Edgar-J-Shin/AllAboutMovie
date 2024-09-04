@@ -1,7 +1,7 @@
 package com.dcs.data.di
 
 import com.dcs.data.remote.service.AuthService
-import com.dcs.data.remote.service.MovieService
+import com.dcs.data.remote.service.MediaContentService
 import com.dcs.data.remote.service.PersonService
 import com.dcs.data.remote.service.SearchService
 import dagger.Module
@@ -15,8 +15,8 @@ import retrofit2.Retrofit
 class ServiceModule {
 
     @Provides
-    fun provideMovieService(retrofit: Retrofit): MovieService =
-        retrofit.create(MovieService::class.java)
+    fun provideMediaContentService(retrofit: Retrofit): MediaContentService =
+        retrofit.create(MediaContentService::class.java)
 
     @Provides
     fun provideAuthService(retrofit: Retrofit): AuthService =

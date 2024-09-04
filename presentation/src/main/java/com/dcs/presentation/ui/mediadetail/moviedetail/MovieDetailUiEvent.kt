@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail
+package com.dcs.presentation.ui.mediadetail.moviedetail
 
 sealed interface MovieDetailUiEvent {
 
