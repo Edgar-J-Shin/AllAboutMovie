@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +24,6 @@ class PeopleViewModel @Inject constructor(
 
     private val _effect = MutableSharedFlow<PeopleEffect>()
     val effect = _effect.asSharedFlow()
-
-    private val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
 
     val popularPeople = getPopularPeopleUseCase()
         .map {

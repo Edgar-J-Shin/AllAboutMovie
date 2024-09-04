@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.BasicImageState
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
 import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.getPosterPathUrl
@@ -45,9 +46,8 @@ fun MediaItem(
         ) {
             BasicImage(
                 imageUrl = mediaContentUiState.getPosterPathUrl(),
-                basicImageState = BasicImageState(
-                    contentDescResId = R.string.movie_image_content_description
-                ),
+                contentDescription = stringResource(R.string.movie_image_content_description),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
