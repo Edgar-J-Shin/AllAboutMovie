@@ -42,7 +42,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.MediaType
-import com.dcs.domain.model.findBy
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
@@ -334,10 +333,7 @@ fun MediaItems(
                     mediaContentUiState = mediaItem,
                     onClick = {
                         onItemClick(
-                            MediaType::value.findBy(
-                                value = mediaItem.mediaType,
-                                defaultValue = MediaType.MOIVE
-                            ),
+                            MediaType.toMediaType(mediaItem.mediaType),
                             mediaItem.toMediaContentId()
                         )
                     },
