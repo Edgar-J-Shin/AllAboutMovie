@@ -100,8 +100,11 @@ private fun MainNavHost(
 
         composable(route = MainTab.Trend.route) {
             TrendRoute(
-                navigateToDetails = { id ->
+                navigateToMovieDetails = { id ->
                     appNavHostController.navigate(Screen.MovieDetail.createRoute(id))
+                },
+                navigateToTvShowDetails = { id ->
+                    appNavHostController.navigate(Screen.TvShowDetail.createRoute(id))
                 },
                 showSnackBar = showSnackBar
             )

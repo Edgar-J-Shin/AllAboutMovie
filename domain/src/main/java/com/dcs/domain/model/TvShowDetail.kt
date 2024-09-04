@@ -12,10 +12,10 @@ data class TvShowDetail(
     val inProduction: Boolean,
     val languages: List<String>,
     val lastAirDate: String,
-    val lastEpisodeToAir: LastEpisodeToAir,
+    val lastEpisodeToAir: EpisodeToAir,
     val name: String,
     val networks: List<Network>,
-    val nextEpisodeToAir: String,
+    val nextEpisodeToAir: EpisodeToAir,
     val numberOfEpisodes: Int,
     val numberOfSeasons: Int,
     val originCountry: List<String>,
@@ -33,6 +33,7 @@ data class TvShowDetail(
     val type: String,
     val voteAverage: Double,
     val voteCount: Int,
+    val credits: Credits,
 )
 
 data class CreatedBy(
@@ -44,7 +45,7 @@ data class CreatedBy(
     val profilePath: String,
 )
 
-data class LastEpisodeToAir(
+data class EpisodeToAir(
     val airDate: String,
     val episodeNumber: Int,
     val episodeType: String,

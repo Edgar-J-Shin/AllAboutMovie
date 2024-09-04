@@ -134,7 +134,7 @@ class MovieRepositoryImpl @Inject constructor(
         val result = tvShowRemoteDataSource
             .getTvShowDetailById(
                 mediaContentId = mediaContentId,
-                appendToResponse = "",
+                appendToResponse = "credits",
                 language = "en-US"
             )
             .getOrThrow()

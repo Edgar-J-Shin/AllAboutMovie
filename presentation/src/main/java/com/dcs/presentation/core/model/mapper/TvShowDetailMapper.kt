@@ -1,32 +1,32 @@
-package com.dcs.data.model.mapper
+package com.dcs.presentation.core.model.mapper
 
-import com.dcs.data.remote.model.GetTvShowDetailResponse
-import com.dcs.data.remote.model.RemoteCreatedBy
-import com.dcs.data.remote.model.RemoteEpisodeToAir
-import com.dcs.data.remote.model.RemoteNetwork
-import com.dcs.data.remote.model.RemoteSeason
 import com.dcs.domain.model.CreatedBy
 import com.dcs.domain.model.EpisodeToAir
 import com.dcs.domain.model.Network
 import com.dcs.domain.model.Season
 import com.dcs.domain.model.TvShowDetail
+import com.dcs.presentation.core.model.CreatedByUiState
+import com.dcs.presentation.core.model.EpisodeToAirUiState
+import com.dcs.presentation.core.model.NetworkUiState
+import com.dcs.presentation.core.model.SeasonUiState
+import com.dcs.presentation.core.model.TvShowDetailUiState
 
-fun GetTvShowDetailResponse.toEntity() = TvShowDetail(
+fun TvShowDetail.toUiState() = TvShowDetailUiState(
     adult = adult,
     backdropPath = backdropPath,
-    createdBy = createdBy.map { it.toEntity() },
+    createdBy = createdBy.map { it.toUiState() },
     episodeRunTime = episodeRunTime,
     firstAirDate = firstAirDate,
-    genres = genres.map { it.toEntity() },
+    genres = genres.map { it.toUiState() },
     homepage = homepage,
     id = id,
     inProduction = inProduction,
     languages = languages,
     lastAirDate = lastAirDate,
-    lastEpisodeToAir = lastEpisodeToAir.toEntity(),
+    lastEpisodeToAir = lastEpisodeToAir.toUiState(),
     name = name,
-    networks = networks.map { it.toEntity() },
-    nextEpisodeToAir = nextEpisodeToAir.toEntity(),
+    networks = networks.map { it.toUiState() },
+    nextEpisodeToAir = nextEpisodeToAir.toUiState(),
     numberOfEpisodes = numberOfEpisodes,
     numberOfSeasons = numberOfSeasons,
     originCountry = originCountry,
@@ -35,19 +35,19 @@ fun GetTvShowDetailResponse.toEntity() = TvShowDetail(
     overview = overview,
     popularity = popularity,
     posterPath = posterPath,
-    productionCompanies = productionCompanies.map { it.toEntity() },
-    productionCountries = productionCountries.map { it.toEntity() },
-    seasons = seasons.map { it.toEntity() },
-    spokenLanguages = spokenLanguages.map { it.toEntity() },
+    productionCompanies = productionCompanies.map { it.toUiState() },
+    productionCountries = productionCountries.map { it.toUiState() },
+    seasons = seasons.map { it.toUiState() },
+    spokenLanguages = spokenLanguages.map { it.toUiState() },
     status = status,
     tagline = tagline,
     type = type,
     voteAverage = voteAverage,
     voteCount = voteCount,
-    credits = credits.toEntity()
+    credits = credits.toUiState(),
 )
 
-fun RemoteCreatedBy.toEntity() = CreatedBy(
+fun CreatedBy.toUiState() = CreatedByUiState(
     creditId = creditId,
     gender = gender,
     id = id,
@@ -56,14 +56,7 @@ fun RemoteCreatedBy.toEntity() = CreatedBy(
     profilePath = profilePath,
 )
 
-fun RemoteNetwork.toEntity() = Network(
-    id = id,
-    logoPath = logoPath,
-    name = name,
-    originCountry = originCountry,
-)
-
-fun RemoteEpisodeToAir.toEntity() = EpisodeToAir(
+fun EpisodeToAir.toUiState() = EpisodeToAirUiState(
     airDate = airDate,
     episodeNumber = episodeNumber,
     episodeType = episodeType,
@@ -79,7 +72,14 @@ fun RemoteEpisodeToAir.toEntity() = EpisodeToAir(
     voteCount = voteCount,
 )
 
-fun RemoteSeason.toEntity() = Season(
+fun Network.toUiState() = NetworkUiState(
+    id = id,
+    logoPath = logoPath,
+    name = name,
+    originCountry = originCountry,
+)
+
+fun Season.toUiState() = SeasonUiState(
     airDate = airDate,
     episodeCount = episodeCount,
     id = id,
