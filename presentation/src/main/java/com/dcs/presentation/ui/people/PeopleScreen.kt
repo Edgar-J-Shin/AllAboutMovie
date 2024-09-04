@@ -19,13 +19,18 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -150,6 +155,7 @@ private fun PersonCard(
         shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         BasicImage(
             imageUrl = state.getProfileUrl(),
@@ -162,12 +168,17 @@ private fun PersonCard(
 
         Text(
             text = state.name,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(12.dp)
         )
 
         Text(
             text = state.getKnownForTitle(),
             maxLines = 2,
+            style = MaterialTheme.typography.bodyMedium,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .padding(12.dp)
                 .height(60.dp),
