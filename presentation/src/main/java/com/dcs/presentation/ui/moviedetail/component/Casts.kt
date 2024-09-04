@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.BasicImageDefaults
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.model.CreditsCastUiState
 import com.dcs.presentation.core.model.getProfilePathUrl
@@ -98,7 +97,7 @@ internal fun CastItem(
     ) {
         BasicImage(
             imageUrl = cast.getProfilePathUrl(),
-            contentDescription = BasicImageDefaults.contentDescription(id = R.string.cast_image_content_description),
+            contentDescription = stringResource(id = R.string.cast_image_content_description),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()

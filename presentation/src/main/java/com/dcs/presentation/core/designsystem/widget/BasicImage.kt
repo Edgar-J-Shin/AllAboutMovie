@@ -1,7 +1,6 @@
 package com.dcs.presentation.core.designsystem.widget
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -14,9 +13,9 @@ import com.dcs.presentation.R
 fun BasicImage(
     imageUrl: String,
     modifier: Modifier = Modifier,
-    contentDescription: String = BasicImageDefaults.contentDescription(),
-    placeHolder: Painter? = BasicImageDefaults.placeHolder(),
-    error: Painter? = BasicImageDefaults.error(),
+    contentDescription: String = stringResource(id = R.string.image_content_description),
+    placeHolder: Painter? = painterResource(id = R.drawable.image_placeholder),
+    error: Painter? = painterResource(id = R.drawable.image_placeholder),
     contentScale: ContentScale = ContentScale.Fit,
 ) {
     AsyncImage(
@@ -27,20 +26,4 @@ fun BasicImage(
         error = error,
         modifier = modifier
     )
-}
-
-@Immutable
-object BasicImageDefaults {
-
-    @Composable
-    fun placeHolder(): Painter = painterResource(id = R.drawable.image_placeholder)
-
-    @Composable
-    fun contentDescription(
-        id: Int = R.string.image_content_description,
-    ): String = stringResource(id = id)
-
-    @Composable
-    fun error(): Painter = painterResource(id = R.drawable.image_placeholder)
-
 }
