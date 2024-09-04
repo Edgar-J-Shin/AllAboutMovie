@@ -37,6 +37,8 @@ fun MovieImage(
         BasicImage(
             imageUrl = posterPathUrl,
             contentDescription = stringResource(R.string.movie_image_content_description),
+            placeHolder = null,
+            error = null,
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(0.75f)
