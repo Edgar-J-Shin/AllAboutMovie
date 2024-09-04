@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
@@ -29,6 +30,7 @@ fun MovieImage(
             basicImageState = BasicImageState(
                 contentDescResId = R.string.movie_image_content_description
             ),
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.TopCenter)

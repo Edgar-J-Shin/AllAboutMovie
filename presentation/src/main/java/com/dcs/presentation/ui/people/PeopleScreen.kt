@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,9 +34,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.widget.BasicImage
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.PersonUiState
@@ -140,7 +140,6 @@ private fun PopularPeople(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun PersonCard(
     state: PersonUiState,
@@ -157,10 +156,10 @@ private fun PersonCard(
         modifier = modifier
             .clickable(onClick = onClick),
     ) {
-        GlideImage(
-            model = state.getProfileUrl(),
+        BasicImage(
+            imageUrl = state.getProfileUrl(),
             contentDescription = stringResource(id = R.string.content_description_profile),
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
         )
         val knownForTitle = state.getKnownForTitle()
