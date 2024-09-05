@@ -40,7 +40,6 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.MediaType
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
@@ -114,15 +113,6 @@ fun TrendScreen(
     onTrendUiEvent: (TrendUiEvent) -> Unit = {},
     scrollState: ScrollState = rememberScrollState(),
 ) {
-    val onItemClick: (MediaType, MediaContentId) -> Unit = { mediaType, mediaContentId ->
-        onTrendUiEvent(
-            TrendUiEvent.NavigateToMediaContentDetails(
-                mediaContentId = mediaContentId,
-                mediaType = mediaType
-            )
-        )
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -131,18 +121,18 @@ fun TrendScreen(
         TrendingMovieSector(
             pagingItems = trendingMovies,
             onTabClick = { tabIndex -> onTrendingMovieUiTypeChange(TrendingMovieUiType.entries[tabIndex]) },
-            onItemClick = onItemClick
+            onTrendUiEvent = onTrendUiEvent,
         )
 
         PopularMovieSector(
             pagingItems = popularMovies,
             onTabClick = { tabIndex -> onPopularMovieUiTypeChange(PopularMovieUiType.entries[tabIndex]) },
-            onItemClick = onItemClick
+            onTrendUiEvent = onTrendUiEvent,
         )
 
         UpcomingMovieSector(
             pagingItems = upcomingMovies,
-            onItemClick = onItemClick
+            onTrendUiEvent = onTrendUiEvent,
         )
     }
 }
@@ -151,14 +141,14 @@ fun TrendScreen(
 fun TrendingMovieSector(
     pagingItems: LazyPagingItems<MediaContentUiState>,
     onTabClick: (Int) -> Unit = {},
-    onItemClick: (MediaType, MediaContentId) -> Unit = { _, _ -> },
+    onTrendUiEvent: (TrendUiEvent) -> Unit = {},
 ) {
     MediaContentSector(
         title = stringResource(id = R.string.movie_trend_title_trend),
         pagingItems = pagingItems,
         tabs = TrendingMovieUiType.entries.map { it.toUiString() },
         onTabClick = onTabClick,
-        onItemClick = onItemClick
+        onTrendUiEvent = onTrendUiEvent
     )
 }
 
@@ -166,26 +156,26 @@ fun TrendingMovieSector(
 fun PopularMovieSector(
     pagingItems: LazyPagingItems<MediaContentUiState>,
     onTabClick: (Int) -> Unit = {},
-    onItemClick: (MediaType, MediaContentId) -> Unit = { _, _ -> },
+    onTrendUiEvent: (TrendUiEvent) -> Unit = {},
 ) {
     MediaContentSector(
         title = stringResource(id = R.string.movie_trend_title_popular),
         pagingItems = pagingItems,
         tabs = PopularMovieUiType.entries.map { it.toUiString() },
         onTabClick = onTabClick,
-        onItemClick = onItemClick
+        onTrendUiEvent = onTrendUiEvent
     )
 }
 
 @Composable
 fun UpcomingMovieSector(
     pagingItems: LazyPagingItems<MediaContentUiState>,
-    onItemClick: (MediaType, MediaContentId) -> Unit = { _, _ -> },
+    onTrendUiEvent: (TrendUiEvent) -> Unit = {},
 ) {
     MediaContentSector(
         title = stringResource(id = R.string.movie_trend_title_upcoming),
         pagingItems = pagingItems,
-        onItemClick = onItemClick
+        onTrendUiEvent = onTrendUiEvent
     )
 }
 
@@ -196,7 +186,7 @@ fun MediaContentSector(
     modifier: Modifier = Modifier,
     tabs: List<String> = listOf(),
     onTabClick: (Int) -> Unit = {},
-    onItemClick: (MediaType, MediaContentId) -> Unit = { _, _ -> },
+    onTrendUiEvent: (TrendUiEvent) -> Unit = {},
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -218,13 +208,13 @@ fun MediaContentSector(
                 selectedTabIndex = selectedTabIndex,
             ) { tabIndex ->
                 selectedTabIndex = tabIndex
-                onTabClick.invoke(tabIndex)
+                onTabClick(tabIndex)
             }
         }
 
         MediaContents(
             pagingItems = pagingItems,
-            onItemClick = onItemClick,
+            onTrendUiEvent = onTrendUiEvent,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(280.dp)
@@ -271,7 +261,7 @@ fun CustomScrollableTabRow(
 @Composable
 fun MediaContents(
     pagingItems: LazyPagingItems<MediaContentUiState>,
-    onItemClick: (MediaType, MediaContentId) -> Unit,
+    onTrendUiEvent: (TrendUiEvent) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -299,7 +289,7 @@ fun MediaContents(
             else -> {
                 MediaItems(
                     pagingItems = pagingItems,
-                    onItemClick = onItemClick
+                    onTrendUiEvent = onTrendUiEvent
                 )
             }
         }
@@ -310,10 +300,9 @@ fun MediaContents(
 fun MediaItems(
     pagingItems: LazyPagingItems<MediaContentUiState>,
     modifier: Modifier = Modifier,
-    onItemClick: (MediaType, MediaContentId) -> Unit,
+    onTrendUiEvent: (TrendUiEvent) -> Unit = {},
     listState: LazyListState = rememberLazyListState(),
 ) {
-
     LazyRow(
         state = listState,
         contentPadding = PaddingValues(
@@ -332,9 +321,11 @@ fun MediaItems(
                 MediaItem(
                     mediaContentUiState = mediaItem,
                     onClick = {
-                        onItemClick(
-                            MediaType.toMediaType(mediaItem.mediaType),
-                            mediaItem.toMediaContentId()
+                        onTrendUiEvent(
+                            TrendUiEvent.NavigateToMediaContentDetails(
+                                mediaContentId = mediaItem.toMediaContentId(),
+                                mediaType = MediaType.toMediaType(mediaItem.mediaType)
+                            )
                         )
                     },
                     modifier = Modifier
