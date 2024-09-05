@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -54,7 +53,6 @@ import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
 import com.dcs.presentation.core.ui.state.UiState
-import kotlin.math.roundToInt
 
 @Composable
 fun PersonDetailRoute(
@@ -92,27 +90,23 @@ private fun PersonDetailScreen(
 ) {
     val scrollState = rememberLazyListState()
 
-    // 앱바의 높이를 저장할 상태
+    // TopAppBar의 높이 저장
     var topBarHeight by remember { mutableFloatStateOf(0f) }
-    var previousScrollOffset by remember { mutableFloatStateOf(0f) }
 
-    // 스크롤 상태에 따른 topBarOffset 값 관리 (초기값 0)
-    var scrolledTopBarOffset by remember { mutableFloatStateOf(0f) }
-
-    // 스크롤 오프셋을 derivedStateOf로 최적화
-    val currentScrollOffset by remember {
-        derivedStateOf {
-            scrollState.firstVisibleItemScrollOffset.toFloat()
-        }
+    // 이미지가 먼저 나타나고, 이후에 TopAppBar가 나타나도록 스크롤 오프셋 계산
+    val firstVisibleItemIndex by remember {
+        derivedStateOf { scrollState.firstVisibleItemIndex }
     }
 
-    // 스크롤 변화 감지 및 TopBar 상태 업데이트
-    LaunchedEffect(currentScrollOffset) {
-        val scrollDifference = currentScrollOffset - previousScrollOffset
+    val firstVisibleItemOffset by remember {
+        derivedStateOf { scrollState.firstVisibleItemScrollOffset }
+    }
 
-        // 스크롤 방향에 따라 TopBar의 위치를 조절
-        scrolledTopBarOffset = (scrolledTopBarOffset - scrollDifference).coerceIn(-topBarHeight, 0f)
-        previousScrollOffset = currentScrollOffset
+    val topBarOffset = if (firstVisibleItemIndex == 0) {
+        // 첫 번째 아이템의 스크롤에 따라 TopAppBar가 나타남
+        -firstVisibleItemOffset.coerceIn(0, topBarHeight.toInt())
+    } else {
+        0 // 다른 아이템으로 넘어가면 TopAppBar가 고정됨
     }
 
     Scaffold(
@@ -135,17 +129,12 @@ private fun PersonDetailScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .statusBarsPadding()
                     .onGloballyPositioned { coordinates ->
-                        // 앱바의 실제 높이를 저장
-                        topBarHeight = coordinates.size.height.toFloat() // 변경된 변수 사용
+                        // TopBar의 높이를 저장
+                        topBarHeight = coordinates.size.height.toFloat()
                     }
-                    .offset {
-                        IntOffset(
-                            x = 0,
-                            y = scrolledTopBarOffset.roundToInt()
-                        )
-                    }  // 스크롤에 따라 Y축으로 이동,
+                    .offset { IntOffset(x = 0, y = topBarOffset) } // 스크롤에 따라 TopAppBar의 위치 변경
+                    .statusBarsPadding()
             )
         },
         modifier = modifier
