@@ -66,9 +66,17 @@ fun PersonDetailRoute(
 
     viewModel.effect.collectAsEffect {
         when (it) {
-            is PersonDetailEffect.NavigateToMovieDetail -> navigateToMovieDetail(it.movieId)
-            is PersonDetailEffect.NavigateToTvShowDetail -> navigateToTvShowDetail(it.tvShowId)
-            PersonDetailEffect.NavigateUp -> navigateUp()
+            is PersonDetailEffect.NavigateToMovieDetail -> {
+                navigateToMovieDetail(it.movieId)
+            }
+
+            is PersonDetailEffect.NavigateToTvShowDetail -> {
+                navigateToTvShowDetail(it.tvShowId)
+            }
+
+            PersonDetailEffect.NavigateUp -> {
+                navigateUp()
+            }
         }
     }
 
