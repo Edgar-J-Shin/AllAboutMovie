@@ -3,11 +3,9 @@ package com.dcs.presentation.ui.persondetail
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +35,7 @@ import com.dcs.presentation.ui.persondetail.component.credits
 @Composable
 internal fun PersonDetailContent(
     personDetailUiState: PersonDetailUiState,
-    navigateUp: () -> Unit,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -55,7 +53,7 @@ internal fun PersonDetailContent(
 
                 navigationIcon = {
                     NavigationBackButton(
-                        navigateUp = navigateUp,
+                        navigateUp = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) },
                     )
                 },
                 modifier = Modifier
@@ -103,6 +101,7 @@ internal fun PersonDetailContent(
         item {
             KnownFor(
                 knownFor = personDetailUiState.knownFor,
+                onPersonDetailUiEvent = onPersonDetailUiEvent,
             )
         }
 
@@ -111,6 +110,7 @@ internal fun PersonDetailContent(
         credits(
             casts = personDetailUiState.casts,
             crews = personDetailUiState.crews,
+            onPersonDetailUiEvent = onPersonDetailUiEvent,
         )
     }
 }

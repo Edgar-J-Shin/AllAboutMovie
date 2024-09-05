@@ -1,5 +1,6 @@
 package com.dcs.presentation.ui.persondetail.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,10 +29,12 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.component.BasicImage
 import com.dcs.presentation.core.model.KnownForUiState
 import com.dcs.presentation.core.model.getPosterUrl
+import com.dcs.presentation.ui.persondetail.PersonDetailUiEvent
 
 @Composable
 internal fun KnownFor(
     knownFor: List<KnownForUiState>,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -51,11 +54,21 @@ internal fun KnownFor(
         ) {
             items(
                 items = knownFor,
-                key = { it.id }
+                key = { it.id.value }
             ) {
                 ElevatedCard(
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier.width(120.dp)
+                    modifier = Modifier
+                        .width(120.dp)
+                        .clickable {
+                            onPersonDetailUiEvent(
+                                PersonDetailUiEvent.OnKnownForCardClick(
+                                    id = it.id,
+                                    mediaType = it.mediaType
+                                )
+                            )
+                        }
+
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),

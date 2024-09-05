@@ -81,6 +81,10 @@ fun AllAboutMovieApp(
         ) {
             PersonDetailRoute(
                 navigateUp = { navController.popBackStack() },
+                navigateToTvShowDetail = { id -> },
+                navigateToMovieDetail = { id ->
+                    navController.navigate(Screen.MovieDetail.createRoute(id))
+                }
             )
         }
 

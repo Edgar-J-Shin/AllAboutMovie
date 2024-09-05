@@ -1,5 +1,6 @@
 package com.dcs.presentation.ui.persondetail.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,11 +23,13 @@ import com.dcs.presentation.core.model.getActingTitle
 import com.dcs.presentation.core.model.getCharacterTitle
 import com.dcs.presentation.core.model.getJobTitle
 import com.dcs.presentation.core.model.getProductionTitle
+import com.dcs.presentation.ui.persondetail.PersonDetailUiEvent
 import com.dcs.presentation.ui.persondetail.spacer
 
 internal fun LazyListScope.credits(
     casts: List<CastUiState>,
     crews: List<CrewUiState>,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
 ) {
     if (casts.isNotEmpty()) {
         item {
@@ -43,6 +46,14 @@ internal fun LazyListScope.credits(
         ) { cast ->
             ActingCard(
                 cast = cast,
+                onClick = {
+                    onPersonDetailUiEvent(
+                        PersonDetailUiEvent.OnActingCardClick(
+                            id = cast.id,
+                            mediaType = cast.mediaType
+                        )
+                    )
+                }
             )
         }
 
@@ -64,6 +75,14 @@ internal fun LazyListScope.credits(
         ) { crew ->
             ProductionCard(
                 crew = crew,
+                onClick = {
+                    onPersonDetailUiEvent(
+                        PersonDetailUiEvent.OnProductionCardClick(
+                            id = crew.id,
+                            mediaType = crew.mediaType
+                        )
+                    )
+                }
             )
         }
 
@@ -75,6 +94,7 @@ internal fun LazyListScope.credits(
 private fun ActingCard(
     cast: CastUiState,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -91,6 +111,7 @@ private fun ActingCard(
                 )
             }
             .padding(vertical = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = cast.getActingTitle(),
@@ -108,6 +129,7 @@ private fun ActingCard(
 private fun ProductionCard(
     crew: CrewUiState,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -124,6 +146,7 @@ private fun ProductionCard(
                 )
             }
             .padding(vertical = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = crew.getProductionTitle(),

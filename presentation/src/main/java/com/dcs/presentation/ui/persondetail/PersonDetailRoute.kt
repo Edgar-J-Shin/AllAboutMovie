@@ -27,13 +27,16 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.designsystem.component.NavigationBackButton
+import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.CastUiState
 import com.dcs.presentation.core.model.CrewUiState
 import com.dcs.presentation.core.model.GenderUiState
 import com.dcs.presentation.core.model.KnownForUiState
+import com.dcs.presentation.core.model.MediaTypeUiState
 import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
@@ -42,14 +45,24 @@ import com.dcs.presentation.core.ui.state.UiState
 @Composable
 fun PersonDetailRoute(
     navigateUp: () -> Unit,
+    navigateToMovieDetail: (Int) -> Unit,
+    navigateToTvShowDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PersonDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    viewModel.effect.collectAsEffect {
+        when (it) {
+            is PersonDetailEffect.NavigateToMovieDetail -> navigateToMovieDetail(it.movieId)
+            is PersonDetailEffect.NavigateToTvShowDetail -> navigateToTvShowDetail(it.tvShowId)
+            PersonDetailEffect.NavigateUp -> navigateUp()
+        }
+    }
+
     PersonDetailScreen(
-        navigateUp = navigateUp,
         uiState = uiState,
+        onPersonDetailUiEvent = viewModel::dispatchEvent,
         modifier = modifier
             .fillMaxSize()
             .systemBarsPadding(),
@@ -58,22 +71,22 @@ fun PersonDetailRoute(
 
 @Composable
 private fun PersonDetailScreen(
-    navigateUp: () -> Unit,
     uiState: UiState<PersonDetailUiState>,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box {
         when (uiState) {
             is UiState.Loading -> {
                 PersonDetailLoadingContent(
-                    navigateUp = navigateUp,
+                    onPersonDetailUiEvent = onPersonDetailUiEvent,
                     modifier = modifier,
                 )
             }
 
             is UiState.Error -> {
                 PersonDetailErrorContent(
-                    navigateUp = navigateUp,
+                    onPersonDetailUiEvent = onPersonDetailUiEvent,
                     modifier = modifier,
                 )
             }
@@ -82,7 +95,7 @@ private fun PersonDetailScreen(
                 val personDetailUiState = uiState.data
                 PersonDetailContent(
                     personDetailUiState = personDetailUiState,
-                    navigateUp = navigateUp,
+                    onPersonDetailUiEvent = onPersonDetailUiEvent,
                     modifier = modifier
                 )
             }
@@ -93,7 +106,7 @@ private fun PersonDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PersonDetailLoadingContent(
-    navigateUp: () -> Unit,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -103,7 +116,11 @@ private fun PersonDetailLoadingContent(
         CenterAlignedTopAppBar(
             title = {},
             navigationIcon = {
-                NavigationBackButton(navigateUp = navigateUp)
+                NavigationBackButton(
+                    navigateUp = {
+                        onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick)
+                    }
+                )
             },
             modifier = Modifier.fillMaxWidth(),
         )
@@ -220,14 +237,18 @@ private fun PersonDetailLoadingContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PersonDetailErrorContent(
-    navigateUp: () -> Unit,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         CenterAlignedTopAppBar(
             title = {},
             navigationIcon = {
-                NavigationBackButton(navigateUp = navigateUp)
+                NavigationBackButton(
+                    navigateUp = {
+                        onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick)
+                    }
+                )
             },
             modifier = Modifier.fillMaxWidth(),
         )
@@ -244,8 +265,8 @@ private fun PersonDetailScreenPreview(
 ) {
     AllAboutMovieTheme {
         PersonDetailScreen(
-            navigateUp = {},
             uiState = uiState,
+            onPersonDetailUiEvent = {}
         )
     }
 }
@@ -273,7 +294,7 @@ private class PersonDetailProvider :
                     profilePath = "/profilePath",
                     casts = listOf(
                         CastUiState(
-                            id = 0,
+                            id = MediaContentId(0),
                             adult = false,
                             backdropPath = "",
                             character = "",
@@ -281,7 +302,7 @@ private class PersonDetailProvider :
                             episodeCount = 0,
                             firstAirDate = "",
                             genreIds = listOf(),
-                            mediaType = "",
+                            mediaType = MediaTypeUiState.MOVIE,
                             name = "Ayo",
                             order = 0,
                             originCountry = listOf(),
@@ -301,14 +322,14 @@ private class PersonDetailProvider :
                     ),
                     crews = listOf(
                         CrewUiState(
-                            id = 0,
+                            id = MediaContentId(0),
                             adult = false,
                             backdropPath = "",
                             creditId = "",
                             department = "",
                             genreIds = listOf(),
                             job = "Producer",
-                            mediaType = "",
+                            mediaType = MediaTypeUiState.TV,
                             originalLanguage = "",
                             originalTitle = "Ayo",
                             overview = "",
@@ -323,14 +344,14 @@ private class PersonDetailProvider :
                     ),
                     knownFor = listOf(
                         KnownForUiState(
-                            id = 0,
+                            id = MediaContentId(0),
                             name = "good",
                             originalName = "or",
                             adult = false,
                             backdropPath = "b",
                             firstAirDate = "",
                             genreIds = listOf(),
-                            mediaType = "",
+                            mediaType = MediaTypeUiState.MOVIE,
                             originCountry = listOf(),
                             originalLanguage = "",
                             originalTitle = "GOOD",
