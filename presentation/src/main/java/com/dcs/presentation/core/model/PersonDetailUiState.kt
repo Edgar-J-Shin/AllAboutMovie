@@ -1,5 +1,6 @@
 package com.dcs.presentation.core.model
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -86,10 +87,11 @@ fun PersonDetailUiState.getProfileUrl(): String =
 @Composable
 fun CastUiState.getActingTitle(): String {
     val name = name.ifBlank { title }
-    return if (releaseDate.isBlank()) {
+    val date = releaseDate.ifBlank { firstAirDate }
+    return if (date.isBlank()) {
         name
     } else {
-        "${LocalDate.parse(releaseDate).year} $name"
+        "${LocalDate.parse(date).year} $name"
     }
 }
 
