@@ -110,6 +110,7 @@ fun CastUiState.getCharacterTitle(): AnnotatedString {
         ) {
             append(stringResource(id = R.string.title_as_character))
         }
+        append(" ")
         append(character)
     }
 }
@@ -136,6 +137,7 @@ fun CrewUiState.getJobTitle(): AnnotatedString {
         ) {
             append(stringResource(id = R.string.title_as_job))
         }
+        append(" ")
         append(job)
     }
 }
