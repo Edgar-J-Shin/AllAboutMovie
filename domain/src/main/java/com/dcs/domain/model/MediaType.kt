@@ -8,7 +8,7 @@ enum class MediaType(val value: String) {
         fun toMediaType(mediaType: String): MediaType =
             MediaType::value.findBy(
                 value = mediaType,
-                defaultValue = MOIVE
+                defaultValue = MOVIE
             )
     }
 }
