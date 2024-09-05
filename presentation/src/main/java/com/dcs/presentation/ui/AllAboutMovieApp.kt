@@ -13,10 +13,10 @@ import com.dcs.presentation.ui.Screen.SearchResult
 import com.dcs.presentation.ui.Screen.SignIn
 import com.dcs.presentation.ui.main.MainRoute
 import com.dcs.presentation.ui.mediadetail.moviedetail.MovieDetailRoute
+import com.dcs.presentation.ui.mediadetail.tvshowdetail.TvShowDetailRoute
 import com.dcs.presentation.ui.persondetail.PersonDetailRoute
 import com.dcs.presentation.ui.searchresult.SearchResultRoute
 import com.dcs.presentation.ui.signin.SignInRoute
-import com.dcs.presentation.ui.mediadetail.tvshowdetail.TvShowDetailRoute
 
 @Composable
 fun AllAboutMovieApp(
@@ -81,7 +81,9 @@ fun AllAboutMovieApp(
         ) {
             PersonDetailRoute(
                 navigateUp = { navController.popBackStack() },
-                navigateToTvShowDetail = { id -> },
+                navigateToTvShowDetail = { id ->
+                    navController.navigate(Screen.TvShowDetail.createRoute(id))
+                },
                 navigateToMovieDetail = { id ->
                     navController.navigate(Screen.MovieDetail.createRoute(id))
                 }
