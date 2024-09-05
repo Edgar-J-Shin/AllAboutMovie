@@ -100,12 +100,10 @@ fun TvShowDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIG
 fun TvShowDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 
 fun TvShowDetailUiState.getNameWithFirstAirYear() =
-    name.let {
-        if (firstAirDate.isBlank()) {
-            it
-        } else {
-            "$it (${LocalDate.parse(firstAirDate).year})"
-        }
+    if (firstAirDate.isBlank()) {
+        name
+    } else {
+        "$name (${LocalDate.parse(firstAirDate).year})"
     }
 
 fun TvShowDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.name }

@@ -112,12 +112,10 @@ fun MovieDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGI
 fun MovieDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 
 fun MovieDetailUiState.getTitleWithReleaseYear() =
-    title.let {
-        if (releaseDate.isNotBlank()) {
-            "$it ${LocalDate.parse(releaseDate).year}"
-        } else {
-            it
-        }
+    if (releaseDate.isBlank()) {
+        title
+    } else {
+        "$title ${LocalDate.parse(releaseDate).year}"
     }
 
 fun MovieDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.name }
