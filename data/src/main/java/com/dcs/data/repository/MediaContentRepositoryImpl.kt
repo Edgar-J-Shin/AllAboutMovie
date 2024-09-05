@@ -21,7 +21,8 @@ import com.dcs.domain.model.MediaPolymorphic
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.MovieDetail
 import com.dcs.domain.model.TimeWindow
-import com.dcs.domain.repository.MovieRepository
+import com.dcs.domain.model.TvShowDetail
+import com.dcs.domain.repository.MediaContentRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -29,12 +30,12 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class MovieRepositoryImpl @Inject constructor(
+class MediaContentRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val tvShowRemoteDataSource: TvShowRemoteDataSource,
     private val keywordLocalDataSource: KeywordLocalDataSource,
     @IoDispatcher val ioDispatcher: CoroutineDispatcher,
-) : MovieRepository {
+) : MediaContentRepository {
 
     @WorkerThread
     override fun getTrendingMediaContents(
@@ -126,6 +127,21 @@ class MovieRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+
+    override fun getTvShowById(
+        mediaContentId: MediaContentId,
+    ): Flow<TvShowDetail> = flow {
+        val result = tvShowRemoteDataSource
+            .getTvShowDetailById(
+                mediaContentId = mediaContentId,
+                appendToResponse = "credits",
+                language = "en-US"
+            )
+            .getOrThrow()
+            .toEntity()
+
+        emit(result)
+    }.flowOn(ioDispatcher)
 
     companion object {
         const val DEFAULT_PAGE_SIZE: Int = 20

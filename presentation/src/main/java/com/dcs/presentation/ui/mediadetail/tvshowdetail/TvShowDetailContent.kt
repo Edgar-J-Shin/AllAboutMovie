@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail
+package com.dcs.presentation.ui.mediadetail.tvshowdetail
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -8,31 +8,32 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.dcs.presentation.core.model.MovieDetailUiState
+import com.dcs.presentation.core.model.TvShowDetailUiState
 import com.dcs.presentation.core.model.getBackdropPathUrl
 import com.dcs.presentation.core.model.getCrew
 import com.dcs.presentation.core.model.getGenres
+import com.dcs.presentation.core.model.getNameWithFirstAirYear
 import com.dcs.presentation.core.model.getOriginCountry
 import com.dcs.presentation.core.model.getPosterPathUrl
 import com.dcs.presentation.core.model.getRuntime
 import com.dcs.presentation.core.model.getSpokenLanguage
-import com.dcs.presentation.core.model.getTitleWithReleaseYear
 import com.dcs.presentation.core.model.getVotePercentage
-import com.dcs.presentation.ui.moviedetail.component.Casts
-import com.dcs.presentation.ui.moviedetail.component.Crews
-import com.dcs.presentation.ui.moviedetail.component.MovieImage
-import com.dcs.presentation.ui.moviedetail.component.MovieInfo
-import com.dcs.presentation.ui.moviedetail.component.Overview
-import com.dcs.presentation.ui.moviedetail.component.Status
+import com.dcs.presentation.ui.mediadetail.component.Casts
+import com.dcs.presentation.ui.mediadetail.component.Crews
+import com.dcs.presentation.ui.mediadetail.component.MediaDetailImage
+import com.dcs.presentation.ui.mediadetail.component.MediaDetailInfo
+import com.dcs.presentation.ui.mediadetail.component.Overview
+import com.dcs.presentation.ui.mediadetail.component.Status
 
-internal fun LazyListScope.movieDetailContent(
-    movieDetailUiState: MovieDetailUiState,
+internal fun LazyListScope.tvShowDetailContent(
+    uiState: TvShowDetailUiState,
+    onPersonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     item {
-        MovieImage(
-            backdropPathUrl = movieDetailUiState.getBackdropPathUrl(),
-            posterPathUrl = movieDetailUiState.getPosterPathUrl(),
+        MediaDetailImage(
+            backdropPathUrl = uiState.getBackdropPathUrl(),
+            posterPathUrl = uiState.getPosterPathUrl(),
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(2f)
@@ -42,14 +43,14 @@ internal fun LazyListScope.movieDetailContent(
     spacer()
 
     item {
-        MovieInfo(
-            title = movieDetailUiState.getTitleWithReleaseYear(),
-            score = movieDetailUiState.getVotePercentage(),
-            releaseDate = movieDetailUiState.releaseDate,
-            country = movieDetailUiState.getOriginCountry(),
-            runtime = movieDetailUiState.getRuntime(),
-            genres = movieDetailUiState.getGenres(),
-            tagline = movieDetailUiState.tagline,
+        MediaDetailInfo(
+            title = uiState.getNameWithFirstAirYear(),
+            score = uiState.getVotePercentage(),
+            releaseDate = uiState.firstAirDate,
+            country = uiState.getOriginCountry(),
+            runtime = uiState.getRuntime(),
+            genres = uiState.getGenres(),
+            tagline = uiState.tagline,
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -58,7 +59,7 @@ internal fun LazyListScope.movieDetailContent(
 
     item {
         Overview(
-            movieDetailUiState.overview,
+            uiState.overview,
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -67,7 +68,7 @@ internal fun LazyListScope.movieDetailContent(
 
     item {
         Crews(
-            movieDetailUiState.getCrew(),
+            uiState.getCrew(),
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -76,7 +77,8 @@ internal fun LazyListScope.movieDetailContent(
 
     item {
         Casts(
-            casts = movieDetailUiState.credits.cast,
+            casts = uiState.credits.cast,
+            onPersonClick = onPersonClick,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -85,9 +87,7 @@ internal fun LazyListScope.movieDetailContent(
 
     item {
         Status(
-            language = movieDetailUiState.getSpokenLanguage(),
-            budget = movieDetailUiState.budget,
-            revenue = movieDetailUiState.revenue,
+            language = uiState.getSpokenLanguage(),
             modifier = modifier.fillMaxWidth()
         )
     }

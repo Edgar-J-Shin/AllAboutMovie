@@ -117,13 +117,29 @@ class TrendViewModel @Inject constructor(
         }
     }
 
+    private fun navigateToTvShowDetails(mediaContentId: MediaContentId) {
+        launch {
+            _effect.emit(
+                TrendEffect.NavigateToTvShowDetails(
+                    mediaContentId = mediaContentId
+                )
+            )
+        }
+    }
+
     fun dispatchEvent(event: TrendUiEvent) {
         when (event) {
 
-            is TrendUiEvent.NavigateToMovieDetails -> {
-                navigateToMovieDetails(
-                    mediaContentId = event.mediaContentId
-                )
+            is TrendUiEvent.NavigateToMediaContentDetails -> {
+                if (event.mediaType == MediaType.MOIVE) {
+                    navigateToMovieDetails(
+                        mediaContentId = event.mediaContentId
+                    )
+                } else {
+                    navigateToTvShowDetails(
+                        mediaContentId = event.mediaContentId
+                    )
+                }
             }
         }
     }

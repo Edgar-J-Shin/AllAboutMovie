@@ -34,10 +34,11 @@ fun MediaItem(
     mediaContentUiState: MediaContentUiState,
     onClick: () -> Unit = {},
 ) {
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .padding(all = 4.dp)
-        .clickable { onClick.invoke() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(all = 4.dp)
+            .clickable(onClick = onClick)
     ) {
         Box(
             modifier = modifier

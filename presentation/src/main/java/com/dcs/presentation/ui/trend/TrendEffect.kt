@@ -12,4 +12,8 @@ sealed interface TrendEffect {
     data class NavigateToMovieDetails(
         val mediaContentId: MediaContentId,
     ) : TrendEffect
+
+    data class NavigateToTvShowDetails(
+        val mediaContentId: MediaContentId,
+    ) : TrendEffect
 }

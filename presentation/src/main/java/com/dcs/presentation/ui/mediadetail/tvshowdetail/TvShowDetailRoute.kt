@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail
+package com.dcs.presentation.ui.mediadetail.tvshowdetail
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,26 +27,31 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.ErrorScreen
 import com.dcs.presentation.core.designsystem.widget.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.core.model.MovieDetailUiState
-import com.dcs.presentation.core.model.MovieDetailUiStateProvider
-import com.dcs.presentation.core.ui.state.UiState
+import com.dcs.presentation.core.model.TvShowDetailUiState
+import com.dcs.presentation.core.model.TvShowDetailUiStateProvider
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
+import com.dcs.presentation.core.ui.state.UiState
 
 @Composable
-fun MovieDetailRoute(
+fun TvShowDetailRoute(
     navigateUp: () -> Boolean,
-    viewModel: MovieDetailViewModel = hiltViewModel(),
+    navigateToPersonDetail: (Int) -> Unit,
+    viewModel: TvShowDetailViewModel = hiltViewModel(),
     showSnackBar: (String, SnackbarDuration) -> Unit = { _, _ -> },
 ) {
     val context = LocalContext.current
 
     viewModel.effect.collectAsEffect { effect ->
         when (effect) {
-            is MovieDetailEffect.NavigateBack -> {
+            is TvShowDetailEffect.NavigateBack -> {
                 navigateUp()
             }
 
-            is MovieDetailEffect.ShowSnackbar -> {
+            is TvShowDetailEffect.NavigateToPersonDetail -> {
+                navigateToPersonDetail(effect.personId)
+            }
+
+            is TvShowDetailEffect.ShowSnackbar -> {
                 showSnackBar(
                     context.getString(effect.state.messageResId),
                     effect.state.duration
@@ -55,19 +60,19 @@ fun MovieDetailRoute(
         }
     }
 
-    val movie = viewModel.movie.collectAsStateWithLifecycle()
+    val tvShow = viewModel.tvShow.collectAsStateWithLifecycle()
 
-    MovieDetailScreen(
-        uiState = movie.value,
-        onMovieDetailEvent = viewModel::dispatchEvent,
+    TvShowDetailScreen(
+        uiState = tvShow.value,
+        onTvShowDetailEvent = viewModel::dispatchEvent,
         modifier = Modifier.fillMaxSize()
     )
 }
 
 @Composable
-private fun MovieDetailScreen(
-    uiState: UiState<MovieDetailUiState>,
-    onMovieDetailEvent: (MovieDetailUiEvent) -> Unit,
+private fun TvShowDetailScreen(
+    uiState: UiState<TvShowDetailUiState>,
+    onTvShowDetailEvent: (TvShowDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -75,13 +80,13 @@ private fun MovieDetailScreen(
         modifier = modifier
     ) {
         item {
-            MovieDetailTopAppBar(
+            TvShowDetailTopAppBar(
                 title = if (uiState is UiState.Success) {
-                    uiState.data.title
+                    uiState.data.name
                 } else {
-                    stringResource(id = R.string.route_movie_detail_name)
+                    stringResource(id = R.string.route_tv_show_detail_name)
                 },
-                onBackClick = { onMovieDetailEvent(MovieDetailUiEvent.NavigateBack) }
+                onBackClick = { onTvShowDetailEvent(TvShowDetailUiEvent.NavigateBack) }
             )
         }
 
@@ -101,8 +106,15 @@ private fun MovieDetailScreen(
             }
 
             is UiState.Success -> {
-                movieDetailContent(
-                    movieDetailUiState = uiState.data,
+                tvShowDetailContent(
+                    uiState = uiState.data,
+                    onPersonClick = { personId ->
+                        onTvShowDetailEvent(
+                            TvShowDetailUiEvent.NavigateToPersonDetail(
+                                personId = personId
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                 )
@@ -113,7 +125,7 @@ private fun MovieDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieDetailTopAppBar(
+private fun TvShowDetailTopAppBar(
     title: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -139,13 +151,13 @@ private fun MovieDetailTopAppBar(
 
 @Preview(showBackground = true)
 @Composable
-fun MovieDetailScreenPreview(
-    @PreviewParameter(MovieDetailUiStateProvider::class) item: UiState<MovieDetailUiState>,
+fun TvShowDetailScreenPreview(
+    @PreviewParameter(TvShowDetailUiStateProvider::class) item: UiState<TvShowDetailUiState>,
 ) {
     AllAboutMovieTheme {
-        MovieDetailScreen(
+        TvShowDetailScreen(
             uiState = item,
-            onMovieDetailEvent = {},
+            onTvShowDetailEvent = {},
             modifier = Modifier.fillMaxSize()
         )
     }

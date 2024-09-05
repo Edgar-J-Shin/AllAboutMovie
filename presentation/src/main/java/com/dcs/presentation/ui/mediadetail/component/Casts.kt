@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail.component
+package com.dcs.presentation.ui.mediadetail.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +30,7 @@ import com.dcs.presentation.core.model.getProfilePathUrl
 @Composable
 internal fun Casts(
     casts: List<CreditsCastUiState>,
+    onPersonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -71,6 +72,9 @@ internal fun Casts(
                             .width(140.dp)
                             .aspectRatio(0.6f)
                             .padding(horizontal = 6.dp)
+                            .clickable {
+                                onPersonClick(casts[index].id)
+                            }
                     )
                 }
             }
@@ -82,18 +86,13 @@ internal fun Casts(
 internal fun CastItem(
     cast: CreditsCastUiState,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
-    Card(
+    ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = 2.dp
-        ),
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick.invoke() }
     ) {
         BasicImage(
             imageUrl = cast.getProfilePathUrl(),

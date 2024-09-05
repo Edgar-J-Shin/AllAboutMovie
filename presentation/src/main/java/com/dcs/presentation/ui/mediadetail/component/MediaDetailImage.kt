@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail.component
+package com.dcs.presentation.ui.mediadetail.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,7 +17,7 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
 
 @Composable
-fun MovieImage(
+fun MediaDetailImage(
     backdropPathUrl: String,
     posterPathUrl: String,
     modifier: Modifier = Modifier,

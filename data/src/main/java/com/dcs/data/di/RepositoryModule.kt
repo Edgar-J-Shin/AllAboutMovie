@@ -2,11 +2,11 @@ package com.dcs.data.di
 
 import com.dcs.data.repository.AuthRepositoryImpl
 import com.dcs.data.repository.KeywordsRepositoryImpl
-import com.dcs.data.repository.MovieRepositoryImpl
+import com.dcs.data.repository.MediaContentRepositoryImpl
 import com.dcs.data.repository.PersonRepositoryImpl
 import com.dcs.domain.repository.AuthRepository
 import com.dcs.domain.repository.KeywordsRepository
-import com.dcs.domain.repository.MovieRepository
+import com.dcs.domain.repository.MediaContentRepository
 import com.dcs.domain.repository.PersonRepository
 import dagger.Binds
 import dagger.Module
@@ -17,7 +17,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
-    abstract fun bindMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): MovieRepository
+    abstract fun bindMediaContentRepository(mediaContentRepositoryImpl: MediaContentRepositoryImpl): MediaContentRepository
 
     @Binds
     abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository

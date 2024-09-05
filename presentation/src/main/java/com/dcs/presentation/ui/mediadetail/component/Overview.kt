@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail.component
+package com.dcs.presentation.ui.mediadetail.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

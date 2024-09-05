@@ -23,9 +23,9 @@
 
     # SearchResult
     <string name="route_search_result_name">Search Result</string>
-    <string name="route_movie_detail_name">Movie Detail</string>
 
     # Movie Detail
+    <string name="route_movie_detail_name">Movie Detail</string>
     <string name="movie_image_content_description">Movie Image</string>
     <string name="cast_image_content_description">Cast Image</string>
     <string name="movie_detail_overview_title">Overview</string>
@@ -35,6 +35,9 @@
     <string name="user_score">User Score</string>
     <string name="top_billed_cast">Top Billed Cast</string>
     <string name="top_billed_cast_empty_message">We don\'t have any cast added to this movie. You can help by adding some!</string>
+
+    # Tv Show Detail
+    <string name="route_tv_show_detail_name">Tv Show Detail</string>
 
     # Movie Trend > Title
     <string name="movie_trend_title_trend">Trend</string>

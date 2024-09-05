@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail
+package com.dcs.presentation.ui.mediadetail.moviedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.usecase.GetMovieByIdUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
+import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.state.asUiState
-import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,10 +57,24 @@ class MovieDetailViewModel @Inject constructor(
         }
     }
 
+    private fun navigateToPersonDetail(personId: Int) {
+        launch {
+            _effect.emit(
+                MovieDetailEffect.NavigateToPersonDetail(
+                    personId = personId
+                )
+            )
+        }
+    }
+
     fun dispatchEvent(event: MovieDetailUiEvent) {
         when (event) {
             is MovieDetailUiEvent.NavigateBack -> {
                 navigateBack()
+            }
+
+            is MovieDetailUiEvent.NavigateToPersonDetail -> {
+                navigateToPersonDetail(event.personId)
             }
         }
     }

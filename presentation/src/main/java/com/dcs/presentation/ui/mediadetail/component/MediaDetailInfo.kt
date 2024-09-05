@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail.component
+package com.dcs.presentation.ui.mediadetail.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -23,7 +23,7 @@ import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
 
 @Composable
-internal fun MovieInfo(
+internal fun MediaDetailInfo(
     title: String,
     score: Int,
     releaseDate: String,

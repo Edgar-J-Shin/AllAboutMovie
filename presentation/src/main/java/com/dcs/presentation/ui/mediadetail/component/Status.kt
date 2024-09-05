@@ -1,4 +1,4 @@
-package com.dcs.presentation.ui.moviedetail.component
+package com.dcs.presentation.ui.mediadetail.component
 
 import android.icu.text.NumberFormat
 import androidx.compose.foundation.layout.Column
@@ -17,9 +17,9 @@ import java.util.Locale
 
 @Composable
 fun Status(
-    language: String,
-    budget: Int,
-    revenue: Int,
+    language: String = "",
+    budget: Int = 0,
+    revenue: Int = 0,
     modifier: Modifier = Modifier,
     format: NumberFormat = NumberFormat.getCurrencyInstance(Locale("en-US")),
 ) {
