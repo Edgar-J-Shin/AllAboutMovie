@@ -28,40 +28,46 @@ internal fun LazyListScope.credits(
     casts: List<CastUiState>,
     crews: List<CrewUiState>,
 ) {
-    item {
-        Text(
-            text = stringResource(id = R.string.title_acting),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 30.dp)
-        )
+    if (casts.isNotEmpty()) {
+        item {
+            Text(
+                text = stringResource(id = R.string.title_acting),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 30.dp)
+            )
+        }
+
+        items(
+            items = casts,
+        ) { cast ->
+            ActingCard(
+                cast = cast,
+            )
+        }
+
+        spacer()
     }
 
-    items(
-        items = casts,
-    ) { cast ->
-        ActingCard(
-            cast = cast,
-        )
-    }
+    if (crews.isNotEmpty()) {
+        item {
+            Text(
+                text = stringResource(id = R.string.title_production),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 30.dp)
+            )
+        }
 
-    spacer()
+        items(
+            items = crews,
+        ) { crew ->
+            ProductionCard(
+                crew = crew,
+            )
+        }
 
-    item {
-        Text(
-            text = stringResource(id = R.string.title_production),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 30.dp)
-        )
-    }
-
-    items(
-        items = crews,
-    ) { crew ->
-        ProductionCard(
-            crew = crew,
-        )
+        spacer()
     }
 }
 
