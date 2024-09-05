@@ -79,5 +79,7 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="gender_non_binary">Non Binary</string>
+    <string name="title_as_character">"As "</string>
+    <string name="title_as_job">As</string>
 
 </resources>

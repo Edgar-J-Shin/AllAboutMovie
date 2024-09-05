@@ -1,12 +1,14 @@
 package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.R
 import java.time.LocalDate
 
 data class PersonDetailUiState(
@@ -86,7 +88,7 @@ fun CastUiState.getActingTitle(): String {
     return if (releaseDate.isBlank()) {
         name
     } else {
-        "{${LocalDate.parse(releaseDate).year} $name}"
+        "${LocalDate.parse(releaseDate).year} $name"
     }
 }
 
@@ -99,7 +101,7 @@ fun CastUiState.getCharacterTitle(): AnnotatedString {
                 fontWeight = FontWeight.Light
             )
         ) {
-            append("As ")
+            append(stringResource(id = R.string.title_as_character))
         }
         append(character)
     }
@@ -111,7 +113,7 @@ fun CrewUiState.getProductionTitle(): String {
     return if (releaseDate.isBlank()) {
         title
     } else {
-        "{${LocalDate.parse(releaseDate).year} $title}"
+        "${LocalDate.parse(releaseDate).year} $title"
     }
 }
 
@@ -124,7 +126,7 @@ fun CrewUiState.getJobTitle(): AnnotatedString {
                 fontWeight = FontWeight.Light
             )
         ) {
-            append("As ")
+            append(stringResource(id = R.string.title_as_job))
         }
         append(job)
     }
