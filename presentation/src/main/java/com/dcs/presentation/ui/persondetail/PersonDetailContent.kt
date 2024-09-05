@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,7 +19,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.component.BasicImage
-import com.dcs.presentation.core.designsystem.component.NavigationBackButton
 import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.model.getProfileUrl
 import com.dcs.presentation.ui.persondetail.component.Biography
@@ -31,36 +27,19 @@ import com.dcs.presentation.ui.persondetail.component.PersonalInfo
 import com.dcs.presentation.ui.persondetail.component.credits
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PersonDetailContent(
     personDetailUiState: PersonDetailUiState,
+    contentPaddingValue: PaddingValues,
+    scrollState: LazyListState,
     onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(bottom = 30.dp),
+        contentPadding = contentPaddingValue,
+        state = scrollState,
         modifier = modifier
     ) {
-        item {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = personDetailUiState.name,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
-
-                navigationIcon = {
-                    NavigationBackButton(
-                        navigateUp = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) },
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
-
         item {
             BasicImage(
                 imageUrl = personDetailUiState.getProfileUrl(),

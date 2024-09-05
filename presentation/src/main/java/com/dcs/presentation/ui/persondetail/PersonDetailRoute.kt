@@ -9,21 +9,34 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,6 +54,7 @@ import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
 import com.dcs.presentation.core.ui.state.UiState
+import kotlin.math.roundToInt
 
 @Composable
 fun PersonDetailRoute(
@@ -69,25 +83,89 @@ fun PersonDetailRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PersonDetailScreen(
     uiState: UiState<PersonDetailUiState>,
     onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box {
+    val scrollState = rememberLazyListState()
+
+    // 앱바의 높이를 저장할 상태
+    var topBarHeight by remember { mutableFloatStateOf(0f) }
+    var previousScrollOffset by remember { mutableFloatStateOf(0f) }
+
+    // 스크롤 상태에 따른 topBarOffset 값 관리 (초기값 0)
+    var scrolledTopBarOffset by remember { mutableFloatStateOf(0f) }
+
+    // 스크롤 오프셋을 derivedStateOf로 최적화
+    val currentScrollOffset by remember {
+        derivedStateOf {
+            scrollState.firstVisibleItemScrollOffset.toFloat()
+        }
+    }
+
+    // 스크롤 변화 감지 및 TopBar 상태 업데이트
+    LaunchedEffect(currentScrollOffset) {
+        val scrollDifference = currentScrollOffset - previousScrollOffset
+
+        // 스크롤 방향에 따라 TopBar의 위치를 조절
+        scrolledTopBarOffset = (scrolledTopBarOffset - scrollDifference).coerceIn(-topBarHeight, 0f)
+        previousScrollOffset = currentScrollOffset
+    }
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    if (uiState is UiState.Success) {
+                        Text(
+                            text = uiState.data.name,
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
+                },
+                navigationIcon = {
+                    NavigationBackButton(
+                        navigateUp = {
+                            onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick)
+                        }
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .onGloballyPositioned { coordinates ->
+                        // 앱바의 실제 높이를 저장
+                        topBarHeight = coordinates.size.height.toFloat() // 변경된 변수 사용
+                    }
+                    .offset {
+                        IntOffset(
+                            x = 0,
+                            y = scrolledTopBarOffset.roundToInt()
+                        )
+                    }  // 스크롤에 따라 Y축으로 이동,
+            )
+        },
+        modifier = modifier
+    ) { paddingValues ->
         when (uiState) {
             is UiState.Loading -> {
                 PersonDetailLoadingContent(
-                    onPersonDetailUiEvent = onPersonDetailUiEvent,
-                    modifier = modifier,
+                    Modifier
+                        .padding(paddingValues)
+                        .padding(horizontal = 30.dp)
+                        .fillMaxSize()
                 )
             }
 
             is UiState.Error -> {
-                PersonDetailErrorContent(
-                    onPersonDetailUiEvent = onPersonDetailUiEvent,
-                    modifier = modifier,
+                ErrorScreen(
+                    message = stringResource(id = R.string.api_response_error_message),
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize(),
                 )
             }
 
@@ -95,111 +173,52 @@ private fun PersonDetailScreen(
                 val personDetailUiState = uiState.data
                 PersonDetailContent(
                     personDetailUiState = personDetailUiState,
+                    contentPaddingValue = paddingValues,
+                    scrollState = scrollState,
                     onPersonDetailUiEvent = onPersonDetailUiEvent,
-                    modifier = modifier
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PersonDetailLoadingContent(
-    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
     ) {
-        CenterAlignedTopAppBar(
-            title = {},
-            navigationIcon = {
-                NavigationBackButton(
-                    navigateUp = {
-                        onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick)
-                    }
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Column(
+        Box(
             modifier = Modifier
-                .padding(horizontal = 30.dp)
-                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Gray1)
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Box(
+            modifier = Modifier
+                .width(150.dp)
+                .height(40.dp)
+                .background(Gray1)
+        )
+
+        Row(
+            modifier = Modifier.padding(top = 12.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Gray1)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Box(
-                modifier = Modifier
-                    .width(150.dp)
-                    .height(40.dp)
-                    .background(Gray1)
-            )
-
-            Row(
-                modifier = Modifier.padding(top = 12.dp)
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                )
-                {
-                    Box(
-                        modifier = Modifier
-                            .width(150.dp)
-                            .height(30.dp)
-                            .background(Gray1)
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Box(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(20.dp)
-                            .background(Gray1)
-                    )
-                }
-
-                Column(
-                    modifier = Modifier.weight(1f)
-                )
-                {
-                    Box(
-                        modifier = Modifier
-                            .width(150.dp)
-                            .height(30.dp)
-                            .background(Gray1)
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Box(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(20.dp)
-                            .background(Gray1)
-                    )
-                }
-            }
-
             Column(
-                modifier = Modifier
-                    .padding(top = 12.dp)
+                modifier = Modifier.weight(1f)
             )
             {
                 Box(
                     modifier = Modifier
-                        .width(130.dp)
+                        .width(150.dp)
                         .height(30.dp)
                         .background(Gray1)
                 )
@@ -208,52 +227,71 @@ private fun PersonDetailLoadingContent(
 
                 Box(
                     modifier = Modifier
-                        .width(80.dp)
+                        .width(100.dp)
                         .height(20.dp)
                         .background(Gray1)
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            )
+            {
+                Box(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(30.dp)
+                        .background(Gray1)
+                )
 
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(20.dp)
+                        .background(Gray1)
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(top = 12.dp)
+        )
+        {
             Box(
                 modifier = Modifier
-                    .width(150.dp)
-                    .height(40.dp)
+                    .width(130.dp)
+                    .height(30.dp)
                     .background(Gray1)
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
             Box(
                 modifier = Modifier
-                    .padding(top = 12.dp)
-                    .fillMaxWidth()
-                    .height(200.dp)
+                    .width(80.dp)
+                    .height(20.dp)
                     .background(Gray1)
             )
         }
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PersonDetailErrorContent(
-    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier) {
-        CenterAlignedTopAppBar(
-            title = {},
-            navigationIcon = {
-                NavigationBackButton(
-                    navigateUp = {
-                        onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick)
-                    }
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Box(
+            modifier = Modifier
+                .width(150.dp)
+                .height(40.dp)
+                .background(Gray1)
         )
-        ErrorScreen(
-            message = stringResource(id = R.string.api_response_error_message),
+
+        Box(
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(Gray1)
         )
     }
 }
