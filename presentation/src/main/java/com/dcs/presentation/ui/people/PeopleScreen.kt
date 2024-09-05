@@ -73,7 +73,8 @@ fun PeopleRoute(
         onPeopleUiEvent = viewModel::dispatchEvent,
         modifier = modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(horizontal = 20.dp)
+            .padding(top = 20.dp)
     )
 }
 
@@ -126,7 +127,7 @@ private fun PopularPeople(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier,
