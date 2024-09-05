@@ -83,6 +83,9 @@ dependencies {
     // glide
     implementation(libs.glide)
 
+    // coil
+    implementation(libs.coil)
+
     // debug
     implementation(libs.timber)
 

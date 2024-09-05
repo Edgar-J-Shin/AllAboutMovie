@@ -16,7 +16,7 @@ data class GetPersonDetailResponse(
     @SerialName("biography")
     val biography: String,
     @SerialName("birthday")
-    val birthday: String,
+    val birthday: String = "",
     @SerialName("combined_credits")
     val combinedCredits: CombinedCredits,
     @SerialName("deathday")
@@ -27,7 +27,7 @@ data class GetPersonDetailResponse(
     @SerialName("homepage")
     val homepage: String = "",
     @SerialName("imdb_id")
-    val imdbId: String,
+    val imdbId: String = "",
     @SerialName("known_for_department")
     val knownForDepartment: String,
     @SerialName("name")

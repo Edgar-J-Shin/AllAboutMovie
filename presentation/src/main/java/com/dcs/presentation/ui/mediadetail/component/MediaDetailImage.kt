@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.BasicImageState
 
 @Composable
 fun MediaDetailImage(
@@ -26,9 +27,8 @@ fun MediaDetailImage(
     ) {
         BasicImage(
             imageUrl = backdropPathUrl,
-            basicImageState = BasicImageState(
-                contentDescResId = R.string.movie_image_content_description
-            ),
+            contentDescription = stringResource(R.string.movie_image_content_description),
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.TopCenter)
@@ -36,11 +36,9 @@ fun MediaDetailImage(
 
         BasicImage(
             imageUrl = posterPathUrl,
-            basicImageState = BasicImageState(
-                loadingResId = null,
-                failureResId = null,
-                contentDescResId = R.string.movie_image_content_description
-            ),
+            contentDescription = stringResource(R.string.movie_image_content_description),
+            placeHolder = null,
+            error = null,
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(0.75f)
