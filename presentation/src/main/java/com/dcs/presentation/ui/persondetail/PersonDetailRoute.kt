@@ -9,38 +9,30 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.component.CollapsedTopBar
 import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.designsystem.component.NavigationBackButton
 import com.dcs.presentation.core.extensions.collectAsEffect
@@ -89,7 +81,6 @@ fun PersonDetailRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PersonDetailScreen(
     uiState: UiState<PersonDetailUiState>,
@@ -98,28 +89,9 @@ private fun PersonDetailScreen(
 ) {
     val scrollState = rememberLazyListState()
 
-    // TopAppBar의 높이 저장
-    var topBarHeight by remember { mutableFloatStateOf(0f) }
-
-    // 이미지가 먼저 나타나고, 이후에 TopAppBar가 나타나도록 스크롤 오프셋 계산
-    val firstVisibleItemIndex by remember {
-        derivedStateOf { scrollState.firstVisibleItemIndex }
-    }
-
-    val firstVisibleItemOffset by remember {
-        derivedStateOf { scrollState.firstVisibleItemScrollOffset }
-    }
-
-    val topBarOffset = if (firstVisibleItemIndex == 0) {
-        // 첫 번째 아이템의 스크롤에 따라 TopAppBar가 나타남
-        -firstVisibleItemOffset.coerceIn(0, topBarHeight.toInt())
-    } else {
-        0 // 다른 아이템으로 넘어가면 TopAppBar가 고정됨
-    }
-
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            CollapsedTopBar(
                 title = {
                     if (uiState is UiState.Success) {
                         Text(
@@ -135,14 +107,9 @@ private fun PersonDetailScreen(
                         }
                     )
                 },
+                scrollState = scrollState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onGloballyPositioned { coordinates ->
-                        // TopBar의 높이를 저장
-                        topBarHeight = coordinates.size.height.toFloat()
-                    }
-                    .offset { IntOffset(x = 0, y = topBarOffset) } // 스크롤에 따라 TopAppBar의 위치 변경
-                    .statusBarsPadding()
             )
         },
         modifier = modifier
