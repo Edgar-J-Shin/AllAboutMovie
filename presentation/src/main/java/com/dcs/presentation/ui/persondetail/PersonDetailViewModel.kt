@@ -1,6 +1,5 @@
 package com.dcs.presentation.ui.persondetail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -87,10 +86,6 @@ class PersonDetailViewModel @Inject constructor(
         mediaType: MediaTypeUiState,
     ) {
         viewModelScope.launch {
-            Log.d(
-                "PersonDetailViewModel",
-                "Navigate to media detail with ID: ${id.value}, media type: $mediaType"
-            )
             when (mediaType) {
                 MediaTypeUiState.MOVIE -> {
                     _effect.emit(PersonDetailEffect.NavigateToMovieDetail(id.value))
