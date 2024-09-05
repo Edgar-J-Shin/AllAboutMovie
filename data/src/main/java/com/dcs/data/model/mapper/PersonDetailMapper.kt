@@ -59,11 +59,15 @@ fun RemoteCrew.toEntity() = com.dcs.domain.model.Crew(
     backdropPath = backdropPath,
     creditId = creditId,
     department = department,
+    episodeCount = episodeCount,
+    firstAirDate = firstAirDate,
     genreIds = genreIds,
     job = job,
     mediaType = mediaType.toEntity(),
+    originCountry = originCountry,
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,
+    originalName = originalName,
     overview = overview,
     popularity = popularity,
     posterPath = posterPath,
@@ -72,5 +76,6 @@ fun RemoteCrew.toEntity() = com.dcs.domain.model.Crew(
     video = video,
     voteAverage = voteAverage,
     voteCount = voteCount,
+    name = name,
 )
 

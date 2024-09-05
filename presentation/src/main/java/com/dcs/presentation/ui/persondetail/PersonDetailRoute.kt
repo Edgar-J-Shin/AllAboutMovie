@@ -339,7 +339,12 @@ private class PersonDetailProvider :
                             title = "12345",
                             video = false,
                             voteAverage = 0.0,
-                            voteCount = 0
+                            voteCount = 0,
+                            originalName = "originalName",
+                            name = "name",
+                            firstAirDate = "",
+                            episodeCount = 0,
+                            originCountry = listOf(),
                         )
                     ),
                     knownFor = listOf(

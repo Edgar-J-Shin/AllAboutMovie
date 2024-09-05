@@ -147,4 +147,6 @@ data class RemoteCrew(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int,
+    @SerialName("name")
+    val name: String = "",
 )

@@ -1,6 +1,5 @@
 package com.dcs.presentation.core.model
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -78,6 +77,11 @@ data class CrewUiState(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int,
+    val originalName: String,
+    val name: String,
+    val firstAirDate: String,
+    val episodeCount: Int,
+    val originCountry: List<String>,
 )
 
 @Composable
@@ -86,12 +90,12 @@ fun PersonDetailUiState.getProfileUrl(): String =
 
 @Composable
 fun CastUiState.getActingTitle(): String {
-    val name = name.ifBlank { title }
+    val title = name.ifBlank { title }
     val date = releaseDate.ifBlank { firstAirDate }
     return if (date.isBlank()) {
-        name
+        title
     } else {
-        "${LocalDate.parse(date).year} $name"
+        "${LocalDate.parse(date).year} $title"
     }
 }
 
@@ -112,11 +116,12 @@ fun CastUiState.getCharacterTitle(): AnnotatedString {
 
 @Composable
 fun CrewUiState.getProductionTitle(): String {
-    val title = title.ifBlank { originalTitle }
-    return if (releaseDate.isBlank()) {
+    val title = name.ifBlank { title }
+    val date = releaseDate.ifBlank { firstAirDate }
+    return if (date.isBlank()) {
         title
     } else {
-        "${LocalDate.parse(releaseDate).year} $title"
+        "${LocalDate.parse(date).year} $title"
     }
 }
 

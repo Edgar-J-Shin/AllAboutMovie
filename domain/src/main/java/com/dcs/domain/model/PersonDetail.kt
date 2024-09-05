@@ -65,4 +65,9 @@ data class Crew(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int,
+    val originalName: String,
+    val name: String,
+    val firstAirDate: String,
+    val episodeCount: Int,
+    val originCountry: List<String>,
 )

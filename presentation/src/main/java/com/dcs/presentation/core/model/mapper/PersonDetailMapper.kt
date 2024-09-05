@@ -48,6 +48,11 @@ fun Crew.toUiState() = CrewUiState(
     video = video,
     voteAverage = voteAverage,
     voteCount = voteCount,
+    originalName = originalName,
+    name = name,
+    firstAirDate = firstAirDate,
+    episodeCount = episodeCount,
+    originCountry = originCountry,
 )
 
 fun Cast.toUiState() = CastUiState(
