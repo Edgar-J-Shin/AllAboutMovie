@@ -35,6 +35,7 @@ class PersonDetailViewModel @Inject constructor(
         }
         .map { it.toUiState() }
         .asUiState()
+//        .map { UiState.Error(Exception()) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
