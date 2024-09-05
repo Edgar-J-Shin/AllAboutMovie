@@ -7,6 +7,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 import java.time.LocalDate
@@ -32,7 +33,7 @@ data class PersonDetailUiState(
 )
 
 data class CastUiState(
-    val id: Int,
+    val id: MediaContentId,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -40,7 +41,7 @@ data class CastUiState(
     val episodeCount: Int,
     val firstAirDate: String,
     val genreIds: List<Int>,
-    val mediaType: String,
+    val mediaType: MediaTypeUiState,
     val name: String,
     val order: Int,
     val originCountry: List<String>,
@@ -58,14 +59,14 @@ data class CastUiState(
 )
 
 data class CrewUiState(
-    val id: Int,
+    val id: MediaContentId,
     val adult: Boolean,
     val backdropPath: String,
     val creditId: String,
     val department: String,
     val genreIds: List<Int>,
     val job: String,
-    val mediaType: String,
+    val mediaType: MediaTypeUiState,
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,

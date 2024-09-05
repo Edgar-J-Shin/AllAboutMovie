@@ -1,7 +1,7 @@
 package com.dcs.domain.model
 
 enum class MediaType(val value: String) {
-    MOIVE("movie"),
+    MOVIE("movie"),
     TV_SHOW("tv");
 
     companion object {

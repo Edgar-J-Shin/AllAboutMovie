@@ -1,6 +1,8 @@
 package com.dcs.data.remote.model
 
 import com.dcs.data.remote.network.serializer.GenderSerializer
+import com.dcs.data.remote.network.serializer.MediaTypeSerializer
+import com.dcs.domain.model.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -52,7 +54,8 @@ data class RemoteKnownFor(
     @SerialName("genre_ids")
     val genreIds: List<Int>,
     @SerialName("media_type")
-    val mediaType: String,
+    @Serializable(with = MediaTypeSerializer::class)
+    val mediaType: RemoteMediaType,
     @SerialName("name")
     val name: String = "",
     @SerialName("origin_country")

@@ -1,5 +1,6 @@
 package com.dcs.data.remote.model
 
+import com.dcs.data.remote.network.serializer.MediaTypeSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
@@ -27,7 +28,8 @@ sealed interface RemoteMediaPolymorphic {
         @SerialName("id")
         val id: Int,
         @SerialName("media_type")
-        val mediaType: String = "movie",
+        @Serializable(with = MediaTypeSerializer::class)
+        val mediaType: RemoteMediaType = RemoteMediaType.MOVIE,
         @SerialName("original_language")
         val originalLanguage: String = "",
         @SerialName("original_title")
@@ -65,7 +67,8 @@ sealed interface RemoteMediaPolymorphic {
         @SerialName("poster_path")
         val posterPath: String = "",
         @SerialName("media_type")
-        val mediaType: String = "tv",
+        @Serializable(with = MediaTypeSerializer::class)
+        val mediaType: RemoteMediaType = RemoteMediaType.TV_SHOW,
         @SerialName("adult")
         val adult: Boolean = false,
         @SerialName("original_language")
@@ -105,7 +108,8 @@ sealed interface RemoteMediaPolymorphic {
         override fun deserialize(decoder: Decoder): RemoteMediaPolymorphic {
             val jsonElement = (decoder as JsonDecoder).decodeJsonElement()
 
-            return when (val mediaType = jsonElement.jsonObject["media_type"]?.jsonPrimitive?.content) {
+            return when (val mediaType =
+                jsonElement.jsonObject["media_type"]?.jsonPrimitive?.content) {
                 "tv" -> json.decodeFromJsonElement(RemoteTvShow.serializer(), jsonElement)
                 "movie" -> json.decodeFromJsonElement(RemoteMovie.serializer(), jsonElement)
                 else -> throw SerializationException("Unknown mediaType: $mediaType")

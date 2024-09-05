@@ -6,6 +6,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
+import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 
@@ -21,33 +22,16 @@ data class PersonUiState(
     val profilePath: String,
 )
 
-data class KnownForUiState(
-    val id: Int,
-    val name: String,
-    val originalName: String,
-    val adult: Boolean,
-    val backdropPath: String,
-    val firstAirDate: String,
-    val genreIds: List<Int>,
-    val mediaType: String,
-    val originCountry: List<String>,
-    val originalLanguage: String,
-    val originalTitle: String,
-    val overview: String,
-    val popularity: Double,
-    val posterPath: String,
-    val releaseDate: String,
-    val title: String,
-    val video: Boolean,
-    val voteAverage: Double,
-    val voteCount: Int,
-)
-
 enum class GenderUiState {
     NOT_SPECIFIED,
     FEMALE,
     MALE,
     NON_BINARY,
+}
+
+enum class MediaTypeUiState {
+    MOVIE,
+    TV,
 }
 
 @Composable
@@ -71,9 +55,6 @@ fun PersonUiState.getKnownForTitle(): String {
         .joinToString { it.title.ifBlank { it.originalTitle } }
 }
 
-@Composable
-fun KnownForUiState.getPosterUrl(): String =
-    "${BuildConfig.TMDB_IMAGE_URL}original$posterPath"
 
 @Composable
 fun PersonUiState.getProfileUrl(): String =
@@ -130,14 +111,14 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
                         profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
                         knownFor = (0 until 5).map { idx ->
                             KnownForUiState(
-                                id = idx,
+                                id = MediaContentId(idx),
                                 originalName = "Original Name $idx",
                                 name = "Name $idx",
                                 adult = false,
                                 backdropPath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
                                 firstAirDate = "2021-09-01",
                                 genreIds = emptyList(),
-                                mediaType = "movie",
+                                mediaType = MediaTypeUiState.MOVIE,
                                 originCountry = emptyList(),
                                 originalLanguage = "en",
                                 originalTitle = "Original Title $idx",

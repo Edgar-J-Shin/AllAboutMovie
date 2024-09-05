@@ -7,7 +7,7 @@ import com.dcs.presentation.core.model.TrendingMovieUiType
 
 fun MediaPolymorphic.Movie.toUiState() = MediaContentUiState(
     id = id,
-    mediaType = mediaType,
+    mediaType = mediaType.value,
     title = title.ifEmpty { originalTitle },
     posterPath = posterPath,
     voteAverage = voteAverage,
@@ -17,7 +17,7 @@ fun MediaPolymorphic.Movie.toUiState() = MediaContentUiState(
 
 fun MediaPolymorphic.TvShow.toUiState() = MediaContentUiState(
     id = id,
-    mediaType = mediaType,
+    mediaType = mediaType.value,
     title = name.ifEmpty { originalName },
     posterPath = posterPath,
     voteAverage = voteAverage,

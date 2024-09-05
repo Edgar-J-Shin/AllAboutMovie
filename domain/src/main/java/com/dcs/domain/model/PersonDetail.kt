@@ -21,7 +21,7 @@ data class PersonDetail(
 )
 
 data class Cast(
-    val id: Int,
+    val id: MediaContentId,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -29,7 +29,7 @@ data class Cast(
     val episodeCount: Int,
     val firstAirDate: String,
     val genreIds: List<Int>,
-    val mediaType: String,
+    val mediaType: MediaType,
     val name: String,
     val order: Int,
     val originCountry: List<String>,
@@ -47,14 +47,14 @@ data class Cast(
 )
 
 data class Crew(
-    val id: Int,
+    val id: MediaContentId,
     val adult: Boolean,
     val backdropPath: String,
     val creditId: String,
     val department: String,
     val genreIds: List<Int>,
     val job: String,
-    val mediaType: String,
+    val mediaType: MediaType,
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,
