@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
+import com.dcs.presentation.core.designsystem.component.BasicImage
+import com.dcs.presentation.core.designsystem.component.CircularProgressBarWithPercentage
 import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.getPosterPathUrl
 import com.dcs.presentation.core.model.getVotePercentage

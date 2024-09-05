@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicImage
+import com.dcs.presentation.core.designsystem.component.BasicImage
 import com.dcs.presentation.core.model.KnownForUiState
 import com.dcs.presentation.core.model.getPosterUrl
 

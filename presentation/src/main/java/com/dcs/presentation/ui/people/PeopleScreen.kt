@@ -40,8 +40,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
+import com.dcs.presentation.core.designsystem.component.BasicImage
+import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.PersonUiStateProvider

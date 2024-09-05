@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.designsystem.widget
+package com.dcs.presentation.core.designsystem.component
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator

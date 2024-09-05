@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.LoadingDialog
+import com.dcs.presentation.core.designsystem.component.LoadingDialog
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.SettingUiStateProvider
