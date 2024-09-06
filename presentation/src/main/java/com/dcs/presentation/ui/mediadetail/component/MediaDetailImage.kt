@@ -14,7 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicImage
+import com.dcs.presentation.core.designsystem.component.BasicImage
 
 @Composable
 fun MediaDetailImage(

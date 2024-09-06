@@ -42,8 +42,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.domain.model.MediaType
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.designsystem.component.ErrorScreen
+import com.dcs.presentation.core.designsystem.component.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MediaContentUiState
 import com.dcs.presentation.core.model.MediaContentUiStateProvider

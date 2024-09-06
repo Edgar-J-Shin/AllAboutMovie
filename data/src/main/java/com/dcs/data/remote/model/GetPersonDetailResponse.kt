@@ -1,6 +1,7 @@
 package com.dcs.data.remote.model
 
 import com.dcs.data.remote.network.serializer.GenderSerializer
+import com.dcs.data.remote.network.serializer.MediaTypeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -67,7 +68,8 @@ data class RemoteCast(
     @SerialName("genre_ids")
     val genreIds: List<Int>,
     @SerialName("media_type")
-    val mediaType: String,
+    @Serializable(with = MediaTypeSerializer::class)
+    val mediaType: RemoteMediaType,
     @SerialName("name")
     val name: String = "",
     @SerialName("order")
@@ -119,7 +121,8 @@ data class RemoteCrew(
     @SerialName("job")
     val job: String,
     @SerialName("media_type")
-    val mediaType: String,
+    @Serializable(with = MediaTypeSerializer::class)
+    val mediaType: RemoteMediaType,
     @SerialName("origin_country")
     val originCountry: List<String> = emptyList(),
     @SerialName("original_language")
@@ -144,4 +147,6 @@ data class RemoteCrew(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int,
+    @SerialName("name")
+    val name: String = "",
 )

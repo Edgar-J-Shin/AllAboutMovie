@@ -1,4 +1,4 @@
-package com.dcs.presentation.core.designsystem.widget
+package com.dcs.presentation.core.designsystem.component
 
 import android.webkit.WebView
 import androidx.compose.runtime.Composable

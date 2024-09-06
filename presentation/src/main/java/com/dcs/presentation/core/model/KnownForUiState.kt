@@ -1,19 +1,10 @@
-package com.dcs.domain.model
+package com.dcs.presentation.core.model
 
+import androidx.compose.runtime.Composable
+import com.dcs.domain.model.MediaContentId
+import com.dcs.presentation.BuildConfig
 
-data class Person(
-    val id: Int,
-    val name: String,
-    val originalName: String,
-    val adult: Boolean,
-    val gender: Gender,
-    val knownFor: List<KnownFor>,
-    val knownForDepartment: String,
-    val popularity: Double,
-    val profilePath: String,
-)
-
-data class KnownFor(
+data class KnownForUiState(
     val id: MediaContentId,
     val name: String,
     val originalName: String,
@@ -21,7 +12,7 @@ data class KnownFor(
     val backdropPath: String,
     val firstAirDate: String,
     val genreIds: List<Int>,
-    val mediaType: MediaType,
+    val mediaType: MediaTypeUiState,
     val originCountry: List<String>,
     val originalLanguage: String,
     val originalTitle: String,
@@ -35,9 +26,6 @@ data class KnownFor(
     val voteCount: Int,
 )
 
-enum class Gender {
-    NOT_SPECIFIED,
-    FEMALE,
-    MALE,
-    NON_BINARY
-}
+@Composable
+fun KnownForUiState.getPosterUrl(): String =
+    "${BuildConfig.TMDB_IMAGE_URL}original$posterPath"

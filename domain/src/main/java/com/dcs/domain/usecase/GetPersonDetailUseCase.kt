@@ -34,12 +34,15 @@ class GetPersonDetailUseCase @Inject constructor(
             .map { it.value }
     }
 
-    private fun List<Crew>.sortByReleaseDate(): List<Crew> {
+    private fun List<Crew>.sortByDate(): List<Crew> {
         return withIndex()
             .sortedWith(compareBy<IndexedValue<Crew>> {
-                it.value.releaseDate.isNotBlank()
+                if (it.value.releaseDate.isBlank() && it.value.firstAirDate.isBlank()) -it.index else 0
             }.thenByDescending {
-                parseDateOrNull(it.value.releaseDate)
+                // 2. releaseDate가 있으면 releaseDate로 정렬, 없으면 firstAirDate로 정렬
+                val releaseDate = parseDateOrNull(it.value.releaseDate)
+                val firstAirDate = parseDateOrNull(it.value.firstAirDate)
+                releaseDate ?: firstAirDate  // releaseDate가 없으면 firstAirDate를 사용
             }.thenByDescending {
                 if (it.value.releaseDate.isBlank()) it.index else -1
             })
@@ -54,7 +57,7 @@ class GetPersonDetailUseCase @Inject constructor(
                 // releaseDate, firstAirDate 빈값이 우선순위가 제일 높고 그다음은 최신날짜 순으로 정렬해야함
                 it.copy(
                     casts = it.casts.sortedByDate(),
-                    crews = it.crews.sortByReleaseDate()
+                    crews = it.crews.sortByDate()
                 )
 
             }

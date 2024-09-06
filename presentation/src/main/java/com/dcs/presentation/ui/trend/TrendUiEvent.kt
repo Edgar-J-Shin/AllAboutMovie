@@ -7,6 +7,6 @@ sealed interface TrendUiEvent {
 
     data class NavigateToMediaContentDetails(
         val mediaContentId: MediaContentId,
-        val mediaType: MediaType = MediaType.MOIVE,
+        val mediaType: MediaType = MediaType.MOVIE,
     ) : TrendUiEvent
 }

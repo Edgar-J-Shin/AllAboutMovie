@@ -1,12 +1,15 @@
 package com.dcs.presentation.core.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.BuildConfig
+import com.dcs.presentation.R
 import java.time.LocalDate
 
 data class PersonDetailUiState(
@@ -30,7 +33,7 @@ data class PersonDetailUiState(
 )
 
 data class CastUiState(
-    val id: Int,
+    val id: MediaContentId,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -38,7 +41,7 @@ data class CastUiState(
     val episodeCount: Int,
     val firstAirDate: String,
     val genreIds: List<Int>,
-    val mediaType: String,
+    val mediaType: MediaTypeUiState,
     val name: String,
     val order: Int,
     val originCountry: List<String>,
@@ -56,14 +59,14 @@ data class CastUiState(
 )
 
 data class CrewUiState(
-    val id: Int,
+    val id: MediaContentId,
     val adult: Boolean,
     val backdropPath: String,
     val creditId: String,
     val department: String,
     val genreIds: List<Int>,
     val job: String,
-    val mediaType: String,
+    val mediaType: MediaTypeUiState,
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,
@@ -74,6 +77,11 @@ data class CrewUiState(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int,
+    val originalName: String,
+    val name: String,
+    val firstAirDate: String,
+    val episodeCount: Int,
+    val originCountry: List<String>,
 )
 
 @Composable
@@ -82,11 +90,12 @@ fun PersonDetailUiState.getProfileUrl(): String =
 
 @Composable
 fun CastUiState.getActingTitle(): String {
-    val name = name.ifBlank { title }
-    return if (releaseDate.isBlank()) {
-        name
+    val title = name.ifBlank { title }
+    val date = releaseDate.ifBlank { firstAirDate }
+    return if (date.isBlank()) {
+        title
     } else {
-        "{${LocalDate.parse(releaseDate).year} $name}"
+        "${LocalDate.parse(date).year} $title"
     }
 }
 
@@ -99,19 +108,21 @@ fun CastUiState.getCharacterTitle(): AnnotatedString {
                 fontWeight = FontWeight.Light
             )
         ) {
-            append("As ")
+            append(stringResource(id = R.string.title_as_character))
         }
+        append(" ")
         append(character)
     }
 }
 
 @Composable
 fun CrewUiState.getProductionTitle(): String {
-    val title = title.ifBlank { originalTitle }
-    return if (releaseDate.isBlank()) {
+    val title = name.ifBlank { title }
+    val date = releaseDate.ifBlank { firstAirDate }
+    return if (date.isBlank()) {
         title
     } else {
-        "{${LocalDate.parse(releaseDate).year} $title}"
+        "${LocalDate.parse(date).year} $title"
     }
 }
 
@@ -124,8 +135,9 @@ fun CrewUiState.getJobTitle(): AnnotatedString {
                 fontWeight = FontWeight.Light
             )
         ) {
-            append("As ")
+            append(stringResource(id = R.string.title_as_job))
         }
+        append(" ")
         append(job)
     }
 }

@@ -91,13 +91,20 @@ data class SeasonUiState(
     val voteAverage: Double,
 )
 
-fun TvShowDetailUiState.getPosterPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$posterPath"
+fun TvShowDetailUiState.getPosterPathUrl(imageType: ImageType = ImageType.ORIGINAL) =
+    "${BuildConfig.TMDB_IMAGE_URL}$imageType$posterPath"
 
-fun TvShowDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$backdropPath"
+fun TvShowDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGINAL) =
+    "${BuildConfig.TMDB_IMAGE_URL}$imageType$backdropPath"
 
 fun TvShowDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 
-fun TvShowDetailUiState.getNameWithFirstAirYear() = "$name (${LocalDate.parse(firstAirDate).year})"
+fun TvShowDetailUiState.getNameWithFirstAirYear() =
+    if (firstAirDate.isBlank()) {
+        name
+    } else {
+        "$name (${LocalDate.parse(firstAirDate).year})"
+    }
 
 fun TvShowDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.name }
 

@@ -22,8 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
+import com.dcs.presentation.core.designsystem.component.BasicImage
+import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.model.CreditsCastUiState
 import com.dcs.presentation.core.model.getProfilePathUrl
 

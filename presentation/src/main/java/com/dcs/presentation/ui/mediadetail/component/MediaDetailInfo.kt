@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.CircularProgressBarWithPercentage
+import com.dcs.presentation.core.designsystem.component.CircularProgressBarWithPercentage
 
 @Composable
 internal fun MediaDetailInfo(

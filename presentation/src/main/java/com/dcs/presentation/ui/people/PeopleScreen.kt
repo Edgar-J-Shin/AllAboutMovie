@@ -40,8 +40,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicImage
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
+import com.dcs.presentation.core.designsystem.component.BasicImage
+import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.PersonUiStateProvider
@@ -73,7 +73,7 @@ fun PeopleRoute(
         onPeopleUiEvent = viewModel::dispatchEvent,
         modifier = modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
     )
 }
 
@@ -126,7 +126,7 @@ private fun PopularPeople(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier,

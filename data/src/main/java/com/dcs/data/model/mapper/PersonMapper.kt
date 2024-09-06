@@ -5,6 +5,7 @@ import com.dcs.data.remote.model.RemoteKnownFor
 import com.dcs.data.remote.model.RemotePerson
 import com.dcs.domain.model.Gender
 import com.dcs.domain.model.KnownFor
+import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.Person
 
 fun RemotePerson.toEntity() = Person(
@@ -20,14 +21,14 @@ fun RemotePerson.toEntity() = Person(
 )
 
 fun RemoteKnownFor.toEntity() = KnownFor(
-    id = id,
+    id = MediaContentId(id),
     originalName = originalName,
     name = name,
     adult = adult,
     backdropPath = backdropPath,
     firstAirDate = firstAirDate,
     genreIds = genreIds,
-    mediaType = mediaType,
+    mediaType = mediaType.toEntity(),
     originCountry = originCountry,
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,

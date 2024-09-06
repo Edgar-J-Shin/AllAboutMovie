@@ -13,9 +13,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.dcs.presentation.R
+import com.dcs.presentation.core.designsystem.component.BasicImage
 import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.model.getProfileUrl
 import com.dcs.presentation.ui.persondetail.component.Biography
@@ -23,13 +22,13 @@ import com.dcs.presentation.ui.persondetail.component.KnownFor
 import com.dcs.presentation.ui.persondetail.component.PersonalInfo
 import com.dcs.presentation.ui.persondetail.component.credits
 
-@OptIn(ExperimentalGlideComposeApi::class)
 internal fun LazyListScope.personDetailContent(
     personDetailUiState: PersonDetailUiState,
+    onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
 ) {
     item {
-        GlideImage(
-            model = personDetailUiState.getProfileUrl(),
+        BasicImage(
+            imageUrl = personDetailUiState.getProfileUrl(),
             contentDescription = stringResource(id = R.string.content_description_profile),
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -67,6 +66,7 @@ internal fun LazyListScope.personDetailContent(
     item {
         KnownFor(
             knownFor = personDetailUiState.knownFor,
+            onPersonDetailUiEvent = onPersonDetailUiEvent,
         )
     }
 
@@ -75,9 +75,9 @@ internal fun LazyListScope.personDetailContent(
     credits(
         casts = personDetailUiState.casts,
         crews = personDetailUiState.crews,
+        onPersonDetailUiEvent = onPersonDetailUiEvent,
     )
 }
-
 
 internal fun LazyListScope.spacer(height: Dp = 20.dp) {
     item {

@@ -2,9 +2,11 @@ package com.dcs.presentation.core.model.mapper
 
 import com.dcs.domain.model.Cast
 import com.dcs.domain.model.Crew
+import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.PersonDetail
 import com.dcs.presentation.core.model.CastUiState
 import com.dcs.presentation.core.model.CrewUiState
+import com.dcs.presentation.core.model.MediaTypeUiState
 import com.dcs.presentation.core.model.PersonDetailUiState
 
 fun PersonDetail.toUiState() = PersonDetailUiState(
@@ -35,7 +37,7 @@ fun Crew.toUiState() = CrewUiState(
     department = department,
     genreIds = genreIds,
     job = job,
-    mediaType = mediaType,
+    mediaType = mediaType.toUiState(),
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,
     overview = overview,
@@ -46,6 +48,11 @@ fun Crew.toUiState() = CrewUiState(
     video = video,
     voteAverage = voteAverage,
     voteCount = voteCount,
+    originalName = originalName,
+    name = name,
+    firstAirDate = firstAirDate,
+    episodeCount = episodeCount,
+    originCountry = originCountry,
 )
 
 fun Cast.toUiState() = CastUiState(
@@ -57,7 +64,7 @@ fun Cast.toUiState() = CastUiState(
     episodeCount = episodeCount,
     firstAirDate = firstAirDate,
     genreIds = genreIds,
-    mediaType = mediaType,
+    mediaType = mediaType.toUiState(),
     name = name,
     order = order,
     originCountry = originCountry,
@@ -73,3 +80,8 @@ fun Cast.toUiState() = CastUiState(
     voteAverage = voteAverage,
     voteCount = voteCount,
 )
+
+fun MediaType.toUiState() = when (this) {
+    MediaType.MOVIE -> MediaTypeUiState.MOVIE
+    MediaType.TV_SHOW -> MediaTypeUiState.TV
+}

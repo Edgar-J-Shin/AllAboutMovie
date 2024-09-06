@@ -4,6 +4,7 @@ import com.dcs.data.remote.model.GetPersonDetailResponse
 import com.dcs.data.remote.model.RemoteCast
 import com.dcs.data.remote.model.RemoteCrew
 import com.dcs.domain.model.KnownFor
+import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.PersonDetail
 
 fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
@@ -27,7 +28,7 @@ fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
 )
 
 fun RemoteCast.toEntity() = com.dcs.domain.model.Cast(
-    id = id,
+    id = MediaContentId(id),
     adult = adult,
     backdropPath = backdropPath,
     character = character,
@@ -35,7 +36,7 @@ fun RemoteCast.toEntity() = com.dcs.domain.model.Cast(
     episodeCount = episodeCount,
     firstAirDate = firstAirDate,
     genreIds = genreIds,
-    mediaType = mediaType,
+    mediaType = mediaType.toEntity(),
     name = name,
     order = order,
     originCountry = originCountry,
@@ -53,16 +54,20 @@ fun RemoteCast.toEntity() = com.dcs.domain.model.Cast(
 )
 
 fun RemoteCrew.toEntity() = com.dcs.domain.model.Crew(
-    id = id,
+    id = MediaContentId(id),
     adult = adult,
     backdropPath = backdropPath,
     creditId = creditId,
     department = department,
+    episodeCount = episodeCount,
+    firstAirDate = firstAirDate,
     genreIds = genreIds,
     job = job,
-    mediaType = mediaType,
+    mediaType = mediaType.toEntity(),
+    originCountry = originCountry,
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,
+    originalName = originalName,
     overview = overview,
     popularity = popularity,
     posterPath = posterPath,
@@ -71,5 +76,6 @@ fun RemoteCrew.toEntity() = com.dcs.domain.model.Crew(
     video = video,
     voteAverage = voteAverage,
     voteCount = voteCount,
+    name = name,
 )
 

@@ -7,7 +7,6 @@
 
     <string name="api_response_error_message">Could not load data!</string>
     <string name="empty_content_list_message">Empty contents!</string>
-    <string name="error_message">일시적인 오류가 발생하여\n작업이 실패했습니다.\n불편을 드려 죄송합니다.\n잠시 후 다시 시작해주세요.</string>
     <string name="retry">재시도</string>
 
     <string name="desc_search">search</string>
@@ -59,9 +58,9 @@
     <string name="sign_out">로그아웃</string>
 
     # Snackbar
-    <string name="setting_to_sign_in_error">일시적인 오류로 로그인을 할 수 없습니다. 잠시 후 다시 시작해주세요.</string>
+    <string name="setting_to_sign_in_error">Login is temporarily unavailable due to some errors. Please try again later.</string>
     <string name="close">닫기</string>
-    <string name="setting_to_sign_out_error">일시적인 오류로 로그아웃 할 수 없습니다. 잠시 후 다시 시작해주세요.</string>
+    <string name="setting_to_sign_out_error">Logout is temporarily unavailable due to some errors. Please try again later.</string>
     <string name="title_poplular_people">인기 인물</string>
     <string name="title_personal_info">Personal Info</string>
     <string name="title_production">Production</string>
@@ -79,5 +78,8 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="gender_non_binary">Non Binary</string>
+    <string name="title_as_character">As</string>
+    <string name="title_as_job">As</string>
+    <string name="content_description_back">Back</string>
 
 </resources>

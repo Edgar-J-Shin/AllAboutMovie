@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.designsystem.widget.LoadingScreen
+import com.dcs.presentation.core.designsystem.component.ErrorScreen
+import com.dcs.presentation.core.designsystem.component.LoadingScreen
 import com.dcs.presentation.core.extensions.collectAsEffect
 import com.dcs.presentation.core.model.MovieDetailUiState
 import com.dcs.presentation.core.model.MovieDetailUiStateProvider

@@ -2,9 +2,11 @@ package com.dcs.data.di
 
 import com.dcs.data.BuildConfig
 import com.dcs.data.remote.model.RemoteGender
+import com.dcs.data.remote.model.RemoteMediaType
 import com.dcs.data.remote.network.DefaultHeaderInterceptor
 import com.dcs.data.remote.network.Network2CallAdapterFactory
 import com.dcs.data.remote.network.serializer.GenderSerializer
+import com.dcs.data.remote.network.serializer.MediaTypeSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,7 @@ class NetworkModule {
     fun provideJsonConverterFactory(): Converter.Factory {
         val module = SerializersModule {
             contextual(RemoteGender::class, GenderSerializer)
+            contextual(RemoteMediaType::class, MediaTypeSerializer)
         }
         val json = Json {
             ignoreUnknownKeys = true

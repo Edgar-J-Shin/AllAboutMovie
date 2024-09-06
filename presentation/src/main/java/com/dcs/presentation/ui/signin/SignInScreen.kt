@@ -23,9 +23,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.widget.BasicWebView
-import com.dcs.presentation.core.designsystem.widget.ErrorScreen
-import com.dcs.presentation.core.designsystem.widget.LoadingDialog
+import com.dcs.presentation.core.designsystem.component.BasicWebView
+import com.dcs.presentation.core.designsystem.component.ErrorScreen
+import com.dcs.presentation.core.designsystem.component.LoadingDialog
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.model.SignInUiStateProvider
 import com.dcs.presentation.core.ui.state.UiState
@@ -95,7 +95,7 @@ private fun SignInScreen(
             is UiState.Error -> {
                 // Error screen
                 ErrorScreen(
-                    message = stringResource(R.string.error_message),
+                    message = stringResource(R.string.api_response_error_message),
                     primaryButton = {
                         Button(
                             onClick = {

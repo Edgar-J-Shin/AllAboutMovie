@@ -103,13 +103,20 @@ data class SpokenLanguageUiState(
 )
 
 
-fun MovieDetailUiState.getPosterPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$posterPath"
+fun MovieDetailUiState.getPosterPathUrl(imageType: ImageType = ImageType.ORIGINAL) =
+    "${BuildConfig.TMDB_IMAGE_URL}$imageType$posterPath"
 
-fun MovieDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$backdropPath"
+fun MovieDetailUiState.getBackdropPathUrl(imageType: ImageType = ImageType.ORIGINAL) =
+    "${BuildConfig.TMDB_IMAGE_URL}$imageType$backdropPath"
 
 fun MovieDetailUiState.getVotePercentage() = (voteAverage * 10).toInt()
 
-fun MovieDetailUiState.getTitleWithReleaseYear() = "$title (${LocalDate.parse(releaseDate).year})"
+fun MovieDetailUiState.getTitleWithReleaseYear() =
+    if (releaseDate.isBlank()) {
+        title
+    } else {
+        "$title ${LocalDate.parse(releaseDate).year}"
+    }
 
 fun MovieDetailUiState.getGenres() = genres.joinToString(separator = ",") { it.name }
 
@@ -126,7 +133,8 @@ fun MovieDetailUiState.getCrew() = credits.crew
     }
     .take(4)
 
-fun CreditsCastUiState.getProfilePathUrl(imageType: ImageType = ImageType.ORIGINAL) = "${BuildConfig.TMDB_IMAGE_URL}$imageType$profilePath"
+fun CreditsCastUiState.getProfilePathUrl(imageType: ImageType = ImageType.ORIGINAL) =
+    "${BuildConfig.TMDB_IMAGE_URL}$imageType$profilePath"
 
 
 class MovieDetailUiStateProvider : PreviewParameterProvider<UiState<MovieDetailUiState>> {

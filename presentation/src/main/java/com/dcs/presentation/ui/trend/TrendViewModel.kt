@@ -49,7 +49,7 @@ class TrendViewModel @Inject constructor(
     internal val trendingMovies = trendingMovieUiType
         .map { it.toTimeWindow() }
         .flatMapLatest { timeWindow ->
-            getTrendingMoviesUseCase(MediaType.MOIVE, timeWindow)
+            getTrendingMoviesUseCase(MediaType.MOVIE, timeWindow)
                 .map { pagingData -> pagingData.map { mediaPolymorphic -> mediaPolymorphic.toUiState() } }
                 .cachedIn(viewModelScope)
         }
@@ -131,7 +131,7 @@ class TrendViewModel @Inject constructor(
         when (event) {
 
             is TrendUiEvent.NavigateToMediaContentDetails -> {
-                if (event.mediaType == MediaType.MOIVE) {
+                if (event.mediaType == MediaType.MOVIE) {
                     navigateToMovieDetails(
                         mediaContentId = event.mediaContentId
                     )
