@@ -8,7 +8,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-class MediaTypeSerializer : KSerializer<RemoteMediaType> {
+object MediaTypeSerializer : KSerializer<RemoteMediaType> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("MediaType", PrimitiveKind.STRING)
 
