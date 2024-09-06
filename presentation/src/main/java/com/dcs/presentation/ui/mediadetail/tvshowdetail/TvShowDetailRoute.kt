@@ -86,7 +86,7 @@ private fun TvShowDetailScreen(
                 } else {
                     stringResource(id = R.string.route_tv_show_detail_name)
                 },
-                onBackClick = { onTvShowDetailEvent(TvShowDetailUiEvent.NavigateBack) }
+                onBackClick = { onTvShowDetailEvent(TvShowDetailUiEvent.OnNavigationBackClick) }
             )
         }
 
@@ -110,7 +110,7 @@ private fun TvShowDetailScreen(
                     uiState = uiState.data,
                     onPersonClick = { personId ->
                         onTvShowDetailEvent(
-                            TvShowDetailUiEvent.NavigateToPersonDetail(
+                            TvShowDetailUiEvent.OnPersonClick(
                                 personId = personId
                             )
                         )

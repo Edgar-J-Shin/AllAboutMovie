@@ -9,12 +9,11 @@ import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.state.asUiState
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -25,7 +24,8 @@ import javax.inject.Inject
 class TvShowDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getTvShowByIdUseCase: GetTvShowByIdUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    EventDelegate<TvShowDetailEffect, TvShowDetailUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val tvShowId: Int =
         savedStateHandle[Screen.TV_SHOW_ID_SAVED_STATE_KEY] ?: error("Tv Show Id not found")
@@ -48,18 +48,15 @@ class TvShowDetailViewModel @Inject constructor(
             initialValue = UiState.Loading,
         )
 
-    private val _effect = MutableSharedFlow<TvShowDetailEffect>()
-    val effect = _effect.asSharedFlow()
-
     private fun navigateBack() {
         launch {
-            _effect.emit(TvShowDetailEffect.NavigateBack)
+            emitEffect(TvShowDetailEffect.NavigateBack)
         }
     }
 
     private fun navigateToPersonDetail(personId: Int) {
         launch {
-            _effect.emit(
+            emitEffect(
                 TvShowDetailEffect.NavigateToPersonDetail(
                     personId = personId
                 )
@@ -67,13 +64,13 @@ class TvShowDetailViewModel @Inject constructor(
         }
     }
 
-    fun dispatchEvent(event: TvShowDetailUiEvent) {
+    override fun dispatchEvent(event: TvShowDetailUiEvent) {
         when (event) {
-            is TvShowDetailUiEvent.NavigateBack -> {
+            is TvShowDetailUiEvent.OnNavigationBackClick -> {
                 navigateBack()
             }
 
-            is TvShowDetailUiEvent.NavigateToPersonDetail -> {
+            is TvShowDetailUiEvent.OnPersonClick -> {
                 navigateToPersonDetail(event.personId)
             }
         }

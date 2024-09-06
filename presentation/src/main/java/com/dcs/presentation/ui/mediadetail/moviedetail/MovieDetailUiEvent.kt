@@ -2,9 +2,9 @@ package com.dcs.presentation.ui.mediadetail.moviedetail
 
 sealed interface MovieDetailUiEvent {
 
-    data object NavigateBack : MovieDetailUiEvent
+    data object OnNavigationBackClick : MovieDetailUiEvent
 
-    data class NavigateToPersonDetail(
+    data class OnPersonClick(
         val personId: Int,
     ) : MovieDetailUiEvent
 }

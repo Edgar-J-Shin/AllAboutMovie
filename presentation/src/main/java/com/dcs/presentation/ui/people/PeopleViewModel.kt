@@ -8,22 +8,16 @@ import com.dcs.domain.usecase.GetPopularPeopleUseCase
 import com.dcs.presentation.core.model.PersonUiState
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class PeopleViewModel @Inject constructor(
     getPopularPeopleUseCase: GetPopularPeopleUseCase,
-) : ViewModel() {
-
-    private val _effect = MutableSharedFlow<PeopleEffect>()
-    val effect = _effect.asSharedFlow()
+) : ViewModel(),
+    EventDelegate<PeopleEffect, PeopleUiEvent> by EventDelegate.EventDelegateImpl() {
 
     val popularPeople = getPopularPeopleUseCase()
         .map {
@@ -33,7 +27,7 @@ class PeopleViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
-    fun dispatchEvent(event: PeopleUiEvent) {
+    override fun dispatchEvent(event: PeopleUiEvent) {
         when (event) {
             is PeopleUiEvent.NavigateToDetail -> {
                 navigateToDetail(event.state)
@@ -43,7 +37,11 @@ class PeopleViewModel @Inject constructor(
 
     private fun navigateToDetail(state: PersonUiState) {
         launch {
-            _effect.emit(PeopleEffect.NavigateToDetail(state.id))
+            emitEffect(
+                PeopleEffect.NavigateToDetail(
+                    personId = state.id
+                )
+            )
         }
     }
 }

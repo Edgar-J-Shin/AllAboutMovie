@@ -131,11 +131,11 @@ private fun SearchTopBar(
     SearchBar(
         query = searchUiState.query.keyword,
         onQueryChange = {
-            onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
+            onHomeUiEvent(HomeUiEvent.OnSearchTextChanged(it))
         },
         onSearch = {
             onSearchActiveChange(false)
-            onHomeUiEvent(HomeUiEvent.SearchText(it))
+            onHomeUiEvent(HomeUiEvent.OnSearch(it))
         },
         active = searchActive,
         onActiveChange = { onSearchActiveChange(it) },
@@ -155,7 +155,7 @@ private fun SearchTopBar(
                     contentDescription = stringResource(id = R.string.desc_clear),
                     modifier = Modifier.clickable {
                         if (searchUiState.queryNotEmpty()) {
-                            onHomeUiEvent(HomeUiEvent.ClearSearchText)
+                            onHomeUiEvent(HomeUiEvent.OnClearSearchTextClick)
                         } else {
                             onSearchActiveChange(false)
                         }
@@ -180,10 +180,10 @@ private fun SearchTopBar(
                     keyword = searchUiState.searchKeywords[index].keyword,
                     onClick = {
                         onSearchActiveChange(false)
-                        onHomeUiEvent(HomeUiEvent.SearchTextChanged(it))
-                        onHomeUiEvent(HomeUiEvent.SearchText(it))
+                        onHomeUiEvent(HomeUiEvent.OnSearchTextChanged(it))
+                        onHomeUiEvent(HomeUiEvent.OnSearch(it))
                     },
-                    onClickRemove = { onHomeUiEvent(HomeUiEvent.DeleteHistory(it)) }
+                    onClickRemove = { onHomeUiEvent(HomeUiEvent.OnDeleteHistoryClick(it)) }
                 )
             }
 
@@ -198,7 +198,7 @@ private fun SearchTopBar(
                         .padding(all = 12.dp)
                         .fillMaxWidth()
                         .clickable {
-                            onHomeUiEvent(HomeUiEvent.DeleteAllHistory)
+                            onHomeUiEvent(HomeUiEvent.OnDeleteAllHistoryClick)
                         }
                 )
             }

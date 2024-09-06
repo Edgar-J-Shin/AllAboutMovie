@@ -8,11 +8,10 @@ import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.core.model.SignInUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.core.ui.state.UiState
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
@@ -25,14 +24,12 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val signInUseCase: SignInUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    EventDelegate<SignInEffect, SignInUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val _state: MutableStateFlow<UiState<SignInUiState>> =
         MutableStateFlow(UiState.Loading)
     val state = _state.asStateFlow()
-
-    private val _effect = MutableSharedFlow<SignInEffect>()
-    val effect = _effect.asSharedFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
@@ -52,7 +49,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun dispatchEvent(event: SignInUiEvent) {
+    override fun dispatchEvent(event: SignInUiEvent) {
         when (event) {
             is SignInUiEvent.SignIn -> {
                 // Handle sign in
@@ -81,14 +78,14 @@ class SignInViewModel @Inject constructor(
                     _state.update { UiState.Error(throwable) }
                 }
                 .collect {
-                    _effect.emit(SignInEffect.NavigateBack)
+                    emitEffect(SignInEffect.NavigateBack)
                 }
         }
     }
 
     private fun navigateBack() {
         launch {
-            _effect.emit(SignInEffect.NavigateBack)
+            emitEffect(SignInEffect.NavigateBack)
         }
     }
 

@@ -77,7 +77,7 @@ private fun SearchResultScreen(
 ) {
     Scaffold(
         topBar = {
-            SearchResultTopAppBar(onBackClick = { onSearchResultEvent(SearchResultUiEvent.NavigateBack) })
+            SearchResultTopAppBar(onBackClick = { onSearchResultEvent(SearchResultUiEvent.OnNavigationBackClick) })
         },
         modifier = modifier,
     ) { innerPadding ->
@@ -118,7 +118,7 @@ private fun SearchResultScreen(
                         pagingItems = pagingItems,
                         onItemClick = { movieId ->
                             onSearchResultEvent(
-                                SearchResultUiEvent.NavigateToMovieDetails(
+                                SearchResultUiEvent.OnMediaItemClick(
                                     mediaContentId = movieId
                                 )
                             )

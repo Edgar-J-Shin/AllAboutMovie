@@ -10,11 +10,10 @@ import com.dcs.presentation.core.model.KeywordUiState
 import com.dcs.presentation.core.model.SearchUiState
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -28,7 +27,8 @@ class HomeViewModel @Inject constructor(
     getSearchKeywordsUseCase: GetSearchKeywordsUseCase,
     private val deleteSearchKeywordUseCase: DeleteSearchKeywordUseCase,
     private val deleteSearchKeywordAllUseCase: DeleteSearchKeywordAllUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    EventDelegate<HomeEffect, HomeUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val searchKeywords = getSearchKeywordsUseCase(KEYWORD_COUNT_LIMIT)
         .map { keywordEntities -> keywordEntities.map { it.toUiState() } }
@@ -42,9 +42,6 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000)
     )
 
-    private val _effect = MutableSharedFlow<HomeEffect>()
-    val effect = _effect.asSharedFlow()
-
     private fun changeSearchText(newText: String) {
         _searchUiState.update { it.copy(query = KeywordUiState(newText)) }
     }
@@ -55,7 +52,7 @@ class HomeViewModel @Inject constructor(
 
     private fun search(query: String) {
         launch {
-            _effect.emit(
+            emitEffect(
                 if (query.isEmpty()) {
                     HomeEffect.ShowSnackbar(state = SnackbarState.SearchQueryEmptyError)
                 } else {
@@ -75,25 +72,25 @@ class HomeViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun dispatchEvent(event: HomeUiEvent) {
+    override fun dispatchEvent(event: HomeUiEvent) {
         when (event) {
-            is HomeUiEvent.SearchTextChanged -> {
+            is HomeUiEvent.OnSearchTextChanged -> {
                 changeSearchText(event.query)
             }
 
-            HomeUiEvent.ClearSearchText -> {
+            HomeUiEvent.OnClearSearchTextClick -> {
                 clearSearchText()
             }
 
-            is HomeUiEvent.SearchText -> {
+            is HomeUiEvent.OnSearch -> {
                 search(event.keyword)
             }
 
-            is HomeUiEvent.DeleteHistory -> {
+            is HomeUiEvent.OnDeleteHistoryClick -> {
                 deleteHistory(event.keyword)
             }
 
-            HomeUiEvent.DeleteAllHistory -> {
+            HomeUiEvent.OnDeleteAllHistoryClick -> {
                 deleteAllHistory()
             }
         }
