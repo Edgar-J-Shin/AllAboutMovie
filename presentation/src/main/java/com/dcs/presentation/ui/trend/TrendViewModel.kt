@@ -16,12 +16,11 @@ import com.dcs.presentation.core.model.TrendingMovieUiType
 import com.dcs.presentation.core.model.mapper.toTimeWindow
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -34,16 +33,14 @@ class TrendViewModel @Inject constructor(
     getPopularMoviesUseCase: GetPopularMoviesUseCase,
     getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     getPopularTvShowsUseCase: GetPopularTvShowsUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    EventDelegate<TrendEffect, TrendUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private var _trendingMovieUiType = MutableStateFlow(TrendingMovieUiType.DAY)
     private val trendingMovieUiType = _trendingMovieUiType.asStateFlow()
 
     private var _popularMovieUiType = MutableStateFlow(PopularMovieUiType.TV)
     private val popularMovieUiType = _popularMovieUiType.asStateFlow()
-
-    private val _effect = MutableSharedFlow<TrendEffect>()
-    val effect = _effect.asSharedFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     internal val trendingMovies = trendingMovieUiType
@@ -109,7 +106,7 @@ class TrendViewModel @Inject constructor(
 
     private fun navigateToMovieDetails(mediaContentId: MediaContentId) {
         launch {
-            _effect.emit(
+            emitEffect(
                 TrendEffect.NavigateToMovieDetails(
                     mediaContentId = mediaContentId
                 )
@@ -119,7 +116,7 @@ class TrendViewModel @Inject constructor(
 
     private fun navigateToTvShowDetails(mediaContentId: MediaContentId) {
         launch {
-            _effect.emit(
+            emitEffect(
                 TrendEffect.NavigateToTvShowDetails(
                     mediaContentId = mediaContentId
                 )
@@ -127,10 +124,9 @@ class TrendViewModel @Inject constructor(
         }
     }
 
-    fun dispatchEvent(event: TrendUiEvent) {
+    override fun dispatchEvent(event: TrendUiEvent) {
         when (event) {
-
-            is TrendUiEvent.NavigateToMediaContentDetails -> {
+            is TrendUiEvent.OnMediaItemClick -> {
                 if (event.mediaType == MediaType.MOVIE) {
                     navigateToMovieDetails(
                         mediaContentId = event.mediaContentId

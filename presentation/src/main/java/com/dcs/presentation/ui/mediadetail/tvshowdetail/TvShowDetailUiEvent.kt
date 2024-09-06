@@ -2,9 +2,9 @@ package com.dcs.presentation.ui.mediadetail.tvshowdetail
 
 sealed interface TvShowDetailUiEvent {
 
-    data object NavigateBack : TvShowDetailUiEvent
+    data object OnNavigationBackClick : TvShowDetailUiEvent
 
-    data class NavigateToPersonDetail(
+    data class OnPersonClick(
         val personId: Int,
     ) : TvShowDetailUiEvent
 }

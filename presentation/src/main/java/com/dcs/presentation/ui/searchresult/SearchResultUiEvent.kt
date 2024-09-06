@@ -4,9 +4,9 @@ import com.dcs.domain.model.MediaContentId
 
 sealed interface SearchResultUiEvent {
 
-    data object NavigateBack : SearchResultUiEvent
+    data object OnNavigationBackClick : SearchResultUiEvent
 
-    data class NavigateToMovieDetails(
+    data class OnMediaItemClick(
         val mediaContentId: MediaContentId,
     ) : SearchResultUiEvent
 }

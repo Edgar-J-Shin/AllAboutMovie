@@ -9,12 +9,11 @@ import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.state.asUiState
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -25,7 +24,8 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getMovieByIdUseCase: GetMovieByIdUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    EventDelegate<MovieDetailEffect, MovieDetailUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val movieId: Int =
         savedStateHandle[Screen.MOVIE_ID_SAVED_STATE_KEY] ?: error("Movie Id not found")
@@ -48,18 +48,15 @@ class MovieDetailViewModel @Inject constructor(
             initialValue = UiState.Loading,
         )
 
-    private val _effect = MutableSharedFlow<MovieDetailEffect>()
-    val effect = _effect.asSharedFlow()
-
     private fun navigateBack() {
         launch {
-            _effect.emit(MovieDetailEffect.NavigateBack)
+            emitEffect(MovieDetailEffect.NavigateBack)
         }
     }
 
     private fun navigateToPersonDetail(personId: Int) {
         launch {
-            _effect.emit(
+            emitEffect(
                 MovieDetailEffect.NavigateToPersonDetail(
                     personId = personId
                 )
@@ -67,13 +64,13 @@ class MovieDetailViewModel @Inject constructor(
         }
     }
 
-    fun dispatchEvent(event: MovieDetailUiEvent) {
+    override fun dispatchEvent(event: MovieDetailUiEvent) {
         when (event) {
-            is MovieDetailUiEvent.NavigateBack -> {
+            is MovieDetailUiEvent.OnNavigationBackClick -> {
                 navigateBack()
             }
 
-            is MovieDetailUiEvent.NavigateToPersonDetail -> {
+            is MovieDetailUiEvent.OnPersonClick -> {
                 navigateToPersonDetail(event.personId)
             }
         }

@@ -9,12 +9,11 @@ import com.dcs.presentation.core.model.MediaTypeUiState
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.state.asUiState
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import com.dcs.presentation.ui.Screen.Companion.PERSON_DETAIL_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -27,13 +26,11 @@ import javax.inject.Inject
 class PersonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getPersonDetailUseCase: GetPersonDetailUseCase,
-) : ViewModel() {
+) : ViewModel(),
+    EventDelegate<PersonDetailEffect, PersonDetailUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val personId =
         savedStateHandle.get<Long>(PERSON_DETAIL_ID_KEY) ?: error("Person ID not found")
-
-    private val _effect = MutableSharedFlow<PersonDetailEffect>()
-    val effect = _effect.asSharedFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState = flowOf(personId)
@@ -49,7 +46,7 @@ class PersonDetailViewModel @Inject constructor(
             initialValue = UiState.Loading,
         )
 
-    fun dispatchEvent(event: PersonDetailUiEvent) {
+    override fun dispatchEvent(event: PersonDetailUiEvent) {
         when (event) {
             is PersonDetailUiEvent.OnKnownForCardClick -> {
                 navigateToMediaDetail(event.id, event.mediaType)
@@ -71,7 +68,7 @@ class PersonDetailViewModel @Inject constructor(
 
     private fun navigateUp() {
         viewModelScope.launch {
-            _effect.emit(PersonDetailEffect.NavigateUp)
+            emitEffect(PersonDetailEffect.NavigateUp)
         }
     }
 
@@ -82,11 +79,19 @@ class PersonDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (mediaType) {
                 MediaTypeUiState.MOVIE -> {
-                    _effect.emit(PersonDetailEffect.NavigateToMovieDetail(id.value))
+                    emitEffect(
+                        PersonDetailEffect.NavigateToMovieDetail(
+                            movieId = id.value
+                        )
+                    )
                 }
 
                 MediaTypeUiState.TV -> {
-                    _effect.emit(PersonDetailEffect.NavigateToTvShowDetail(id.value))
+                    emitEffect(
+                        PersonDetailEffect.NavigateToTvShowDetail(
+                            tvShowId = id.value
+                        )
+                    )
                 }
             }
         }

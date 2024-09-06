@@ -322,7 +322,7 @@ fun MediaItems(
                     mediaContentUiState = mediaItem,
                     onClick = {
                         onTrendUiEvent(
-                            TrendUiEvent.NavigateToMediaContentDetails(
+                            TrendUiEvent.OnMediaItemClick(
                                 mediaContentId = mediaItem.toMediaContentId(),
                                 mediaType = MediaType.toMediaType(mediaItem.mediaType)
                             )

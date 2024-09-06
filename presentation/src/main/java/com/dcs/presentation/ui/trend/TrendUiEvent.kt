@@ -5,7 +5,7 @@ import com.dcs.domain.model.MediaType
 
 sealed interface TrendUiEvent {
 
-    data class NavigateToMediaContentDetails(
+    data class OnMediaItemClick(
         val mediaContentId: MediaContentId,
         val mediaType: MediaType = MediaType.MOVIE,
     ) : TrendUiEvent

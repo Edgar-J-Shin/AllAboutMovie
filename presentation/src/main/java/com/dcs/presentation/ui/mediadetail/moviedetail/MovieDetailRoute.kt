@@ -86,7 +86,7 @@ private fun MovieDetailScreen(
                 } else {
                     stringResource(id = R.string.route_movie_detail_name)
                 },
-                onBackClick = { onMovieDetailEvent(MovieDetailUiEvent.NavigateBack) }
+                onBackClick = { onMovieDetailEvent(MovieDetailUiEvent.OnNavigationBackClick) }
             )
         }
 
@@ -110,7 +110,7 @@ private fun MovieDetailScreen(
                     uiState = uiState.data,
                     onPersonClick = { personId ->
                         onMovieDetailEvent(
-                            MovieDetailUiEvent.NavigateToPersonDetail(
+                            MovieDetailUiEvent.OnPersonClick(
                                 personId = personId
                             )
                         )

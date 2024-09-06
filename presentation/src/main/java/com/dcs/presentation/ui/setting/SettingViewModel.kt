@@ -7,13 +7,12 @@ import com.dcs.domain.usecase.SignOutUseCase
 import com.dcs.presentation.core.designsystem.state.SnackbarState
 import com.dcs.presentation.core.model.SettingUiState
 import com.dcs.presentation.core.model.UserProfile
+import com.dcs.presentation.core.ui.lifecycle.launch
 import com.dcs.presentation.core.ui.state.UiState
 import com.dcs.presentation.core.ui.state.asUiState
-import com.dcs.presentation.core.ui.lifecycle.launch
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -27,10 +26,8 @@ class SettingViewModel @Inject constructor(
     private val createRequestTokenUseCase: CreateRequestTokenUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val signOutUseCase: SignOutUseCase,
-) : ViewModel() {
-
-    private val _effect = MutableSharedFlow<SettingEffect>()
-    val effect = _effect.asSharedFlow()
+) : ViewModel(),
+    EventDelegate<SettingEffect, SettingUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val _state =
         MutableStateFlow<UiState<SettingUiState>>(UiState.Loading)
@@ -56,7 +53,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun dispatchEvent(event: SettingUiEvent) {
+    override fun dispatchEvent(event: SettingUiEvent) {
         when (event) {
             SettingUiEvent.SignIn -> {
                 createRequestTokenAndNavigateToSignIn()
@@ -78,14 +75,18 @@ class SettingViewModel @Inject constructor(
                     _isLoading.update { false }
                 }
                 .catch { _ ->
-                    _effect.emit(
+                    emitEffect(
                         SettingEffect.ShowSnackbar(
                             state = SnackbarState.SettingToSignInError
                         )
                     )
                 }
                 .collect { requestToken ->
-                    _effect.emit(SettingEffect.SignIn(requestToken = requestToken))
+                    emitEffect(
+                        SettingEffect.SignIn(
+                            requestToken = requestToken
+                        )
+                    )
                 }
         }
     }
@@ -106,7 +107,7 @@ class SettingViewModel @Inject constructor(
                     _isLoading.update { false }
                 }
                 .catch { _ ->
-                    _effect.emit(
+                    emitEffect(
                         SettingEffect.ShowSnackbar(
                             state = SnackbarState.SettingToSignOutError
                         )

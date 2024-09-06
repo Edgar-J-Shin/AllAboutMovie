@@ -9,10 +9,9 @@ import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.usecase.GetSearchContentsUseCase
 import com.dcs.presentation.core.model.mapper.toUiState
 import com.dcs.presentation.core.ui.lifecycle.launch
+import com.dcs.presentation.core.ui.viewmodel.EventDelegate
 import com.dcs.presentation.ui.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,10 +19,8 @@ import javax.inject.Inject
 class SearchResultViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getSearchContentsUseCase: GetSearchContentsUseCase,
-) : ViewModel() {
-
-    private val _effect = MutableSharedFlow<SearchResultEffect>()
-    val effect = _effect.asSharedFlow()
+) : ViewModel(),
+    EventDelegate<SearchResultEffect, SearchResultUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val keyword: String =
         savedStateHandle[Screen.SEARCH_RESULT_KEYWORD] ?: error("Search result keyword not found")
@@ -34,13 +31,13 @@ class SearchResultViewModel @Inject constructor(
 
     private fun navigateBack() {
         launch {
-            _effect.emit(SearchResultEffect.NavigateBack)
+            emitEffect(SearchResultEffect.NavigateBack)
         }
     }
 
     private fun navigateToMovieDetails(mediaContentId: MediaContentId) {
         launch {
-            _effect.emit(
+            emitEffect(
                 SearchResultEffect.NavigateToMovieDetails(
                     mediaContentId = mediaContentId
                 )
@@ -48,13 +45,13 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    fun dispatchEvent(event: SearchResultUiEvent) {
+    override fun dispatchEvent(event: SearchResultUiEvent) {
         when (event) {
-            is SearchResultUiEvent.NavigateBack -> {
+            is SearchResultUiEvent.OnNavigationBackClick -> {
                 navigateBack()
             }
 
-            is SearchResultUiEvent.NavigateToMovieDetails -> {
+            is SearchResultUiEvent.OnMediaItemClick -> {
                 navigateToMovieDetails(
                     mediaContentId = event.mediaContentId
                 )
