@@ -4,21 +4,21 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-interface EventDelegate<O, I> {
-    val effect: SharedFlow<O>
+interface EventDelegate<EF, EV> {
+    val effect: SharedFlow<EF>
 
-    suspend fun emitEffect(effect: O)
+    suspend fun emitEffect(effect: EF)
 
-    fun dispatchEvent(event: I)
+    fun dispatchEvent(event: EV)
 
-    class EventDelegateImpl<O, I> : EventDelegate<O, I> {
-        private val _effect = MutableSharedFlow<O>()
+    class EventDelegateImpl<EF, EV> : EventDelegate<EF, EV> {
+        private val _effect = MutableSharedFlow<EF>()
         override val effect = _effect.asSharedFlow()
 
-        override suspend fun emitEffect(effect: O) {
+        override suspend fun emitEffect(effect: EF) {
             _effect.emit(effect)
         }
 
-        override fun dispatchEvent(event: I) {}
+        override fun dispatchEvent(event: EV) {}
     }
 }
