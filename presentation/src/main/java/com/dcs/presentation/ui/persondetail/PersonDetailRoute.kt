@@ -3,6 +3,7 @@ package com.dcs.presentation.ui.persondetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +33,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.domain.model.MediaContentId
 import com.dcs.presentation.R
-import com.dcs.presentation.core.designsystem.component.CollapsedTopBar
 import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.designsystem.component.NavigationBackButton
 import com.dcs.presentation.core.extensions.collectAsEffect
@@ -81,68 +81,64 @@ fun PersonDetailRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PersonDetailScreen(
     uiState: UiState<PersonDetailUiState>,
     onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollState = rememberLazyListState()
-
-    Scaffold(
-        topBar = {
-            CollapsedTopBar(
+    LazyColumn(
+        contentPadding = PaddingValues(bottom = 30.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+    ) {
+        item {
+            CenterAlignedTopAppBar(
                 title = {
                     if (uiState is UiState.Success) {
+                        val personDetailUiState = uiState.data
                         Text(
-                            text = uiState.data.name,
+                            text = personDetailUiState.name,
                             style = MaterialTheme.typography.titleLarge,
                         )
                     }
                 },
+
                 navigationIcon = {
                     NavigationBackButton(
-                        navigateUp = {
-                            onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick)
-                        }
+                        navigateUp = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) }
                     )
                 },
-                scrollState = scrollState,
                 modifier = Modifier
                     .fillMaxWidth()
             )
-        },
-        modifier = modifier
-    ) { paddingValues ->
+        }
+
         when (uiState) {
             is UiState.Loading -> {
-                PersonDetailLoadingContent(
-                    Modifier
-                        .padding(paddingValues)
-                        .padding(horizontal = 30.dp)
-                        .fillMaxSize()
-                )
+                item {
+                    PersonDetailLoadingContent(
+                        modifier = Modifier.fillParentMaxSize()
+                    )
+                }
             }
 
             is UiState.Error -> {
-                ErrorScreen(
-                    message = stringResource(id = R.string.api_response_error_message),
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxSize(),
-                )
+                item {
+                    ErrorScreen(
+                        message = stringResource(id = R.string.api_response_error_message),
+                        modifier = Modifier.fillParentMaxSize()
+                    )
+                }
             }
 
             is UiState.Success -> {
                 val personDetailUiState = uiState.data
-                PersonDetailContent(
+                personDetailContent(
                     personDetailUiState = personDetailUiState,
-                    contentPaddingValue = paddingValues,
-                    scrollState = scrollState,
-                    onPersonDetailUiEvent = onPersonDetailUiEvent,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .statusBarsPadding()
+                    onPersonDetailUiEvent = onPersonDetailUiEvent
                 )
             }
         }

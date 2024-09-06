@@ -95,7 +95,7 @@ private fun SignInScreen(
             is UiState.Error -> {
                 // Error screen
                 ErrorScreen(
-                    message = stringResource(R.string.error_message),
+                    message = stringResource(R.string.api_response_error_message),
                     primaryButton = {
                         Button(
                             onClick = {
