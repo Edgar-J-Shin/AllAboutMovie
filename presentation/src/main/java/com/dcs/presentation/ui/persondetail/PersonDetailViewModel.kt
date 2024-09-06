@@ -13,14 +13,13 @@ import com.dcs.presentation.ui.Screen.Companion.PERSON_DETAIL_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,13 +29,14 @@ class PersonDetailViewModel @Inject constructor(
     getPersonDetailUseCase: GetPersonDetailUseCase,
 ) : ViewModel() {
 
-    private val personId = MutableStateFlow<Long?>(null)
+    private val personId =
+        savedStateHandle.get<Long>(PERSON_DETAIL_ID_KEY) ?: error("Person ID not found")
 
     private val _effect = MutableSharedFlow<PersonDetailEffect>()
     val effect = _effect.asSharedFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState = personId
+    val uiState = flowOf(personId)
         .filterNotNull()
         .flatMapLatest {
             getPersonDetailUseCase(it)
@@ -48,12 +48,6 @@ class PersonDetailViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = UiState.Loading,
         )
-
-    init {
-        val id =
-            savedStateHandle.get<Long>(PERSON_DETAIL_ID_KEY) ?: error("Person ID not found")
-        personId.update { id }
-    }
 
     fun dispatchEvent(event: PersonDetailUiEvent) {
         when (event) {
