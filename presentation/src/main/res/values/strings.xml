@@ -80,5 +80,6 @@
     <string name="gender_non_binary">Non Binary</string>
     <string name="title_as_character">As</string>
     <string name="title_as_job">As</string>
+    <string name="content_description_back">Back</string>
 
 </resources>

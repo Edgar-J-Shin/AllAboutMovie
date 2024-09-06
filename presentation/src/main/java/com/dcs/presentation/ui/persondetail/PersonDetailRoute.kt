@@ -108,7 +108,7 @@ private fun PersonDetailScreen(
 
                 navigationIcon = {
                     NavigationBackButton(
-                        navigateUp = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) }
+                        onClick = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) }
                     )
                 },
                 modifier = Modifier

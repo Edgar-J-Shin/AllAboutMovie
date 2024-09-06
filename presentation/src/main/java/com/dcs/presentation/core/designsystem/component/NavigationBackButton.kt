@@ -6,22 +6,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.dcs.presentation.R
 
 @Composable
 fun NavigationBackButton(
-    navigateUp: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    icon: @Composable () -> Unit = {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = "Back",
-        )
-    },
 ) {
     IconButton(
-        onClick = navigateUp,
+        onClick = onClick,
         modifier = modifier,
     ) {
-        icon()
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(id = R.string.content_description_back),
+        )
     }
 }
