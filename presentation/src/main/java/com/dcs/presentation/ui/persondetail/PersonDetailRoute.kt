@@ -120,7 +120,9 @@ private fun PersonDetailScreen(
             is UiState.Loading -> {
                 item {
                     PersonDetailLoadingContent(
-                        modifier = Modifier.fillParentMaxSize()
+                        modifier = Modifier
+                            .fillParentMaxSize()
+                            .padding(30.dp)
                     )
                 }
             }
