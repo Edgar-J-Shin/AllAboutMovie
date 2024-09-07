@@ -35,14 +35,15 @@ enum class MediaTypeUiState {
 }
 
 @Composable
-fun GenderUiState.toGenderString(): String = when (this) {
-    GenderUiState.NOT_SPECIFIED -> R.string.gender_not_specified
-    GenderUiState.FEMALE -> R.string.gender_female
-    GenderUiState.MALE -> R.string.gender_male
-    GenderUiState.NON_BINARY -> R.string.gender_non_binary
-}.let {
-    stringResource(id = it)
-}
+fun GenderUiState.toGenderString(): String =
+    when (this) {
+        GenderUiState.NOT_SPECIFIED -> R.string.gender_not_specified
+        GenderUiState.FEMALE -> R.string.gender_female
+        GenderUiState.MALE -> R.string.gender_male
+        GenderUiState.NON_BINARY -> R.string.gender_non_binary
+    }.let {
+        stringResource(id = it)
+    }
 
 @Composable
 fun PersonUiState.getKnownForTitle(): String {
@@ -50,96 +51,106 @@ fun PersonUiState.getKnownForTitle(): String {
         return ""
     }
     return knownFor
-        .filterNot { it.title.isBlank() && it.originalTitle.isBlank() }
+        .filterNot {
+            if (it.mediaType == MediaTypeUiState.MOVIE) it.title.isBlank() else it.name.isBlank()
+        }
         .take(3)
-        .joinToString { it.title.ifBlank { it.originalTitle } }
+        .joinToString {
+            if (it.mediaType == MediaTypeUiState.MOVIE) it.title else it.name
+        }
 }
 
-
 @Composable
-fun PersonUiState.getProfileUrl(): String =
-    "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
+fun PersonUiState.getProfileUrl(): String = "${BuildConfig.TMDB_IMAGE_URL}original$profilePath"
 
 class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>> {
     override val values: Sequence<PagingData<PersonUiState>>
-        get() = sequenceOf(
-            PagingData.from(
-                data = emptyList(),
-                sourceLoadStates = LoadStates(
-                    refresh = LoadState.Loading,
-                    prepend = LoadState.NotLoading(false),
-                    append = LoadState.NotLoading(false),
-                )
-            ),
-            PagingData.from(
-                data = emptyList(),
-                sourceLoadStates = LoadStates(
-                    refresh = LoadState.Error(Exception("Error")),
-                    prepend = LoadState.NotLoading(false),
-                    append = LoadState.NotLoading(false),
-                )
-            ),
-            PagingData.from(
-                data = (0 until 10).map {
-                    PersonUiState(
-                        id = it,
-                        name = "Person $it",
-                        originalName = "Original Person $it",
-                        adult = false,
-                        gender = GenderUiState.MALE,
-                        popularity = 1.0,
-                        profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
-                        knownFor = emptyList(),
-                        knownForDepartment = "Department $it",
-                    )
-                },
-                sourceLoadStates = LoadStates(
-                    refresh = LoadState.NotLoading(true),
-                    prepend = LoadState.NotLoading(false),
-                    append = LoadState.NotLoading(false),
-                )
-            ),
-            PagingData.from(
-                data = (0 until 10).map {
-                    PersonUiState(
-                        id = it,
-                        name = "Person $it",
-                        originalName = "Original Person $it",
-                        adult = false,
-                        gender = GenderUiState.FEMALE,
-                        popularity = 1.0,
-                        profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
-                        knownFor = (0 until 5).map { idx ->
-                            KnownForUiState(
-                                id = MediaContentId(idx),
-                                originalName = "Original Name $idx",
-                                name = "Name $idx",
-                                adult = false,
-                                backdropPath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
-                                firstAirDate = "2021-09-01",
-                                genreIds = emptyList(),
-                                mediaType = MediaTypeUiState.MOVIE,
-                                originCountry = emptyList(),
-                                originalLanguage = "en",
-                                originalTitle = "Original Title $idx",
-                                overview = "Overview $it",
-                                popularity = 1.0,
-                                posterPath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
-                                releaseDate = "2021-09-01",
-                                title = "Title $idx",
-                                video = false,
-                                voteAverage = 1.0,
-                                voteCount = 1,
-                            )
-                        },
-                        knownForDepartment = "Department $it",
-                    )
-                },
-                sourceLoadStates = LoadStates(
-                    refresh = LoadState.NotLoading(true),
-                    prepend = LoadState.NotLoading(false),
-                    append = LoadState.NotLoading(false),
-                )
+        get() =
+            sequenceOf(
+                PagingData.from(
+                    data = emptyList(),
+                    sourceLoadStates =
+                    LoadStates(
+                        refresh = LoadState.Loading,
+                        prepend = LoadState.NotLoading(false),
+                        append = LoadState.NotLoading(false),
+                    ),
+                ),
+                PagingData.from(
+                    data = emptyList(),
+                    sourceLoadStates =
+                    LoadStates(
+                        refresh = LoadState.Error(Exception("Error")),
+                        prepend = LoadState.NotLoading(false),
+                        append = LoadState.NotLoading(false),
+                    ),
+                ),
+                PagingData.from(
+                    data =
+                    (0 until 10).map {
+                        PersonUiState(
+                            id = it,
+                            name = "Person $it",
+                            originalName = "Original Person $it",
+                            adult = false,
+                            gender = GenderUiState.MALE,
+                            popularity = 1.0,
+                            profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
+                            knownFor = emptyList(),
+                            knownForDepartment = "Department $it",
+                        )
+                    },
+                    sourceLoadStates =
+                    LoadStates(
+                        refresh = LoadState.NotLoading(true),
+                        prepend = LoadState.NotLoading(false),
+                        append = LoadState.NotLoading(false),
+                    ),
+                ),
+                PagingData.from(
+                    data =
+                    (0 until 10).map {
+                        PersonUiState(
+                            id = it,
+                            name = "Person",
+                            originalName = "Original Person $it",
+                            adult = false,
+                            gender = GenderUiState.FEMALE,
+                            popularity = 1.0,
+                            profilePath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
+                            knownFor =
+                            (0 until 5).map { idx ->
+                                KnownForUiState(
+                                    id = MediaContentId(idx),
+                                    originalName = "Original Name $idx",
+                                    name = "Name $idx",
+                                    adult = false,
+                                    backdropPath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
+                                    firstAirDate = "2021-09-01",
+                                    genreIds = emptyList(),
+                                    mediaType = MediaTypeUiState.MOVIE,
+                                    originCountry = emptyList(),
+                                    originalLanguage = "en",
+                                    originalTitle = "Original Title $idx",
+                                    overview = "Overview $it",
+                                    popularity = 1.0,
+                                    posterPath = "https://image.tmdb.org/t/p/w500/4q2NNj4S5c5cUfzjXk5jXgefBvS.jpg",
+                                    releaseDate = "2021-09-01",
+                                    title = "Title $idx",
+                                    video = false,
+                                    voteAverage = 1.0,
+                                    voteCount = 1,
+                                )
+                            },
+                            knownForDepartment = "Department $it",
+                        )
+                    },
+                    sourceLoadStates =
+                    LoadStates(
+                        refresh = LoadState.NotLoading(true),
+                        prepend = LoadState.NotLoading(false),
+                        append = LoadState.NotLoading(false),
+                    ),
+                ),
             )
-        )
 }

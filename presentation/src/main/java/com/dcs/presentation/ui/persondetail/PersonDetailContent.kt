@@ -47,7 +47,7 @@ internal fun LazyListScope.personDetailContent(
             birthday = personDetailUiState.birthday,
             placeOfBirth = personDetailUiState.placeOfBirth,
             gender = personDetailUiState.gender,
-            credits = personDetailUiState.casts.size,
+            credits = personDetailUiState.creditCounts,
             modifier = Modifier.padding(horizontal = 30.dp)
         )
     }
@@ -73,8 +73,7 @@ internal fun LazyListScope.personDetailContent(
     spacer()
 
     credits(
-        casts = personDetailUiState.casts,
-        crews = personDetailUiState.crews,
+        credits = personDetailUiState.credits,
         onPersonDetailUiEvent = onPersonDetailUiEvent,
     )
 }

@@ -46,7 +46,6 @@ class PersonRepositoryImpl @Inject constructor(
                 .flatMap { it.knownFor }
                 .map { it.toEntity() }
         emit(personDetailResponse.toEntity(knownFor))
-
     }
         .flowOn(ioDispatcher)
 
