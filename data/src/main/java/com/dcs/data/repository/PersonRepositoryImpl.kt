@@ -13,6 +13,7 @@ import com.dcs.domain.model.PersonDetail
 import com.dcs.domain.repository.PersonRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
@@ -36,18 +37,22 @@ class PersonRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override fun getPersonDetail(personId: Long): Flow<PersonDetail> = flow {
-        val personDetailResponse = remote.getPersonDetail(personId).getOrThrow()
-        val searchPersonResponse =
-            remote.getSearchPerson(personDetailResponse.name).getOrThrow()
-
-        val knownFor: List<KnownFor> =
-            searchPersonResponse.results
-                .flatMap { it.knownFor }
-                .map { it.toEntity() }
-        emit(personDetailResponse.toEntity(knownFor))
-    }
-        .flowOn(ioDispatcher)
+    override fun getPersonDetail(personId: Long): Flow<PersonDetail> =
+        combine(
+            flow {
+                emit(remote.getPersonDetail(personId).getOrThrow())
+            },
+            flow {
+                emit(remote.getSearchPerson(personId.toString()).getOrThrow())
+            }
+        ) { personDetailResponse, searchPersonResponse ->
+            val knownFor: List<KnownFor> =
+                searchPersonResponse.results
+                    .flatMap { it.knownFor }
+                    .map { it.toEntity() }
+            personDetailResponse.toEntity(knownFor)
+        }
+            .flowOn(ioDispatcher)
 
     companion object {
         private const val DEFAULT_PAGE_SIZE = 20
