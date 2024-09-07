@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -169,9 +170,13 @@ private fun PersonCard(
         Text(
             text = state.name,
             style = MaterialTheme.typography.bodyMedium,
+            maxLines = 2,
             fontWeight = FontWeight.Bold,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier
+                .padding(start = 12.dp, end = 12.dp, top = 12.dp)
+                .fillMaxWidth()
+                .height(50.dp),
         )
 
         Text(
@@ -180,8 +185,9 @@ private fun PersonCard(
             style = MaterialTheme.typography.bodyMedium,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .padding(12.dp)
-                .height(60.dp),
+                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+                .fillMaxWidth()
+                .height(50.dp),
         )
     }
 }
