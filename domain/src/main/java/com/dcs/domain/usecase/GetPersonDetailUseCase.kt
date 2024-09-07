@@ -30,7 +30,7 @@ class GetPersonDetailUseCase @Inject constructor(
             .map { it.value }
     }
 
-    operator fun invoke(personId: Long): Flow<PersonDetail> =
+    operator fun invoke(personId: Int): Flow<PersonDetail> =
         personRepository.getPersonDetail(personId)
             .map {
                 it.copy(

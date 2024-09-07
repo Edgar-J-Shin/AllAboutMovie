@@ -37,7 +37,7 @@ class PersonRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override fun getPersonDetail(personId: Long): Flow<PersonDetail> =
+    override fun getPersonDetail(personId: Int): Flow<PersonDetail> =
         combine(
             flow {
                 emit(remote.getPersonDetail(personId).getOrThrow())

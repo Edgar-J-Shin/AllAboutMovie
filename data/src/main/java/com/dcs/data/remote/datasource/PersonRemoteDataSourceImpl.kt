@@ -25,7 +25,7 @@ class PersonRemoteDataSourceImpl
                     it.data as GetPopularPeopleResponse
                 }
 
-        override suspend fun getPersonDetail(personId: Long): Result<GetPersonDetailResponse> =
+        override suspend fun getPersonDetail(personId: Int): Result<GetPersonDetailResponse> =
             personService
                 .getPersonDetail(
                     personId = personId,

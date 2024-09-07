@@ -92,7 +92,7 @@ sealed class Screen(
     data object PersonDetail : Screen(
         route = "$ROUTE_PERSON_DETAIL/{$PERSON_DETAIL_ID_KEY}",
         navArguments = persistentListOf(navArgument(PERSON_DETAIL_ID_KEY) {
-            type = NavType.LongType
+            type = NavType.IntType
         })
     ) {
         fun createRoute(personId: Int) = "$ROUTE_PERSON_DETAIL/${personId}"
