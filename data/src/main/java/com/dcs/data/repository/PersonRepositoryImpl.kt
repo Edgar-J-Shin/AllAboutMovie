@@ -12,10 +12,12 @@ import com.dcs.domain.model.Person
 import com.dcs.domain.model.PersonDetail
 import com.dcs.domain.repository.PersonRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PersonRepositoryImpl @Inject constructor(
@@ -37,21 +39,23 @@ class PersonRepositoryImpl @Inject constructor(
         ).flow
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getPersonDetail(personId: Int): Flow<PersonDetail> =
-        combine(
-            flow {
-                emit(remote.getPersonDetail(personId).getOrThrow())
-            },
-            flow {
-                emit(remote.getSearchPerson(personId.toString()).getOrThrow())
-            }
-        ) { personDetailResponse, searchPersonResponse ->
-            val knownFor: List<KnownFor> =
-                searchPersonResponse.results
-                    .flatMap { it.knownFor }
-                    .map { it.toEntity() }
-            personDetailResponse.toEntity(knownFor)
+        flow {
+            emit(remote.getPersonDetail(personId).getOrThrow())
         }
+            .flatMapLatest { personDetailResponse ->
+                flow {
+                    emit(remote.getSearchPerson(personDetailResponse.name).getOrThrow())
+                }
+                    .map { searchPersonResponse ->
+                        val knownFor: List<KnownFor> =
+                            searchPersonResponse.results
+                                .flatMap { it.knownFor }
+                                .map { it.toEntity() }
+                        personDetailResponse.toEntity(knownFor)
+                    }
+            }
             .flowOn(ioDispatcher)
 
     companion object {
