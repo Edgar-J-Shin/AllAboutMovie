@@ -11,7 +11,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,25 +18,31 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.component.BasicImage
 import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.model.ProfileImageUiState
 import com.dcs.presentation.core.model.getProfileImageUrl
 import com.dcs.presentation.core.model.getProfileUrl
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -127,6 +132,15 @@ fun SharedTransitionScope.ProfileImageDetails(
     }
 }
 
+private val threePagesPerViewport = object : PageSize {
+    override fun Density.calculateMainAxisPageSize(
+        availableSpace: Int,
+        pageSpacing: Int,
+    ): Int {
+        return (availableSpace - 2 * pageSpacing) / 3
+    }
+}
+
 @Composable
 private fun PersonProfileImageContent(
     profileImageUrl: String,
@@ -141,19 +155,47 @@ private fun PersonProfileImageContent(
             .fillMaxWidth()
     ) {
         if (isProfileImagesShowing) {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 25.dp),
-                horizontalArrangement = Arrangement.spacedBy(25.dp),
-                modifier = Modifier.clickable(onClick = onClick)
-            ) {
-                items(profileImages) { item ->
+            val pagerState = rememberPagerState(
+                pageCount = { profileImages.size },
+            )
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            val pageWidth = 350.dp
+            val remainingSpace = screenWidth - pageWidth
+            val contentPadding = remainingSpace / 2
+            val pageSpacing = 15.dp
+
+            HorizontalPager(
+                contentPadding = PaddingValues(horizontal = contentPadding),
+                state = pagerState,
+                pageSpacing = pageSpacing,
+                pageSize = PageSize.Fixed(pageWidth),
+            ) { page ->
+                Card(
+                    Modifier
+                        .aspectRatio(1f)
+                        .graphicsLayer {
+                            // Calculate the absolute offset for the current page from the
+                            // scroll position. We use the absolute value which allows us to mirror
+                            // any effects for both directions
+                            val pageOffset = (
+                                    (pagerState.currentPage - page) + pagerState
+                                        .currentPageOffsetFraction
+                                    ).absoluteValue
+
+                            // We animate the alpha, between 50% and 100%
+                            alpha = lerp(
+                                start = 0.3f,
+                                stop = 1f,
+                                fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                            )
+                        }
+                ) {
+                    // Card content
                     BasicImage(
-                        imageUrl = item.getProfileImageUrl(),
+                        imageUrl = profileImages[page].getProfileImageUrl(),
                         contentDescription = stringResource(id = R.string.content_description_profile),
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(350.dp)
-                            .clip(RoundedCornerShape(8.dp))
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }
