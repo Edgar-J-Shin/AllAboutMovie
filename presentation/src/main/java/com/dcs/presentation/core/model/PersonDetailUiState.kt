@@ -8,13 +8,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.PersonId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
-import com.dcs.presentation.core.model.PersonCreditUiState.Companion.KEY_CAST
 import java.time.LocalDate
 
 data class PersonDetailUiState(
-    val id: Int,
+    val id: PersonId,
     val adult: Boolean,
     val alsoKnownAs: List<String>,
     val biography: String,
@@ -30,10 +30,8 @@ data class PersonDetailUiState(
     val profilePath: String,
     val knownFor: List<KnownForUiState>,
     val credits: Map<String, List<PersonCreditUiState>>,
-) {
-    val creditCounts: Int
-        get() = credits[KEY_CAST]?.size ?: 0
-}
+    val creditCounts: Int,
+)
 
 data class PersonCreditUiState(
     val id: MediaContentId,

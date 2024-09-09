@@ -25,7 +25,8 @@ fun PersonDetail.toUiState() = PersonDetailUiState(
     knownFor = knownFor.map { it.toUiState() },
     credits = credits.mapValues {
         it.value.map { item -> item.toUiState() }
-    }
+    },
+    creditCounts = creditCounts,
 )
 
 fun MediaType.toUiState() = when (this) {

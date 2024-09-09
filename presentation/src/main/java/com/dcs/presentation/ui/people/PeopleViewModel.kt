@@ -39,7 +39,7 @@ class PeopleViewModel @Inject constructor(
         launch {
             emitEffect(
                 PeopleEffect.NavigateToDetail(
-                    personId = state.id
+                    personId = state.id.value
                 )
             )
         }

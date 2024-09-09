@@ -9,9 +9,10 @@ import com.dcs.domain.model.KnownFor
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.PersonCredit
 import com.dcs.domain.model.PersonDetail
+import com.dcs.domain.model.PersonId
 
 fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
-    id = id,
+    id = PersonId(id),
     adult = adult,
     alsoKnownAs = alsoKnownAs,
     biography = biography,
@@ -26,7 +27,8 @@ fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
     popularity = popularity,
     profilePath = profilePath,
     knownFor = knownFor,
-    credits = combinedCredits.toEntity()
+    credits = combinedCredits.toEntity(),
+    creditCounts = combinedCredits.cast.size
 )
 
 fun CombinedCredits.toEntity(): Map<String, List<PersonCredit>> {

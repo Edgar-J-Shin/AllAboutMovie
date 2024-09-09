@@ -7,9 +7,10 @@ import com.dcs.domain.model.Gender
 import com.dcs.domain.model.KnownFor
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.Person
+import com.dcs.domain.model.PersonId
 
 fun RemotePerson.toEntity() = Person(
-    id = id,
+    id = PersonId(id),
     name = name,
     originalName = originalName,
     adult = adult,

@@ -7,11 +7,12 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.PersonId
 import com.dcs.presentation.BuildConfig
 import com.dcs.presentation.R
 
 data class PersonUiState(
-    val id: Int,
+    val id: PersonId,
     val name: String,
     val originalName: String,
     val adult: Boolean,
@@ -51,8 +52,8 @@ fun PersonUiState.getKnownForTitle(): String {
         return ""
     }
     return knownFor
-        .filterNot {
-            if (it.mediaType == MediaTypeUiState.MOVIE) it.title.isBlank() else it.name.isBlank()
+        .filter {
+            if (it.mediaType == MediaTypeUiState.MOVIE) it.title.isNotBlank() else it.name.isNotBlank()
         }
         .take(3)
         .joinToString {
@@ -89,7 +90,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
                     data =
                     (0 until 10).map {
                         PersonUiState(
-                            id = it,
+                            id = PersonId(it),
                             name = "Person $it",
                             originalName = "Original Person $it",
                             adult = false,
@@ -111,7 +112,7 @@ class PersonUiStateProvider : PreviewParameterProvider<PagingData<PersonUiState>
                     data =
                     (0 until 10).map {
                         PersonUiState(
-                            id = it,
+                            id = PersonId(it),
                             name = "Person",
                             originalName = "Original Person $it",
                             adult = false,

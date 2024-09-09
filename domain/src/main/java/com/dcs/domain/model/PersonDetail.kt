@@ -1,7 +1,7 @@
 package com.dcs.domain.model
 
 data class PersonDetail(
-    val id: Int,
+    val id: PersonId,
     val adult: Boolean,
     val alsoKnownAs: List<String>,
     val biography: String,
@@ -17,6 +17,7 @@ data class PersonDetail(
     val profilePath: String,
     val knownFor: List<KnownFor>,
     val credits: Map<String, List<PersonCredit>>,
+    val creditCounts: Int,
 )
 
 data class PersonCredit(

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.PersonId
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.designsystem.component.NavigationBackButton
@@ -275,7 +276,7 @@ private class PersonDetailProvider :
             UiState.Loading,
             UiState.Success(
                 PersonDetailUiState(
-                    id = 1,
+                    id = PersonId(1),
                     adult = false,
                     alsoKnownAs = listOf("alsoKnownAs"),
                     biography = LoremIpsum(100).values.first(),
@@ -336,6 +337,7 @@ private class PersonDetailProvider :
                             voteCount = 0
                         )
                     ),
+                    creditCounts = 20,
                 )
             )
         )
