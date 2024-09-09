@@ -19,6 +19,6 @@ interface PersonService {
     suspend fun getPersonDetail(
         @Path("person_id") personId: Int,
         @Query("language") language: String = "en-US",
-        @Query("append_to_response") appendToResponse: String = "combined_credits",
+        @Query("append_to_response") appendToResponse: String = "combined_credits,images",
     ): NetworkResponse<GetPersonDetailResponse>
 }

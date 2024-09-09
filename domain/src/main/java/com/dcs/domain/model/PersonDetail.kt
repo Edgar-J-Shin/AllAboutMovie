@@ -17,6 +17,7 @@ data class PersonDetail(
     val profilePath: String,
     val knownFor: List<KnownFor>,
     val credits: Map<String, List<PersonCredit>>,
+    val profileImages: List<ProfileImage>,
     val creditCounts: Int,
 )
 
@@ -28,4 +29,14 @@ data class PersonCredit(
     val releaseDate: String, // Movie release date, TV show first air date
     val title: String, // Movie title, TV show name
     val role: String, // Character name for cast, job for crew
+)
+
+data class ProfileImage(
+    val aspectRatio: Double,
+    val filePath: String,
+    val height: Int,
+    val iso6391: String,
+    val voteAverage: Double,
+    val voteCount: Int,
+    val width: Int,
 )

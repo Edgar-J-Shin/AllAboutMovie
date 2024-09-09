@@ -3,9 +3,11 @@ package com.dcs.presentation.core.model.mapper
 import com.dcs.domain.model.MediaType
 import com.dcs.domain.model.PersonCredit
 import com.dcs.domain.model.PersonDetail
+import com.dcs.domain.model.ProfileImage
 import com.dcs.presentation.core.model.MediaTypeUiState
 import com.dcs.presentation.core.model.PersonCreditUiState
 import com.dcs.presentation.core.model.PersonDetailUiState
+import com.dcs.presentation.core.model.ProfileImageUiState
 
 fun PersonDetail.toUiState() = PersonDetailUiState(
     id = id,
@@ -26,6 +28,7 @@ fun PersonDetail.toUiState() = PersonDetailUiState(
     credits = credits.mapValues {
         it.value.map { item -> item.toUiState() }
     },
+    profileImages = profileImages.map { it.toUiState() },
     creditCounts = creditCounts,
 )
 
@@ -42,4 +45,14 @@ fun PersonCredit.toUiState() = PersonCreditUiState(
     releaseDate = releaseDate,
     title = title,
     role = role,
+)
+
+fun ProfileImage.toUiState() = ProfileImageUiState(
+    aspectRatio = aspectRatio,
+    filePath = filePath,
+    height = height,
+    iso6391 = iso6391,
+    voteAverage = voteAverage,
+    voteCount = voteCount,
+    width = width,
 )

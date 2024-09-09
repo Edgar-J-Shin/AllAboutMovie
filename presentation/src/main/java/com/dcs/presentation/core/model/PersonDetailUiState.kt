@@ -31,6 +31,7 @@ data class PersonDetailUiState(
     val knownFor: List<KnownForUiState>,
     val credits: Map<String, List<PersonCreditUiState>>,
     val creditCounts: Int,
+    val profileImages: List<ProfileImageUiState>,
 )
 
 data class PersonCreditUiState(
@@ -45,6 +46,7 @@ data class PersonCreditUiState(
     companion object {
         const val KEY_CAST = "Acting"
     }
+
 }
 
 @Composable
@@ -75,3 +77,16 @@ fun PersonCreditUiState.getCharacterTitle(): AnnotatedString {
         append(role)
     }
 }
+
+data class ProfileImageUiState(
+    val aspectRatio: Double,
+    val filePath: String,
+    val height: Int,
+    val iso6391: String,
+    val voteAverage: Double,
+    val voteCount: Int,
+    val width: Int,
+)
+
+fun ProfileImageUiState.getProfileImageUrl(): String =
+    "${BuildConfig.TMDB_IMAGE_URL}original$filePath"
