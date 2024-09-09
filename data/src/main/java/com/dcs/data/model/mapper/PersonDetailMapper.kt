@@ -40,12 +40,7 @@ fun CombinedCredits.toEntity(): Map<String, List<PersonCredit>> {
     if (crew.isNotEmpty()) {
         crew.forEach {
             val department = it.department
-
-            if (map.containsKey(department)) {
-                map[department] = map.getOrDefault(department, listOf()) + it.toEntity()
-            } else {
-                map[department] = listOf(it.toEntity())
-            }
+            map[department] = map.getOrDefault(department, listOf()) + it.toEntity()
         }
     }
 
