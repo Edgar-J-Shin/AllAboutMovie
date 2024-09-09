@@ -1,5 +1,7 @@
 package com.dcs.presentation.ui.persondetail
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -41,9 +46,12 @@ import com.dcs.presentation.core.model.KnownForUiState
 import com.dcs.presentation.core.model.MediaTypeUiState
 import com.dcs.presentation.core.model.PersonCreditUiState
 import com.dcs.presentation.core.model.PersonDetailUiState
+import com.dcs.presentation.core.model.ProfileImageUiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
 import com.dcs.presentation.core.ui.state.UiState
+import com.dcs.presentation.ui.persondetail.component.PersonProfileImage
+import com.dcs.presentation.ui.persondetail.component.ProfileImageDetails
 
 @Composable
 fun PersonDetailRoute(
@@ -80,65 +88,85 @@ fun PersonDetailRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun PersonDetailScreen(
     uiState: UiState<PersonDetailUiState>,
     onPersonDetailUiEvent: (PersonDetailUiEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-    ) {
-        item {
-            CenterAlignedTopAppBar(
-                title = {
-                    if (uiState is UiState.Success) {
-                        val personDetailUiState = uiState.data
-                        Text(
-                            text = personDetailUiState.name,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
-                },
+    var isProfileImagesShowing by remember { mutableStateOf(false) }
+    val onProfileImagesShowingChanged = remember {
+        { isProfileImagesShowing = !isProfileImagesShowing }
+    }
 
-                navigationIcon = {
-                    NavigationBackButton(
-                        onClick = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) }
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
-
-        when (uiState) {
-            is UiState.Loading -> {
+    SharedTransitionLayout(modifier = modifier) {
+        Box {
+            LazyColumn {
                 item {
-                    PersonDetailLoadingContent(
+                    CenterAlignedTopAppBar(
+                        title = {
+                            if (uiState is UiState.Success) {
+                                val personDetailUiState = uiState.data
+                                Text(
+                                    text = personDetailUiState.name,
+                                    style = MaterialTheme.typography.titleLarge,
+                                )
+                            }
+                        },
+
+                        navigationIcon = {
+                            NavigationBackButton(
+                                onClick = { onPersonDetailUiEvent(PersonDetailUiEvent.OnNavigationBackButtonClick) }
+                            )
+                        },
                         modifier = Modifier
-                            .fillParentMaxSize()
-                            .padding(30.dp)
+                            .fillMaxWidth()
                     )
                 }
-            }
 
-            is UiState.Error -> {
-                item {
-                    ErrorScreen(
-                        message = stringResource(id = R.string.api_response_error_message),
-                        modifier = Modifier.fillParentMaxSize()
-                    )
+                when (uiState) {
+                    is UiState.Loading -> {
+                        item {
+                            PersonDetailLoadingContent(
+                                modifier = Modifier
+                                    .fillParentMaxSize()
+                                    .padding(30.dp)
+                            )
+                        }
+                    }
+
+                    is UiState.Error -> {
+                        item {
+                            ErrorScreen(
+                                message = stringResource(id = R.string.api_response_error_message),
+                                modifier = Modifier.fillParentMaxSize()
+                            )
+                        }
+                    }
+
+                    is UiState.Success -> {
+                        val personDetailUiState = uiState.data
+                        personDetailContent(
+                            personDetailUiState = personDetailUiState,
+                            onPersonDetailUiEvent = onPersonDetailUiEvent
+                        ) {
+                            PersonProfileImage(
+                                uiState = personDetailUiState,
+                                isProfileImagesShowing = isProfileImagesShowing,
+                                onChanged = onProfileImagesShowingChanged,
+                                modifier = Modifier.animateItem()
+                            )
+                        }
+                    }
                 }
             }
-
-            is UiState.Success -> {
+            if (uiState is UiState.Success) {
                 val personDetailUiState = uiState.data
-                personDetailContent(
-                    personDetailUiState = personDetailUiState,
-                    onPersonDetailUiEvent = onPersonDetailUiEvent
+                ProfileImageDetails(
+                    uiState = personDetailUiState,
+                    isProfileImagesShowing = isProfileImagesShowing,
+                    onChanged = onProfileImagesShowingChanged,
                 )
             }
         }
@@ -338,6 +366,17 @@ private class PersonDetailProvider :
                         )
                     ),
                     creditCounts = 20,
+                    profileImages = listOf(
+                        ProfileImageUiState(
+                            aspectRatio = 1.0,
+                            filePath = "/profilePath",
+                            height = 1000,
+                            width = 1000,
+                            voteCount = 0,
+                            iso6391 = "en",
+                            voteAverage = 0.0
+                        )
+                    ),
                 )
             )
         )
