@@ -2,7 +2,6 @@ package com.dcs.data.remote.model
 
 import com.dcs.data.remote.network.serializer.GenderSerializer
 import com.dcs.data.remote.network.serializer.MediaTypeSerializer
-import com.dcs.domain.model.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

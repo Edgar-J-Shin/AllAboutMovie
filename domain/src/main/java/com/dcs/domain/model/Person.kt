@@ -2,7 +2,7 @@ package com.dcs.domain.model
 
 
 data class Person(
-    val id: Int,
+    val id: PersonId,
     val name: String,
     val originalName: String,
     val adult: Boolean,

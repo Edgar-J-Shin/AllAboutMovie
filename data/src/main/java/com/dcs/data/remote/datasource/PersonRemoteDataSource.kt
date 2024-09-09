@@ -11,7 +11,7 @@ interface PersonRemoteDataSource {
         language: String,
     ): Result<GetPopularPeopleResponse>
 
-    suspend fun getPersonDetail(personId: Long): Result<GetPersonDetailResponse>
+    suspend fun getPersonDetail(personId: Int): Result<GetPersonDetailResponse>
 
     suspend fun getSearchPerson(personName: String): Result<GetSearchPersonResponse>
 }

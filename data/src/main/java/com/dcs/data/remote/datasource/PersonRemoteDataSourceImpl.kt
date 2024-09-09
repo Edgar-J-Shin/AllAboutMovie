@@ -14,29 +14,28 @@ class PersonRemoteDataSourceImpl @Inject constructor(
     override suspend fun getPopularPeople(
         page: Int,
         language: String,
-    ): Result<GetPopularPeopleResponse> {
-        return personService.getPopularPeople(
-            page = page,
-            language = language
-        ).asResult {
-            it.data as GetPopularPeopleResponse
-        }
-    }
+    ): Result<GetPopularPeopleResponse> =
+        personService
+            .getPopularPeople(
+                page = page,
+                language = language,
+            ).asResult {
+                it.data as GetPopularPeopleResponse
+            }
 
-    override suspend fun getPersonDetail(personId: Long): Result<GetPersonDetailResponse> {
-        return personService.getPersonDetail(
-            personId = personId
-        ).asResult {
-            it.data as GetPersonDetailResponse
-        }
-    }
+    override suspend fun getPersonDetail(personId: Int): Result<GetPersonDetailResponse> =
+        personService
+            .getPersonDetail(
+                personId = personId,
+            ).asResult {
+                it.data as GetPersonDetailResponse
+            }
 
-    override suspend fun getSearchPerson(personName: String): Result<GetSearchPersonResponse> {
-        return searchService.getSearchPerson(
-            query = personName
-        ).asResult {
-            it.data as GetSearchPersonResponse
-        }
-    }
-
+    override suspend fun getSearchPerson(personName: String): Result<GetSearchPersonResponse> =
+        searchService
+            .getSearchPerson(
+                query = personName,
+            ).asResult {
+                it.data as GetSearchPersonResponse
+            }
 }

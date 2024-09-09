@@ -5,13 +5,12 @@ import com.dcs.data.remote.network.serializer.MediaTypeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class GetPersonDetailResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean = false,
     @SerialName("also_known_as")
     val alsoKnownAs: List<String>,
     @SerialName("biography")
@@ -32,25 +31,29 @@ data class GetPersonDetailResponse(
     @SerialName("known_for_department")
     val knownForDepartment: String,
     @SerialName("name")
-    val name: String,
+    val name: String = "",
     @SerialName("place_of_birth")
-    val placeOfBirth: String,
+    val placeOfBirth: String = "",
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double = 0.0,
     @SerialName("profile_path")
-    val profilePath: String,
+    val profilePath: String = "",
 )
 
 @Serializable
 data class CombinedCredits(
     @SerialName("cast")
-    val cast: List<RemoteCast>,
+    val cast: List<RemotePersonCast>,
     @SerialName("crew")
-    val crew: List<RemoteCrew>,
-)
+    val crew: List<RemotePersonCrew>,
+) {
+    companion object {
+        const val KEY_CAST = "Acting"
+    }
+}
 
 @Serializable
-data class RemoteCast(
+data class RemotePersonCast(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")
@@ -101,7 +104,7 @@ data class RemoteCast(
 )
 
 @Serializable
-data class RemoteCrew(
+data class RemotePersonCrew(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")

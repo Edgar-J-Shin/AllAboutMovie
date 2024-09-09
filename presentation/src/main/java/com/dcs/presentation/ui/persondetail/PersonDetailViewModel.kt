@@ -30,7 +30,7 @@ class PersonDetailViewModel @Inject constructor(
     EventDelegate<PersonDetailEffect, PersonDetailUiEvent> by EventDelegate.EventDelegateImpl() {
 
     private val personId =
-        savedStateHandle.get<Long>(PERSON_DETAIL_ID_KEY) ?: error("Person ID not found")
+        savedStateHandle.get<Int>(PERSON_DETAIL_ID_KEY) ?: error("Person ID not found")
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState = flowOf(personId)

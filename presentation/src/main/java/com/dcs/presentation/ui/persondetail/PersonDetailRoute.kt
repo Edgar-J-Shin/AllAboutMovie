@@ -3,7 +3,6 @@ package com.dcs.presentation.ui.persondetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -32,15 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dcs.domain.model.MediaContentId
+import com.dcs.domain.model.PersonId
 import com.dcs.presentation.R
 import com.dcs.presentation.core.designsystem.component.ErrorScreen
 import com.dcs.presentation.core.designsystem.component.NavigationBackButton
 import com.dcs.presentation.core.extensions.collectAsEffect
-import com.dcs.presentation.core.model.CastUiState
-import com.dcs.presentation.core.model.CrewUiState
 import com.dcs.presentation.core.model.GenderUiState
 import com.dcs.presentation.core.model.KnownForUiState
 import com.dcs.presentation.core.model.MediaTypeUiState
+import com.dcs.presentation.core.model.PersonCreditUiState
 import com.dcs.presentation.core.model.PersonDetailUiState
 import com.dcs.presentation.core.theme.AllAboutMovieTheme
 import com.dcs.presentation.core.theme.Gray1
@@ -89,7 +88,6 @@ private fun PersonDetailScreen(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(bottom = 30.dp),
         modifier = modifier
             .fillMaxSize()
             .systemBarsPadding()
@@ -278,7 +276,7 @@ private class PersonDetailProvider :
             UiState.Loading,
             UiState.Success(
                 PersonDetailUiState(
-                    id = 1,
+                    id = PersonId(1),
                     adult = false,
                     alsoKnownAs = listOf("alsoKnownAs"),
                     biography = LoremIpsum(100).values.first(),
@@ -292,59 +290,28 @@ private class PersonDetailProvider :
                     placeOfBirth = "Korea",
                     popularity = 1.0,
                     profilePath = "/profilePath",
-                    casts = listOf(
-                        CastUiState(
-                            id = MediaContentId(0),
-                            adult = false,
-                            backdropPath = "",
-                            character = "",
-                            creditId = "",
-                            episodeCount = 0,
-                            firstAirDate = "",
-                            genreIds = listOf(),
-                            mediaType = MediaTypeUiState.MOVIE,
-                            name = "Ayo",
-                            order = 0,
-                            originCountry = listOf(),
-                            originalLanguage = "",
-                            originalName = "",
-                            originalTitle = "11111",
-                            overview = "",
-                            popularity = 0.0,
-                            posterPath = "",
-                            releaseDate = "",
-                            title = "wowowowowo",
-                            video = false,
-                            voteAverage = 0.0,
-                            voteCount = 0
-
-                        )
-                    ),
-                    crews = listOf(
-                        CrewUiState(
-                            id = MediaContentId(0),
-                            adult = false,
-                            backdropPath = "",
-                            creditId = "",
-                            department = "",
-                            genreIds = listOf(),
-                            job = "Producer",
-                            mediaType = MediaTypeUiState.TV,
-                            originalLanguage = "",
-                            originalTitle = "Ayo",
-                            overview = "",
-                            popularity = 0.0,
-                            posterPath = "",
-                            releaseDate = "",
-                            title = "12345",
-                            video = false,
-                            voteAverage = 0.0,
-                            voteCount = 0,
-                            originalName = "originalName",
-                            name = "name",
-                            firstAirDate = "",
-                            episodeCount = 0,
-                            originCountry = listOf(),
+                    credits = mapOf(
+                        "Acting" to listOf(
+                            PersonCreditUiState(
+                                id = MediaContentId(0),
+                                adult = false,
+                                mediaType = MediaTypeUiState.MOVIE,
+                                posterPath = "/posterPath",
+                                releaseDate = "2021-01-01",
+                                title = "Title",
+                                role = "Role",
+                            )
+                        ),
+                        "Production" to listOf(
+                            PersonCreditUiState(
+                                id = MediaContentId(1),
+                                adult = false,
+                                mediaType = MediaTypeUiState.TV,
+                                posterPath = "/posterPath",
+                                releaseDate = "2021-01-01",
+                                title = "Title",
+                                role = "Role",
+                            )
                         )
                     ),
                     knownFor = listOf(
@@ -370,6 +337,7 @@ private class PersonDetailProvider :
                             voteCount = 0
                         )
                     ),
+                    creditCounts = 20,
                 )
             )
         )

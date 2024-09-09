@@ -3,7 +3,6 @@ package com.dcs.data.remote.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class GetSearchPersonResponse(
     @SerialName("page")

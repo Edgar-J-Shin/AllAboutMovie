@@ -9,5 +9,5 @@ interface PersonRepository {
 
     fun getPopularPeople(): Flow<PagingData<Person>>
 
-    fun getPersonDetail(personId: Long): Flow<PersonDetail>
+    fun getPersonDetail(personId: Int): Flow<PersonDetail>
 }
