@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.dcs.presentation.R
@@ -129,15 +128,6 @@ fun SharedTransitionScope.ProfileImageDetails(
                 }
             }
         }
-    }
-}
-
-private val threePagesPerViewport = object : PageSize {
-    override fun Density.calculateMainAxisPageSize(
-        availableSpace: Int,
-        pageSpacing: Int,
-    ): Int {
-        return (availableSpace - 2 * pageSpacing) / 3
     }
 }
 
