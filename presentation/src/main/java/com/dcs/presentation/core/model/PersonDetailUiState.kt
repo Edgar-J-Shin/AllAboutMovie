@@ -42,12 +42,7 @@ data class PersonCreditUiState(
     val releaseDate: String,
     val title: String,
     val role: String,
-) {
-    companion object {
-        const val KEY_CAST = "Acting"
-    }
-
-}
+)
 
 @Composable
 fun PersonDetailUiState.getProfileUrl(): String =

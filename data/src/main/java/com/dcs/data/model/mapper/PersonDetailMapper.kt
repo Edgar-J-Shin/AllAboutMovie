@@ -31,9 +31,7 @@ fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
     credits = combinedCredits.toEntity(),
     profileImages = profileImages
         .profiles
-        .map {
-            it.toEntity()
-        },
+        .map { it.toEntity() },
     creditCounts = combinedCredits.cast.size
 )
 
