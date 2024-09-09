@@ -1,5 +1,6 @@
 package com.dcs.presentation.ui.persondetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
@@ -98,6 +99,10 @@ private fun PersonDetailScreen(
     var isProfileImagesShowing by remember { mutableStateOf(false) }
     val onProfileImagesShowingChanged = remember {
         { isProfileImagesShowing = !isProfileImagesShowing }
+    }
+
+    BackHandler(enabled = isProfileImagesShowing) {
+        onProfileImagesShowingChanged()
     }
 
     SharedTransitionLayout(modifier = modifier) {
