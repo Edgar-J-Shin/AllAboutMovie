@@ -172,6 +172,12 @@ private fun PersonProfileImageContent(
                                         .currentPageOffsetFraction
                                     ).absoluteValue
 
+                            scaleY = lerp(
+                                start = 0.85f,
+                                stop = 1f,
+                                fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                            )
+
                             // We animate the alpha, between 50% and 100%
                             alpha = lerp(
                                 start = 0.3f,
