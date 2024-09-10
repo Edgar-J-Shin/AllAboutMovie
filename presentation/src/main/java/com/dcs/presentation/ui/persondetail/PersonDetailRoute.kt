@@ -100,10 +100,11 @@ private fun PersonDetailScreen(
     val onProfileImagesShowingChanged = remember {
         { isProfileImagesShowing = !isProfileImagesShowing }
     }
-
-    BackHandler(enabled = isProfileImagesShowing) {
-        onProfileImagesShowingChanged()
-    }
+    
+    BackHandler(
+        enabled = isProfileImagesShowing,
+        onBack = onProfileImagesShowingChanged
+    )
 
     SharedTransitionLayout(modifier = modifier) {
         Box {
