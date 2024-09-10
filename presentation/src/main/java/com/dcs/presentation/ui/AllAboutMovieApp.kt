@@ -53,7 +53,7 @@ fun AllAboutMovieApp(
         modifier = modifier
     ) {
         composable(route = Main.route) {
-            MainRoute(navController = navController)
+            MainRoute(navigateTo = { route -> navController.navigate(route) })
         }
 
         composable(
