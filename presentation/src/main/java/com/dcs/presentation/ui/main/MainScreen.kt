@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainRoute(
-    navController: NavHostController,
+    navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier,
     mainNavController: NavHostController = rememberNavController(),
     searchActive: MutableState<Boolean> = remember { mutableStateOf(false) },
@@ -52,8 +52,8 @@ fun MainRoute(
         Box(modifier = Modifier.padding(paddingValues)) {
             MainNavHost(
                 mainNavController = mainNavController,
-                appNavHostController = navController,
                 startDestination = MainTab.Home.route,
+                navigateTo = navigateTo,
                 searchActive = searchActive.value,
                 onSearchActiveChange = { active ->
                     searchActive.value = active
@@ -74,8 +74,8 @@ fun MainRoute(
 @Composable
 private fun MainNavHost(
     mainNavController: NavHostController,
-    appNavHostController: NavHostController,
     startDestination: String,
+    navigateTo: (String) -> Unit,
     searchActive: Boolean,
     onSearchActiveChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -90,7 +90,7 @@ private fun MainNavHost(
         composable(route = MainTab.Home.route) {
             HomeRoute(
                 navigateToSearchResult = { keyword ->
-                    appNavHostController.navigate(Screen.SearchResult.createRoute(keyword))
+                    navigateTo(Screen.SearchResult.createRoute(keyword))
                 },
                 searchActive = searchActive,
                 onSearchActiveChange = onSearchActiveChange,
@@ -101,10 +101,10 @@ private fun MainNavHost(
         composable(route = MainTab.Trend.route) {
             TrendRoute(
                 navigateToMovieDetails = { id ->
-                    appNavHostController.navigate(Screen.MovieDetail.createRoute(id))
+                    navigateTo(Screen.MovieDetail.createRoute(id))
                 },
                 navigateToTvShowDetails = { id ->
-                    appNavHostController.navigate(Screen.TvShowDetail.createRoute(id))
+                    navigateTo(Screen.TvShowDetail.createRoute(id))
                 },
                 showSnackBar = showSnackBar
             )
@@ -113,7 +113,7 @@ private fun MainNavHost(
         composable(route = MainTab.People.route) {
             PeopleRoute(
                 navigateToDetail = { personId ->
-                    appNavHostController.navigate(Screen.PersonDetail.createRoute(personId))
+                    navigateTo(Screen.PersonDetail.createRoute(personId))
                 }
             )
         }
@@ -121,7 +121,7 @@ private fun MainNavHost(
         composable(route = MainTab.Setting.route) {
             SettingRoute(
                 navigateToSignIn = { requestToken ->
-                    appNavHostController.navigate(Screen.SignIn.createRoute(requestToken))
+                    navigateTo(Screen.SignIn.createRoute(requestToken))
                 },
                 showSnackBar = showSnackBar
             )

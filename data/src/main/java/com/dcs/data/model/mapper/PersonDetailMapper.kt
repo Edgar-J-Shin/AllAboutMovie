@@ -5,6 +5,7 @@ import com.dcs.data.remote.model.GetPersonDetailResponse
 import com.dcs.data.remote.model.RemoteMediaType
 import com.dcs.data.remote.model.RemotePersonCast
 import com.dcs.data.remote.model.RemotePersonCrew
+import com.dcs.data.remote.model.RemoteProfileImage
 import com.dcs.domain.model.KnownFor
 import com.dcs.domain.model.MediaContentId
 import com.dcs.domain.model.PersonCredit
@@ -28,6 +29,9 @@ fun GetPersonDetailResponse.toEntity(knownFor: List<KnownFor>) = PersonDetail(
     profilePath = profilePath,
     knownFor = knownFor,
     credits = combinedCredits.toEntity(),
+    profileImages = profileImages
+        .profiles
+        .map { it.toEntity() },
     creditCounts = combinedCredits.cast.size
 )
 
@@ -94,4 +98,14 @@ private fun RemotePersonCrew.toEntity(): PersonCredit {
         role = job
     )
 }
+
+private fun RemoteProfileImage.toEntity() = com.dcs.domain.model.ProfileImage(
+    aspectRatio = aspectRatio,
+    filePath = filePath,
+    height = height,
+    iso6391 = iso6391,
+    voteAverage = voteAverage,
+    voteCount = voteCount,
+    width = width
+)
 

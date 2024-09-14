@@ -41,6 +41,7 @@ class PersonRepositoryImpl @Inject constructor(
             val knownFor = remote.getSearchPerson(personDetailResponse.name)
                 .getOrThrow()
                 .results
+                .filter { it.id == personId }
                 .flatMap { it.knownFor }
                 .map { it.toEntity() }
             emit(personDetailResponse.toEntity(knownFor))

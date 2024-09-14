@@ -22,20 +22,20 @@ data class RemotePerson(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean = false,
     @SerialName("gender")
     @Serializable(with = GenderSerializer::class)
     val gender: RemoteGender,
     @SerialName("known_for")
     val knownFor: List<RemoteKnownFor>,
     @SerialName("known_for_department")
-    val knownForDepartment: String,
+    val knownForDepartment: String = "",
     @SerialName("name")
-    val name: String,
+    val name: String = "",
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String = "",
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double = 0.0,
     @SerialName("profile_path")
     val profilePath: String = "",
 )

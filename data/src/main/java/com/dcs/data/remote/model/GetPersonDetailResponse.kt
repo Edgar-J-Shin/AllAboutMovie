@@ -38,6 +38,8 @@ data class GetPersonDetailResponse(
     val popularity: Double = 0.0,
     @SerialName("profile_path")
     val profilePath: String = "",
+    @SerialName("images")
+    val profileImages: ProfileImages,
 )
 
 @Serializable

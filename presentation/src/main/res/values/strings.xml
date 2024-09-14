@@ -81,5 +81,6 @@
     <string name="title_as_character">As</string>
     <string name="title_as_job">As</string>
     <string name="content_description_back">Back</string>
+    <string name="label_profile_image_details">ProfileImageDetails</string>
 
 </resources>
